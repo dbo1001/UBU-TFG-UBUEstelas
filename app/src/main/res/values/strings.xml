@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">UBUEstelas</string>
+    <string name="boton_nuevo_juego">Nuevo juego</string>
+    <string name="boton_continuar">Continuar</string>
+    <string name="cual_nombre">¿Cual es tu nombre?</string>
+    <string name="nombre">Nombre</string>
+</resources>
