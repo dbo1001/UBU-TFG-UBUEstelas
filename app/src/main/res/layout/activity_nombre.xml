@@ -37,6 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editText">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nombre"
@@ -52,6 +53,7 @@
         android:layout_marginBottom="16dp"
         android:background="@color/colorBoton"
         android:capitalize="none"
+        android:onClick="continuarAEscena"
         android:text="@string/boton_continuar"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
