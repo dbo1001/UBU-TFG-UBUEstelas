@@ -3,6 +3,7 @@ package com.example.ubuestelas;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,7 +19,11 @@ public class EscenaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escena);
-
+        SharedPreferences sharedPref= getSharedPreferences("nombreActivity",0);
+        String name = sharedPref.getString("nombre", "amigo");
+        String texto1= getResources().getString(R.string.textoEscena1, name);
+        TextView textView = findViewById(R.id.texto_escena);
+        textView.setText(texto1);
     }
 
     public void cambiarEscena (View view){
