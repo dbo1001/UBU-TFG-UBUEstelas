@@ -1,7 +1,12 @@
 package com.example.ubuestelas;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -12,6 +17,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -40,12 +52,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         LatLng laraDeLosInfantes = new LatLng(42.123126, -3.445355);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(laraDeLosInfantes, 17.5f));
-        LatLng estela1 = new LatLng(42.123893, -3.445544);
-        mMap.addMarker(new MarkerOptions().position(estela1).title("ESTELA 1").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        JSONObject obj;
+        try{
+            obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(),"estelasJSON.json"));
+            JSONArray estelas = obj.getJSONArray("estelas");
+            for (int i=0; i<estelas.length(); i++){
+                JSONObject estela = estelas.getJSONObject(i);
+                LatLng estela1 = new LatLng(estela.getDouble("latitude"), estela.getDouble("longitude"));
+                mMap.addMarker(new MarkerOptions().position(estela1).title(estela.getString("description")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            }
 
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

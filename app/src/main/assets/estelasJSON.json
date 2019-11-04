@@ -1,0 +1,49 @@
+{
+  "estelas": [
+    {
+      "description":"Estela 1",
+      "latitude": 42.123804,
+      "longitude": -3.445478
+    },
+    {
+      "description":"Estela 2",
+      "latitude": 42.123870,
+      "longitude": -3.445599
+    },
+    {
+      "description":"Estela 3",
+      "latitude": 42.122334,
+      "longitude": -3.445216
+    },
+    {
+      "description":"Estela 4",
+      "latitude": 42.121576,
+      "longitude": -3.445009
+    },
+    {
+      "description":"Estela 5",
+      "latitude": 42.123162,
+      "longitude": -3.444855
+    },
+    {
+      "description":"Estela 6",
+      "latitude": 42.123285,
+      "longitude": -3.445400
+    },
+    {
+      "description":"Estela 7",
+      "latitude": 42.122932,
+      "longitude": -3.444696
+    },
+    {
+      "description":"Estela 8",
+      "latitude": 42.123155,
+      "longitude": -3.445654
+    },
+    {
+      "description":"Estela 9",
+      "latitude": 42.123124,
+      "longitude": -3.445432
+    }
+  ]
+}
