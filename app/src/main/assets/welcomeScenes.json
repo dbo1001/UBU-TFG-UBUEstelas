@@ -1,0 +1,21 @@
+{
+  "scenes": [
+    {
+      "text": "Hola amigo, mi nombre es Caius Laritius maximus y soy el centurión de la ciudad de Nova Augusta.",
+      "image": "romano"
+    },
+    {
+      "text": "Vas a comenzar la misión de reconocer y encontrar algunas de las estelas que se encuentran en la ciudad romana de Nova Augusta, hoy Lara de los Infantes.",
+      "image": "cararomano"
+    },
+    {
+      "text": "Las estelas romanas son monumentos conmemorativos que se levantaban sobre el suelo a modo de pedestal.",
+      "image": "romano"
+    },
+    {
+      "text": "En esta aventura tendrás que poner a prueba tus sentidos y tu orientación. Que los dioses te acompañen.",
+      "image": "cararomano"
+    }
+  ],
+  "scenesNumber": 4
+}
