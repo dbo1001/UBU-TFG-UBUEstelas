@@ -4,12 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
     /*
     *Se llama cuando el usuario pulsa el botón nuevo juego
      */
-    public void nuevoJuego (View view) {
-        startActivity(new Intent(this, NombreActivity.class));
+    public void newGame(View view) {
+        startActivity(new Intent(this, NameActivity.class));
 
     }
 }

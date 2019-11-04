@@ -33,14 +33,14 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
         <activity
-            android:name=".EscenaActivity"
-            android:parentActivityName=".NombreActivity">
+            android:name=".SceneActivity"
+            android:parentActivityName=".NameActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NombreActivity" />
+                android:value=".NameActivity" />
         </activity>
         <activity
-            android:name=".NombreActivity"
+            android:name=".NameActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

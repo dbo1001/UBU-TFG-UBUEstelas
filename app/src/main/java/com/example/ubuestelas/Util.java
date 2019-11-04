@@ -8,7 +8,7 @@ import java.io.InputStream;
 public class Util {
 
     public static String loadJSONFromAsset(Context context, String name) {
-        String json = null;
+        String json;
         try {
             InputStream is = context.getAssets().open(name);
 

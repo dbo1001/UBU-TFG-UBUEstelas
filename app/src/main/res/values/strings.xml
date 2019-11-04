@@ -1,12 +1,8 @@
 <resources>
     <string name="app_name">UBUEstelas</string>
-    <string name="boton_nuevo_juego">Nuevo juego</string>
-    <string name="boton_continuar">Continuar</string>
-    <string name="cual_nombre">¿Cual es tu nombre?</string>
-    <string name="nombre">Nombre</string>
+    <string name="new_game_button">Nuevo juego</string>
+    <string name="continue_button">Continuar</string>
+    <string name="what_name">¿Cuál es tu nombre?</string>
+    <string name="name">Nombre</string>
     <string name="title_activity_maps">Map</string>
-    <string name="textoEscena1">Hola %1$s, mi nombre es Caius Laritius maximus y soy el centurión de la ciudad de Nova Augusta.</string>
-    <string name="textoEscena2">Vais a comenzar la misión de reconocer y encontrar algunas de las estelas que se encuentran en la ciudad romana de Nova Augusta, hoy Lara de los Infantes.</string>
-    <string name="textoEscena3">Las estelas romanas son monumentos conmemorativos que se levantaban sobre el suelo a modo de pedestal.</string>
-    <string name="textoEscena4">En esta aventura tendréis que poner a prueba vuestros sentidos y vuestra orientación. Que los dioses os acompañen.</string>
 </resources>

@@ -21,8 +21,8 @@ public class SceneActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escena);
-        SharedPreferences sharedPref= getSharedPreferences("nombreActivity",0);
-        String name = sharedPref.getString("nombre", "amigo");
+        SharedPreferences sharedPref= getSharedPreferences("nameActivity",0);
+        String name = sharedPref.getString("name", "amigo");
         JSONObject obj;
         try{
             obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(),"welcomeScenes.json"));

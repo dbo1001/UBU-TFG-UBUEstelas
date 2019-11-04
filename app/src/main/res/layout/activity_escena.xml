@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="auto"
-    android:onClick="cambiarEscena"
-    tools:context=".EscenaActivity">
+    android:onClick="changeScene"
+    tools:context=".SceneActivity">
 
     <ImageView
         android:id="@+id/imagen_escena"
@@ -20,12 +20,11 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/texto_escena"
+        android:id="@+id/scene_text"
         android:layout_width="374dp"
         android:layout_height="158dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/textoEscena1"
         android:textIsSelectable="false"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
