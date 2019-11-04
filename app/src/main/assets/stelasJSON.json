@@ -45,5 +45,12 @@
       "latitude": 42.123124,
       "longitude": -3.445432
     }
+  ],
+  "townCentre": [
+    {
+      "name": "Lara de los Infantes",
+      "latitude": 42.123126,
+      "longitude": -3.445355
+    }
   ]
 }

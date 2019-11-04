@@ -43,11 +43,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        LatLng laraDeLosInfantes = new LatLng(42.123126, -3.445355);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(laraDeLosInfantes, 17.5f));
         JSONObject obj;
         try{
             obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "stelasJSON.json"));
+            JSONArray townCentre = obj.getJSONArray("townCentre");
+            JSONObject town = townCentre.getJSONObject(0);
+            LatLng townLatLng = new LatLng(town.getDouble("latitude"), town.getDouble("longitude"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(townLatLng, 17.5f));
             JSONArray stelas = obj.getJSONArray("stelas");
             for (int i=0; i<stelas.length(); i++){
                 JSONObject stela = stelas.getJSONObject(i);
