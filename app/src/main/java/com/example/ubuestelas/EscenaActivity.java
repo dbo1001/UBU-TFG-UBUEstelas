@@ -27,8 +27,8 @@ public class EscenaActivity extends AppCompatActivity {
     }
 
     public void cambiarEscena (View view){
-        ImageView imagen = (ImageView) findViewById(R.id.imagen_escena);
-        TextView texto = (TextView) findViewById(R.id.texto_escena);
+        ImageView imagen = findViewById(R.id.imagen_escena);
+        TextView texto = findViewById(R.id.texto_escena);
         contador++;
         switch (contador){
             case 2:

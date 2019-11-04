@@ -22,7 +22,7 @@ public class NombreActivity extends AppCompatActivity {
 
         SharedPreferences nombreSP= getSharedPreferences("nombreActivity", 0);
         SharedPreferences.Editor nombreEditor = nombreSP.edit();
-        EditText editText = (EditText) findViewById(R.id.input_nombre);
+        EditText editText = findViewById(R.id.input_nombre);
         String nombre = editText.getText().toString();
         nombreEditor.putString("nombre", nombre);
         nombreEditor.commit();
