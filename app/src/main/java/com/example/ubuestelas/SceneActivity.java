@@ -49,7 +49,8 @@ public class SceneActivity extends AppCompatActivity {
             JSONArray scenes = obj.getJSONArray("scenes");
             int scenesNumber = obj.getInt("scenesNumber");
             if (counter >= scenesNumber){
-                Intent intent = new Intent(this, MapsActivity.class);
+//                Intent intent = new Intent(this, MapsActivity.class);
+                Intent intent = new Intent(this, NavigationDrawerActivity.class);
                 startActivity(intent);
             }
             JSONObject scene = scenes.getJSONObject(counter);
