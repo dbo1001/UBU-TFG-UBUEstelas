@@ -1,7 +1,9 @@
 {
   "scenes": [
     {
-      "text": "Hola amigo, mi nombre es Caius Laritius maximus y soy el centurión de la ciudad de Nova Augusta.",
+      "text": "Hola ",
+      "_comment": "Está separado en dos para meter la variable del nombre",
+      "text2": ", mi nombre es Caius Laritius maximus y soy el centurión de la ciudad de Nova Augusta.",
       "image": "romano"
     },
     {

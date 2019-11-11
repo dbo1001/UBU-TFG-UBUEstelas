@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class SceneActivity extends AppCompatActivity {
 
@@ -28,9 +31,12 @@ public class SceneActivity extends AppCompatActivity {
             obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(),"welcomeScenes.json"));
             JSONArray scenes = obj.getJSONArray("scenes");
             JSONObject scene = scenes.getJSONObject(0);
-            String text= scene.getString("text");
+            String text = scene.getString("text");
+            String text2 =scene.getString("text2");
+            String[] textToComplete = {text,name,text2};
+            String completeText = TextUtils.join("", textToComplete);
             TextView textView = findViewById(R.id.scene_text);
-            textView.setText(text);
+            textView.setText(completeText);
 
 
         }catch (Exception e){
