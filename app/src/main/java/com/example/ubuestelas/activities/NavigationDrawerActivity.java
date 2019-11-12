@@ -1,4 +1,4 @@
-package com.example.ubuestelas;
+package com.example.ubuestelas.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -9,8 +9,9 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.ubuestelas.R;
+import com.example.ubuestelas.util.Util;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,12 +20,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.view.View;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
@@ -55,7 +50,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private GoogleMap mMap;
     FusedLocationProviderClient fusedLocationProviderClient;
     MarkerOptions currentLocation;
-    List<LatLng> markerList;
+    List<Marker> markerList;
     Marker currentLocationMarker;
 
     @Override
@@ -170,7 +165,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     public void addJSONmarkers(){
         JSONObject obj;
-        markerList = new ArrayList<LatLng>();
+        markerList = new ArrayList<Marker>();
         try {
             obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "stelasJSON.json"));
             JSONArray townCentre = obj.getJSONArray("townCentre");
@@ -181,8 +176,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
             for (int i = 0; i < stelas.length(); i++) {
                 JSONObject stela = stelas.getJSONObject(i);
                 LatLng stelaLatLng = new LatLng(stela.getDouble("latitude"), stela.getDouble("longitude"));
-                markerList.add(stelaLatLng);
-                mMap.addMarker(new MarkerOptions().position(stelaLatLng).title(stela.getString("description")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                Marker marker = mMap.addMarker(new MarkerOptions().position(stelaLatLng).title(stela.getString("description")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                markerList.add(marker);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -207,6 +202,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 currentLocation.position(new LatLng(location.getLatitude(), location.getLongitude())).title("Estoy aquí").icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_my_location));
 
                 currentLocationMarker = mMap.addMarker(currentLocation);
+
+                List<Marker> closeMarkers = getCloseMarkers();
+                for(Marker marker : closeMarkers){
+                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                }
             }
 
             @Override
@@ -225,6 +225,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 // TODO Auto-generated method stub
             }
         });
+    }
+
+    public List<Marker> getCloseMarkers(){
+        //TODO comprobar si esa estela ya la ha resuelto
+        List<Marker> closeMarkers=new ArrayList<Marker>();
+        for (Marker marker : markerList) {
+            if(Util.getDistanceFromLatLong(currentLocationMarker.getPosition(),marker.getPosition()) <= 10){
+                closeMarkers.add(marker);
+            }
+        }
+        return closeMarkers;
     }
 
 }

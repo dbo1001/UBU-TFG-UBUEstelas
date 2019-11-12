@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".NavigationDrawerActivity"
+            android:name=".activities.NavigationDrawerActivity"
             android:label="@string/title_activity_navigation_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
@@ -34,23 +34,23 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".SceneActivity"
-            android:parentActivityName=".NameActivity">
+            android:name=".activities.SceneActivity"
+            android:parentActivityName=".activities.NameActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NameActivity" />
+                android:value=".activities.NameActivity" />
         </activity>
         <activity
-            android:name=".NameActivity"
-            android:parentActivityName=".MainActivity">
+            android:name=".activities.NameActivity"
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

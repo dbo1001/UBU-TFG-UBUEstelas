@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="auto"
     android:onClick="changeScene"
-    tools:context=".SceneActivity">
+    tools:context=".activities.SceneActivity">
 
     <ImageView
         android:id="@+id/imagen_escena"

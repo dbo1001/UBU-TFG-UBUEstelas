@@ -1,4 +1,4 @@
-package com.example.ubuestelas;
+package com.example.ubuestelas.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,10 +10,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ubuestelas.R;
+import com.example.ubuestelas.util.Util;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.List;
 
 public class SceneActivity extends AppCompatActivity {
 

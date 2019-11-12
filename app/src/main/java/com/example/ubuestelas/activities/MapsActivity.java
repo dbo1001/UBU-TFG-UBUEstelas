@@ -1,9 +1,11 @@
-package com.example.ubuestelas;
+package com.example.ubuestelas.activities;
 
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
 
+import com.example.ubuestelas.R;
+import com.example.ubuestelas.util.Util;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
