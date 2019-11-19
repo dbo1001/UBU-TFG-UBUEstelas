@@ -32,12 +32,11 @@ public class SceneActivity extends AppCompatActivity {
             obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(),"welcomeScenes.json"));
             JSONArray scenes = obj.getJSONArray("scenes");
             JSONObject scene = scenes.getJSONObject(0);
+
             String text = scene.getString("text");
-            String text2 =scene.getString("text2");
-            String[] textToComplete = {text,name,text2};
-            String completeText = TextUtils.join("", textToComplete);
+            text = text.replace("%user%", name);
             TextView textView = findViewById(R.id.scene_text);
-            textView.setText(completeText);
+            textView.setText(text);
 
 
         }catch (Exception e){
