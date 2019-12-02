@@ -2,6 +2,7 @@ package com.example.ubuestelas.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -9,6 +10,19 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
@@ -21,26 +35,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-
-import android.view.MenuItem;
-
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.Menu;
-import android.widget.TextView;
-
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -64,14 +62,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -79,10 +69,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
 
         if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
@@ -175,30 +161,32 @@ public class NavigationDrawerActivity extends AppCompatActivity
         JSONObject obj;
         markerList = new ArrayList<Marker>();
         try {
-            obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "stelasJSON.json"));
+            obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "marksJSON.json"));
             JSONArray townCentre = obj.getJSONArray("townCentre");
             JSONObject town = townCentre.getJSONObject(0);
             LatLng townLatLng = new LatLng(town.getDouble("latitude"), town.getDouble("longitude"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(townLatLng, 17.5f));
-            JSONArray stelas = obj.getJSONArray("stelas");
-            for (int i = 0; i < stelas.length(); i++) {
-                JSONObject stela = stelas.getJSONObject(i);
-                LatLng stelaLatLng = new LatLng(stela.getDouble("latitude"), stela.getDouble("longitude"));
-                Marker marker = mMap.addMarker(new MarkerOptions().position(stelaLatLng).title(stela.getString("description")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            JSONArray marks = obj.getJSONArray("marks");
+            for (int i = 0; i < marks.length(); i++) {
+                JSONObject mark = marks.getJSONObject(i);
+                LatLng stelaLatLng = new LatLng(mark.getDouble("latitude"), mark.getDouble("longitude"));
+                Marker marker = mMap.addMarker(new MarkerOptions().position(stelaLatLng).title(mark.getString("description")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 markerList.add(marker);
             }
-        }catch (Exception e){
+        }catch (JSONException e){
             e.printStackTrace();
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void getCurrentLocation(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
+            List<String> prevNameCloseMarkers = new ArrayList<>();
             @Override
             public void onLocationChanged(Location location) {
 
@@ -211,10 +199,38 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
                 currentLocationMarker = mMap.addMarker(currentLocation);
 
-                List<Marker> closeMarkers = getCloseMarkers();
+                final List<Marker> closeMarkers = getCloseMarkers();
+                List<String> nameCloseMarkers = new ArrayList<>();
+
                 for(Marker marker : closeMarkers){
-                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+                    nameCloseMarkers.add(marker.getTitle());
                 }
+
+                if (!prevNameCloseMarkers.equals(nameCloseMarkers) && !nameCloseMarkers.isEmpty()) {
+                    builder.setTitle("Elige una estela");
+// add a list
+                    String[] closeMarkersString = new String[nameCloseMarkers.size()];
+                    closeMarkersString = nameCloseMarkers.toArray(closeMarkersString);
+//                String[] animals = {"horse", "cow", "camel", "sheep", "goat"};
+                    builder.setItems(closeMarkersString, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            System.out.println(closeMarkers.get(which));
+                            switch (which) {
+                                case 0: // horse
+                                case 1: // cow
+                                case 2: // camel
+                                case 3: // sheep
+                                case 4: // goat
+                            }
+                        }
+                    });
+// create and show the alert dialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+                prevNameCloseMarkers = new ArrayList<>(nameCloseMarkers);
             }
 
             @Override
@@ -237,13 +253,34 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     public List<Marker> getCloseMarkers(){
         //TODO comprobar si esa estela ya la ha resuelto
-        List<Marker> closeMarkers=new ArrayList<Marker>();
+//        List<Boolean> completedMarkers = checkCompletedMarkers();
+        List<Marker> closeMarkers= new ArrayList<>();
+        int counter = 0;
         for (Marker marker : markerList) {
-            if(Util.getDistanceFromLatLong(currentLocationMarker.getPosition(),marker.getPosition()) <= 10){
-                closeMarkers.add(marker);
-            }
+//            if (!completedMarkers.get(counter)) {
+                if (Util.getDistanceFromLatLong(currentLocationMarker.getPosition(), marker.getPosition()) <= 10) {
+                    closeMarkers.add(marker);
+                }
+                counter++;
+//            }
         }
         return closeMarkers;
+    }
+
+    public List<Boolean> checkCompletedMarkers(){
+        JSONObject obj;
+        List<Boolean> completedMarkers= new ArrayList<>();
+        try {
+            obj = new JSONObject(Util.loadJSONFromFilesDir(getApplicationContext(), "userInfo.json"));
+            JSONArray marks = obj.getJSONArray("marks");
+            for (int i = 0; i <= marks.length(); i++){
+                JSONObject mark = marks.getJSONObject(i);
+                completedMarkers.add(mark.getBoolean("mark" + String.format("%02d", i)));
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return completedMarkers;
     }
 
 }
