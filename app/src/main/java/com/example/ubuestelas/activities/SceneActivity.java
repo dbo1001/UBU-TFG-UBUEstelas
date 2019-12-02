@@ -14,10 +14,18 @@ import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class SceneActivity extends AppCompatActivity {
 
+
+    private static final String FILE_NAME="userInfo";
 
     private int counter =0;
 
@@ -25,6 +33,7 @@ public class SceneActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escena);
+        createJSONprogress();
         SharedPreferences sharedPref= getSharedPreferences("nameActivity",0);
         String name = sharedPref.getString("name", "amigo");
         JSONObject obj;
@@ -66,5 +75,42 @@ public class SceneActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void createJSONprogress(){
+        File file = new File(this.getFilesDir(), FILE_NAME);
+        FileWriter fileWriter;
+        BufferedWriter bufferedWriter;
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                fileWriter = new FileWriter(file.getAbsoluteFile());
+                bufferedWriter = new BufferedWriter(fileWriter);
+                bufferedWriter.write("{}");
+                bufferedWriter.close();
+            }
+            SharedPreferences sharedPref = getSharedPreferences("nameActivity", 0);
+            String name = sharedPref.getString("name", "amigo");
+            JSONObject obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "marksJSON.json"));
+            JSONArray markstot = obj.getJSONArray("marks");
+            JSONObject complete = new JSONObject();
+            JSONArray stelas = new JSONArray();
+            for (int i = 1; i <= markstot.length(); i++) {
+                JSONObject mark = new JSONObject();
+                mark.put("mark" + String.format("%02d", i), false);
+                stelas.put(mark);
+            }
+            complete.put("user", name);
+            complete.put("marks", stelas);
+            fileWriter = new FileWriter(file.getAbsoluteFile());
+            bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(complete.toString());
+            bufferedWriter.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
     }
 }
