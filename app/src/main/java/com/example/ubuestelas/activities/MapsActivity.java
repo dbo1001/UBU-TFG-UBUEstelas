@@ -51,14 +51,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         JSONObject obj;
         List<LatLng> markerList = new ArrayList<LatLng>();
         try{
-            obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "stelasJSON.json"));
+            obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "marksJSON.json"));
             JSONArray townCentre = obj.getJSONArray("townCentre");
             JSONObject town = townCentre.getJSONObject(0);
             LatLng townLatLng = new LatLng(town.getDouble("latitude"), town.getDouble("longitude"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(townLatLng, 17.5f));
-            JSONArray stelas = obj.getJSONArray("stelas");
-            for (int i=0; i<stelas.length(); i++){
-                JSONObject stela = stelas.getJSONObject(i);
+            JSONArray marks = obj.getJSONArray("marks");
+            for (int i=0; i<marks.length(); i++){
+                JSONObject stela = marks.getJSONObject(i);
                 LatLng stelaLatLng = new LatLng(stela.getDouble("latitude"), stela.getDouble("longitude"));
                 markerList.add(stelaLatLng);
                 mMap.addMarker(new MarkerOptions().position(stelaLatLng).title(stela.getString("description")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
