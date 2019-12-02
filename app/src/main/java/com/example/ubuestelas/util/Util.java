@@ -4,8 +4,14 @@ import android.content.Context;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class Util {
 
@@ -26,6 +32,39 @@ public class Util {
 
             json = new String(buffer, "UTF-8");
 
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
+    }
+
+    public static String loadJSONFromFilesDir(Context context, String name) {
+        String json;
+        try {
+//            FileInputStream fis = context.openFileInput(name);
+//            InputStreamReader isr = new InputStreamReader(fis);
+//            BufferedReader bufferedReader = new BufferedReader(isr);
+//            StringBuilder sb = new StringBuilder();
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                sb.append(line);
+//            }
+            //TODO arreglar lectura de fichero
+            File file = new File(context.getFilesDir(), name);
+            StringBuffer output = new StringBuffer();
+//            FileReader fileReader = new FileReader(file);
+//            FileInputStream fileInputStream = new FileInputStream(context.getFilesDir()+ "/" + name);
+//            InputStreamReader isr = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = bufferedReader.readLine()) != null){
+                output.append(line + "\n");
+            }
+            json = output.toString();
+            bufferedReader.close();
 
         } catch (IOException ex) {
             ex.printStackTrace();
