@@ -44,20 +44,8 @@ public class Util {
     public static String loadJSONFromFilesDir(Context context, String name) {
         String json;
         try {
-//            FileInputStream fis = context.openFileInput(name);
-//            InputStreamReader isr = new InputStreamReader(fis);
-//            BufferedReader bufferedReader = new BufferedReader(isr);
-//            StringBuilder sb = new StringBuilder();
-//            String line;
-//            while ((line = bufferedReader.readLine()) != null) {
-//                sb.append(line);
-//            }
-            //TODO arreglar lectura de fichero
             File file = new File(context.getFilesDir(), name);
             StringBuffer output = new StringBuffer();
-//            FileReader fileReader = new FileReader(file);
-//            FileInputStream fileInputStream = new FileInputStream(context.getFilesDir()+ "/" + name);
-//            InputStreamReader isr = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = bufferedReader.readLine()) != null){
@@ -85,5 +73,18 @@ public class Util {
         km = 2*RADIO_TIERRA * Math.asin(Math.sqrt(distance));
         return km * 1000; //distancia en metros
 
+    }
+
+    //Siempre que sea de solución única
+    public static double testScoreIfFail(double optionsNumber, double attemptNumber){
+        double score;
+        if (attemptNumber >= optionsNumber){
+            return 0;
+        }
+        score=1-(attemptNumber/optionsNumber);
+        score *= 100;
+        String strScore = String.format("%.2f", score);
+        score = Double.valueOf(strScore);
+        return score;
     }
 }
