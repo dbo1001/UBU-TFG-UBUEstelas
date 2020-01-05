@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -86,5 +87,17 @@ public class Util {
         String strScore = String.format("%.2f", score);
         score = Double.valueOf(strScore);
         return score;
+    }
+
+    public static void writeJSONToFilesDir(Context context, String name, String data){
+        try {
+            File file = new File(context.getFilesDir(), name);
+            FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(data);
+            bufferedWriter.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
