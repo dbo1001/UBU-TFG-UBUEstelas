@@ -1,7 +1,9 @@
 package com.example.ubuestelas.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -121,8 +123,11 @@ public class TypeTestActivity extends AppCompatActivity {
                     obj.put("marks", marks);
                     double scoreFile = obj.getDouble("score");
                     scoreFile += score;
-                    String scoreFormat = String.format("%.2f",scoreFile);
-                    obj.put("score", Double.parseDouble(scoreFormat));
+                    double scoreToFile = Math.round(scoreFile*100)/100.0;
+//                    String scoreFormat = String.format("%.2f",scoreFile);
+//                    Double scoreToFile = Double.valueOf(scoreFormat);
+//                    double scoreToFile = Double.parseDouble(scoreFormat);
+                    obj.put("score", scoreToFile);
                     Util.writeJSONToFilesDir(this,"userInfo", obj.toString());
                 }catch (JSONException e){
                     e.printStackTrace();

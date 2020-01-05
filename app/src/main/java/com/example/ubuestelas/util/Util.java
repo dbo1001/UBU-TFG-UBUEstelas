@@ -84,9 +84,10 @@ public class Util {
         }
         score=1-(attemptNumber/optionsNumber);
         score *= 100;
-        String strScore = String.format("%.2f", score);
-        score = Double.valueOf(strScore);
-        return score;
+        double scoreF = Math.round(score*100)/100.0;
+//        String strScore = String.format("%.2f", score);
+//        score = Double.valueOf(strScore);
+        return scoreF;
     }
 
     public static void writeJSONToFilesDir(Context context, String name, String data){
