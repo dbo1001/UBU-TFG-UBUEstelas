@@ -72,7 +72,7 @@ public class SceneActivity extends AppCompatActivity {
             final int resourceId = this.getResources().getIdentifier(scene.getString("image"), "drawable", this.getPackageName());
             imageView.setImageResource(resourceId);
             textView.setText(scene.getString("text"));
-        }catch (Exception e){
+        }catch (JSONException e){
             e.printStackTrace();
         }
     }
@@ -89,6 +89,7 @@ public class SceneActivity extends AppCompatActivity {
                 bufferedWriter.write("{}");
                 bufferedWriter.close();
             }
+            double score=0.0;
             SharedPreferences sharedPref = getSharedPreferences("nameActivity", 0);
             String name = sharedPref.getString("name", "amigo");
             JSONObject obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "marksJSON.json"));
@@ -102,6 +103,7 @@ public class SceneActivity extends AppCompatActivity {
             }
             complete.put("user", name);
             complete.put("marks", stelas);
+            complete.put("score", score);
             fileWriter = new FileWriter(file.getAbsoluteFile());
             bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(complete.toString());
