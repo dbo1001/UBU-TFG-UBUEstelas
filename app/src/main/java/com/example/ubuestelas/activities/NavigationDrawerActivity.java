@@ -56,6 +56,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     List<Marker> markerList;
     Marker currentLocationMarker;
     HashMap<Marker,List<String>> dicMarkerAct;
+    Marker currentMarkerActivity = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,7 +218,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 }
 
                 if (!prevNameCloseMarkers.equals(nameCloseMarkers) && !nameCloseMarkers.isEmpty()) {
-                    builder.setTitle("Elige una estela");
+                    builder.setTitle(getString(R.string.choose_stela));
 // add a list
                     String[] closeMarkersString = new String[nameCloseMarkers.size()];
                     closeMarkersString = nameCloseMarkers.toArray(closeMarkersString);
@@ -225,8 +226,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     builder.setItems(closeMarkersString, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            List<String> markerChosen = dicMarkerAct.get(closeMarkers.get(which));
-                            SharedPreferences fileNameSP= getSharedPreferences("navDrawFileName", 0);
+                            currentMarkerActivity=closeMarkers.get(which);
+                            List<String> markerChosen = dicMarkerAct.get(currentMarkerActivity);
+                            SharedPreferences fileNameSP = getSharedPreferences("navDrawFileName", 0);
                             SharedPreferences.Editor nameEditor = fileNameSP.edit();
                             String fileNameChosen = markerChosen.get(1);
                             nameEditor.putString("fileName", fileNameChosen);
@@ -235,6 +237,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                                 case "test":
                                     Intent intent = new Intent(getBaseContext(), TypeTestActivity.class);
                                     startActivity(intent);
+
                                     break;
                                 case "puzzle":
                                     //TODO meter aqui la clase de puzzle cuando la tenga
@@ -245,6 +248,20 @@ public class NavigationDrawerActivity extends AppCompatActivity
 // create and show the alert dialog
                     AlertDialog dialog = builder.create();
                     dialog.show();
+                }
+                SharedPreferences sharedPrefTypeTest = getSharedPreferences("typeTestScore", 0);
+                String scoreTestString = sharedPrefTypeTest.getString("score", "-1");
+                double scoreTest = Double.parseDouble(scoreTestString);
+                if(currentMarkerActivity != null) {
+                    if (scoreTest == 100) {
+                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    } else if (scoreTest == 0) {
+                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    } else if (scoreTest > 0 && scoreTest < 100) {
+                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                    } else {
+                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    }
                 }
                 prevNameCloseMarkers = new ArrayList<>(nameCloseMarkers);
             }
@@ -291,7 +308,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             JSONArray marks = obj.getJSONArray("marks");
             for (int i = 0; i <= marks.length(); i++){
                 JSONObject mark = marks.getJSONObject(i);
-                completedMarkers.add(mark.getBoolean("mark" + String.format("%02d", i+1)));
+                completedMarkers.add(mark.getBoolean("solved"));
             }
         }catch (JSONException e){
             e.printStackTrace();

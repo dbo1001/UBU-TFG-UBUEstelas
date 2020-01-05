@@ -98,7 +98,8 @@ public class SceneActivity extends AppCompatActivity {
             JSONArray stelas = new JSONArray();
             for (int i = 1; i <= markstot.length(); i++) {
                 JSONObject mark = new JSONObject();
-                mark.put("mark" + String.format("%02d", i), false);
+                mark.put("mark", "mark" + String.format("%02d", i));
+                mark.put("solved", false);
                 stelas.put(mark);
             }
             complete.put("user", name);

@@ -19,10 +19,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class TypeTestActivity extends AppCompatActivity {
 
     JSONObject fileToRead;
     int attempts = 0;
+    String markName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +41,10 @@ public class TypeTestActivity extends AppCompatActivity {
 
     public void fillData(){
         try {
-            //TODO
-            //tiene que haber un sharedpreferences donde me pase el nombre del archivo a cargar
-            //de ahí va a salir la variable que ahora está como texto fijo en mark02.json
             SharedPreferences sharedPref = getSharedPreferences("navDrawFileName", 0);
             String fileNameMark = sharedPref.getString("fileName", "error");
+            String[] splitName = fileNameMark.split("\\.");
+            markName = splitName[0];
             fileToRead = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), fileNameMark));
             JSONArray options = fileToRead.getJSONArray("options");
             int optionsNumber = fileToRead.getInt("optionsNumber");
@@ -99,9 +107,30 @@ public class TypeTestActivity extends AppCompatActivity {
                 }else {
                     score = Util.testScoreIfFail(fileToRead.getInt("optionsNumber"), attempts);
                 }
-
-                //TODO recuperar el archivo de userInfo y actualizar el score
-                System.out.println("Score:" + score);
+                Toast.makeText(this,getString(R.string.correct) + ". " + getString(R.string.points_obtained, score), Toast.LENGTH_SHORT).show();
+                JSONObject obj;
+                try {
+                    obj = new JSONObject(Util.loadJSONFromFilesDir(this, "userInfo"));
+                    JSONArray marks = obj.getJSONArray("marks");
+                    for (int i = 0; i < marks.length(); i++) {
+                        JSONObject mark = marks.getJSONObject(i);
+                        if(markName.equals(mark.getString("mark"))){
+                            mark.put("solved", true);
+                        }
+                    }
+                    obj.put("marks", marks);
+                    double scoreFile = obj.getDouble("score");
+                    scoreFile += score;
+                    String scoreFormat = String.format("%.2f",scoreFile);
+                    obj.put("score", Double.parseDouble(scoreFormat));
+                    Util.writeJSONToFilesDir(this,"userInfo", obj.toString());
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+                SharedPreferences scoreSP = getSharedPreferences("typeTestScore", 0);
+                SharedPreferences.Editor nameEditor = scoreSP.edit();
+                nameEditor.putString("score", String.valueOf(score));
+                nameEditor.commit();
                 Intent intent = new Intent(this, DidYouKnowActivity.class);
                 startActivity(intent);
                 finish();
