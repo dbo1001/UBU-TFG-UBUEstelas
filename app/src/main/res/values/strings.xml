@@ -4,6 +4,10 @@
     <string name="continue_button">Continuar</string>
     <string name="what_name">¿Cuál es tu nombre?</string>
     <string name="name">Nombre</string>
+    <string name="send">Enviar</string>
+    <string name="incorrect">Incorrecto</string>
+    <string name="try_again">Inténtalo otra vez</string>
+    <string name="did_you_know">¿Sabías que...</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

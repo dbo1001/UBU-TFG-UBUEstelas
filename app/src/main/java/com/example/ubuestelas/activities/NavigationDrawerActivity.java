@@ -3,6 +3,7 @@ package com.example.ubuestelas.activities;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -42,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class NavigationDrawerActivity extends AppCompatActivity
@@ -52,6 +55,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     MarkerOptions currentLocation;
     List<Marker> markerList;
     Marker currentLocationMarker;
+    HashMap<Marker,List<String>> dicMarkerAct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +147,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        addJSONmarkers();
+        addJSONmarkersAndFillDic();
         getCurrentLocation();
     }
 
@@ -157,9 +161,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     }
 
-    public void addJSONmarkers(){
+    public void addJSONmarkersAndFillDic(){
         JSONObject obj;
         markerList = new ArrayList<Marker>();
+        dicMarkerAct = new HashMap<Marker,List<String>>();
         try {
             obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "marksJSON.json"));
             JSONArray townCentre = obj.getJSONArray("townCentre");
@@ -172,6 +177,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 LatLng stelaLatLng = new LatLng(mark.getDouble("latitude"), mark.getDouble("longitude"));
                 Marker marker = mMap.addMarker(new MarkerOptions().position(stelaLatLng).title(mark.getString("description")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 markerList.add(marker);
+                List<String> typeAndFile = new ArrayList<String>();
+                typeAndFile.add(mark.getString("type"));
+                typeAndFile.add(mark.getString("fileName"));
+                dicMarkerAct.put(marker,typeAndFile);
             }
         }catch (JSONException e){
             e.printStackTrace();
@@ -216,13 +225,20 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     builder.setItems(closeMarkersString, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            System.out.println(closeMarkers.get(which));
-                            switch (which) {
-                                case 0: // horse
-                                case 1: // cow
-                                case 2: // camel
-                                case 3: // sheep
-                                case 4: // goat
+                            List<String> markerChosen = dicMarkerAct.get(closeMarkers.get(which));
+                            SharedPreferences fileNameSP= getSharedPreferences("navDrawFileName", 0);
+                            SharedPreferences.Editor nameEditor = fileNameSP.edit();
+                            String fileNameChosen = markerChosen.get(1);
+                            nameEditor.putString("fileName", fileNameChosen);
+                            nameEditor.commit();
+                            switch (markerChosen.get(0)){
+                                case "test":
+                                    Intent intent = new Intent(getBaseContext(), TypeTestActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                case "puzzle":
+                                    //TODO meter aqui la clase de puzzle cuando la tenga
+                                    break;
                             }
                         }
                     });
@@ -253,16 +269,16 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     public List<Marker> getCloseMarkers(){
         //TODO comprobar si esa estela ya la ha resuelto
-//        List<Boolean> completedMarkers = checkCompletedMarkers();
+        List<Boolean> completedMarkers = checkCompletedMarkers();
         List<Marker> closeMarkers= new ArrayList<>();
         int counter = 0;
         for (Marker marker : markerList) {
-//            if (!completedMarkers.get(counter)) {
+            if (!completedMarkers.get(counter)) {
                 if (Util.getDistanceFromLatLong(currentLocationMarker.getPosition(), marker.getPosition()) <= 10) {
                     closeMarkers.add(marker);
                 }
                 counter++;
-//            }
+            }
         }
         return closeMarkers;
     }
@@ -271,11 +287,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
         JSONObject obj;
         List<Boolean> completedMarkers= new ArrayList<>();
         try {
-            obj = new JSONObject(Util.loadJSONFromFilesDir(getApplicationContext(), "userInfo.json"));
+            obj = new JSONObject(Util.loadJSONFromFilesDir(this, "userInfo"));
             JSONArray marks = obj.getJSONArray("marks");
             for (int i = 0; i <= marks.length(); i++){
                 JSONObject mark = marks.getJSONObject(i);
-                completedMarkers.add(mark.getBoolean("mark" + String.format("%02d", i)));
+                completedMarkers.add(mark.getBoolean("mark" + String.format("%02d", i+1)));
             }
         }catch (JSONException e){
             e.printStackTrace();
