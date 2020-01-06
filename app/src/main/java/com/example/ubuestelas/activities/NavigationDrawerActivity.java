@@ -149,6 +149,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         addJSONmarkersAndFillDic();
+        TextView textViewScore = findViewById(R.id.score);
+        textViewScore.setText(getScoreOutOfTotal());
         getCurrentLocation();
     }
 
@@ -263,6 +265,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
                         currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                     }
                 }
+                TextView textViewScore = findViewById(R.id.score);
+                textViewScore.setText(getScoreOutOfTotal());
                 prevNameCloseMarkers = new ArrayList<>(nameCloseMarkers);
             }
 
@@ -314,6 +318,18 @@ public class NavigationDrawerActivity extends AppCompatActivity
             e.printStackTrace();
         }
         return completedMarkers;
+    }
+
+    public String getScoreOutOfTotal(){
+        JSONObject obj;
+        double score=0.0;
+        try {
+            obj = new JSONObject(Util.loadJSONFromFilesDir(this, "userInfo"));
+            score = obj.getDouble("score");
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return String.valueOf(score)+"/"+String.valueOf(markerList.size()*100);
     }
 
 }
