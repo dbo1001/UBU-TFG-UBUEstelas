@@ -99,6 +99,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
         String name = sharedPref.getString("name", "amigo");
         TextView textViewName = findViewById(R.id.user_name);
         textViewName.setText(name);
+        //Se setea también el valor inicial del score en el menú lateral
+        TextView textViewScore = findViewById(R.id.score);
+        textViewScore.setText(getScoreOutOfTotal());
         getMenuInflater().inflate(R.menu.navigation_drawer, menu);
         return true;
     }
@@ -149,8 +152,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         addJSONmarkersAndFillDic();
-        TextView textViewScore = findViewById(R.id.score);
-        textViewScore.setText(getScoreOutOfTotal());
         getCurrentLocation();
     }
 
