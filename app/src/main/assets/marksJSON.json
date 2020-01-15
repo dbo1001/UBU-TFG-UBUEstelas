@@ -62,6 +62,13 @@
       "longitude": -3.445432,
       "type": "test",
       "fileName": "mark02.json"
+    },
+    {
+      "description":"Estela 10",
+      "latitude": 42.120989,
+      "longitude": -3.444791,
+      "type": "test",
+      "fileName": "mark02.json"
     }
   ],
   "townCentre": [
