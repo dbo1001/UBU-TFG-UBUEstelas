@@ -1,0 +1,44 @@
+{
+  "characters": [
+    {
+      "characterImage": "character01",
+      "whenSelected": "check"
+    },
+    {
+      "characterImage": "character02",
+      "whenSelected": "check"
+    },
+    {
+      "characterImage": "character03",
+      "whenSelected": "check"
+    },
+    {
+      "characterImage": "character04",
+      "whenSelected": "check"
+    },
+    {
+      "characterImage": "character05",
+      "whenSelected": "check"
+    },
+    {
+      "characterImage": "character06",
+      "whenSelected": "check"
+    },
+    {
+      "characterImage": "character07",
+      "whenSelected": "check"
+    },
+    {
+      "characterImage": "character08",
+      "whenSelected": "check"
+    },
+    {
+      "characterImage": "character09",
+      "whenSelected": "check"
+    },
+    {
+      "characterImage": "character10",
+      "whenSelected": "check"
+    }
+  ]
+}

@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,12 +29,14 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.ubuestelas.R;
+import com.example.ubuestelas.util.CharacterSelectionAdapter;
 import com.example.ubuestelas.util.Util;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -195,11 +199,16 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void getCurrentLocation(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        SharedPreferences sharedPrefLoc = getSharedPreferences("characterSelected",0);
+        int positionChar = sharedPrefLoc.getInt("position", 0);
+        CharacterSelectionAdapter characterSelectionAdapter = new CharacterSelectionAdapter(this);
+        final int characterSel = characterSelectionAdapter.characters[positionChar];
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
             List<String> prevNameCloseMarkers = new ArrayList<>();
+            Bitmap characterSized = getCharacterSized(characterSel);
             @Override
             public void onLocationChanged(Location location) {
 
@@ -208,7 +217,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 }
                 currentLocation = new MarkerOptions();
 
-                currentLocation.position(new LatLng(location.getLatitude(), location.getLongitude())).title("Estoy aquí").icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_my_location));
+                currentLocation.position(new LatLng(location.getLatitude(), location.getLongitude())).title("Estoy aquí").icon(BitmapDescriptorFactory.fromBitmap(characterSized));
 
                 currentLocationMarker = mMap.addMarker(currentLocation);
 
@@ -269,6 +278,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 TextView textViewScore = findViewById(R.id.score);
                 textViewScore.setText(getScoreOutOfTotal());
                 prevNameCloseMarkers = new ArrayList<>(nameCloseMarkers);
+            }
+            public Bitmap getCharacterSized(int character){
+                BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(character);
+                Bitmap b = bitmapdraw.getBitmap();
+                int width = (int) (b.getWidth()*0.6);
+                int heigth = (int) (b.getHeight()*0.6);
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, false);
+                return smallMarker;
             }
 
             @Override
