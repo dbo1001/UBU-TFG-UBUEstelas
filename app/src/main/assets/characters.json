@@ -2,43 +2,47 @@
   "characters": [
     {
       "characterImage": "character01",
-      "whenSelected": "check"
+      "whenSelected": "character01selec"
     },
     {
       "characterImage": "character02",
-      "whenSelected": "check"
+      "whenSelected": "character02selec"
     },
     {
       "characterImage": "character03",
-      "whenSelected": "check"
+      "whenSelected": "character03selec"
     },
     {
       "characterImage": "character04",
-      "whenSelected": "check"
+      "whenSelected": "character04selec"
     },
     {
       "characterImage": "character05",
-      "whenSelected": "check"
+      "whenSelected": "character05selec"
     },
     {
       "characterImage": "character06",
-      "whenSelected": "check"
+      "whenSelected": "character06selec"
     },
     {
       "characterImage": "character07",
-      "whenSelected": "check"
+      "whenSelected": "character07selec"
     },
     {
       "characterImage": "character08",
-      "whenSelected": "check"
+      "whenSelected": "character08selec"
     },
     {
       "characterImage": "character09",
-      "whenSelected": "check"
+      "whenSelected": "character09selec"
     },
     {
       "characterImage": "character10",
-      "whenSelected": "check"
+      "whenSelected": "character10selec"
+    },
+    {
+      "characterImage": "character11",
+      "whenSelected": "character11selec"
     }
   ]
 }

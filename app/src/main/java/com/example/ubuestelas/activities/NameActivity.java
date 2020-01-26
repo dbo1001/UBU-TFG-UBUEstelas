@@ -22,6 +22,7 @@ public class NameActivity extends AppCompatActivity{
 
     JSONArray chars;
     Integer[] characs = {};
+    Integer[] characsSelec = {};
 
     int prevIdCharacter = R.id.character;
     int prevSelecCharacter = R.drawable.character01;
@@ -53,8 +54,10 @@ public class NameActivity extends AppCompatActivity{
             chars = obj.getJSONArray("characters");
             for (int i = 0; i<chars.length(); i++){
                 JSONObject charac = chars.getJSONObject(i);
-                int resourceId = getResources().getIdentifier(charac.getString("characterImage"), "drawable", getPackageName());
-                characs = ArrayUtils.appendToArray(characs, resourceId);
+                int resourceIdCharac = getResources().getIdentifier(charac.getString("characterImage"), "drawable", getPackageName());
+                int resourceIdSelecCharac = getResources().getIdentifier(charac.getString("whenSelected"), "drawable", getPackageName());
+                characs = ArrayUtils.appendToArray(characs, resourceIdCharac);
+                characsSelec = ArrayUtils.appendToArray(characsSelec, resourceIdSelecCharac);
             }}catch (JSONException e){
             e.printStackTrace();
         }
@@ -64,6 +67,10 @@ public class NameActivity extends AppCompatActivity{
             iv.setImageResource(characs[i]);
             iv.setId(R.id.character+i);
             iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//            iv.setMinimumWidth(50);
+//            iv.requestLayout();
+//            iv.getLayoutParams().width=300;
+//            iv.setLayoutParams(new LinearLayout.LayoutParams(600, LinearLayout.LayoutParams.WRAP_CONTENT));
             iv.setOnClickListener(new View.OnClickListener() {
                                       @Override
                                       public void onClick(View v) {
@@ -73,7 +80,7 @@ public class NameActivity extends AppCompatActivity{
                                                   ImageView ivPreviousSelected = (ImageView) findViewById(prevIdCharacter);
                                                   ivPreviousSelected.setImageResource(prevSelecCharacter);
                                                   ivPreviousSelected.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                                                  ivSelected.setImageResource(R.drawable.checknewdimen);
+                                                  ivSelected.setImageResource(characsSelec[i]);
                                                   ivSelected.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                                                   prevSelecCharacter=characs[i];
                                                   prevIdCharacter =R.id.character+i;
