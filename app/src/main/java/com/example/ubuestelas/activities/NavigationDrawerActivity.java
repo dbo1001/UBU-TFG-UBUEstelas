@@ -15,7 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -29,14 +28,12 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.ubuestelas.R;
-import com.example.ubuestelas.util.CharacterSelectionAdapter;
 import com.example.ubuestelas.util.Util;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -199,16 +196,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void getCurrentLocation(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        SharedPreferences sharedPrefLoc = getSharedPreferences("characterSelected",0);
-        int positionChar = sharedPrefLoc.getInt("position", 0);
-        CharacterSelectionAdapter characterSelectionAdapter = new CharacterSelectionAdapter(this);
-        final int characterSel = characterSelectionAdapter.characters[positionChar];
+        SharedPreferences sharedPrefChar = getSharedPreferences("characterSelected",0);
+        final int characterDrawable = sharedPrefChar.getInt("drawableCharac",R.drawable.character01);
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
             List<String> prevNameCloseMarkers = new ArrayList<>();
-            Bitmap characterSized = getCharacterSized(characterSel);
+            Bitmap characterSized = getCharacterSized(characterDrawable);
             @Override
             public void onLocationChanged(Location location) {
 
@@ -245,14 +240,16 @@ public class NavigationDrawerActivity extends AppCompatActivity
                             String fileNameChosen = markerChosen.get(1);
                             nameEditor.putString("fileName", fileNameChosen);
                             nameEditor.commit();
+                            Intent intent;
                             switch (markerChosen.get(0)){
                                 case "test":
-                                    Intent intent = new Intent(getBaseContext(), TypeTestActivity.class);
+                                    intent = new Intent(getBaseContext(), TypeTestActivity.class);
                                     startActivity(intent);
 
                                     break;
                                 case "puzzle":
-                                    //TODO meter aqui la clase de puzzle cuando la tenga
+                                    intent = new Intent(getBaseContext(), TypePuzzleActivity.class);
+                                    startActivity(intent);
                                     break;
                             }
                         }
@@ -261,7 +258,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
-                SharedPreferences sharedPrefTypeTest = getSharedPreferences("typeTestScore", 0);
+                SharedPreferences sharedPrefTypeTest = getSharedPreferences("scoreEvent", 0);
                 String scoreTestString = sharedPrefTypeTest.getString("score", "-1");
                 double scoreTest = Double.parseDouble(scoreTestString);
                 if(currentMarkerActivity != null) {
@@ -279,6 +276,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 textViewScore.setText(getScoreOutOfTotal());
                 prevNameCloseMarkers = new ArrayList<>(nameCloseMarkers);
             }
+
             public Bitmap getCharacterSized(int character){
                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(character);
                 Bitmap b = bitmapdraw.getBitmap();

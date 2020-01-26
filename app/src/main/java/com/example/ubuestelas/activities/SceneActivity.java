@@ -102,9 +102,12 @@ public class SceneActivity extends AppCompatActivity {
                 mark.put("solved", false);
                 stelas.put(mark);
             }
+            SharedPreferences scoreSharedPref = getSharedPreferences("characterSelected", 0);
+            int drawableCharac = scoreSharedPref.getInt("drawableCharac", R.drawable.character01);
             complete.put("user", name);
             complete.put("marks", stelas);
             complete.put("score", score);
+            complete.put("drawableCharac", drawableCharac);
             fileWriter = new FileWriter(file.getAbsoluteFile());
             bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(complete.toString());

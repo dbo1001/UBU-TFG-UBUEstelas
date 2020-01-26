@@ -6,14 +6,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.ubuestelas.R;
-import com.example.ubuestelas.util.CharacterSelectionAdapter;
+import com.example.ubuestelas.util.Util;
+import com.google.android.gms.common.util.ArrayUtils;
 
-public class NameActivity extends AppCompatActivity {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class NameActivity extends AppCompatActivity{
+
+    JSONArray chars;
+    Integer[] characs = {};
+
+    int prevIdCharacter = R.id.character;
+    int prevSelecCharacter = R.drawable.character01;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,34 +47,45 @@ public class NameActivity extends AppCompatActivity {
     }
 
     public void fillCharacters(){
-        final GridView gridView = (GridView) findViewById(R.id.selec_charac);
+        JSONObject obj;
+        try {
+            obj = new JSONObject(Util.loadJSONFromAsset(this, "characters.json"));
+            chars = obj.getJSONArray("characters");
+            for (int i = 0; i<chars.length(); i++){
+                JSONObject charac = chars.getJSONObject(i);
+                int resourceId = getResources().getIdentifier(charac.getString("characterImage"), "drawable", getPackageName());
+                characs = ArrayUtils.appendToArray(characs, resourceId);
+            }}catch (JSONException e){
+            e.printStackTrace();
+        }
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.images_scroll);
+        for (int i =0; i<characs.length; i++) {
+            ImageView iv = new ImageView (this);
+            iv.setImageResource(characs[i]);
+            iv.setId(R.id.character+i);
+            iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            iv.setOnClickListener(new View.OnClickListener() {
+                                      @Override
+                                      public void onClick(View v) {
+                                          for (int i = 0; i<chars.length(); i++) {
+                                              if (v.getId() == R.id.character + i) {
+                                                  ImageView ivSelected = (ImageView) findViewById(R.id.character + i);
+                                                  ImageView ivPreviousSelected = (ImageView) findViewById(prevIdCharacter);
+                                                  ivPreviousSelected.setImageResource(prevSelecCharacter);
+                                                  ivPreviousSelected.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                                                  ivSelected.setImageResource(R.drawable.checknewdimen);
+                                                  ivSelected.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                                                  prevSelecCharacter=characs[i];
+                                                  prevIdCharacter =R.id.character+i;
+                                                  SharedPreferences characSP= getSharedPreferences("characterSelected", 0);
+                                                  SharedPreferences.Editor characEditor = characSP.edit();
+                                                  characEditor.putInt("drawableCharac", characs[i]);
+                                                  characEditor.commit();
+                                              }
+                                          }
+                                      }});
+            linearLayout.addView(iv);
+        }
 
-        gridView.setAdapter(new CharacterSelectionAdapter(this));
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
-            /**
-             * Callback method to be invoked when an item in this AdapterView has
-             * been clicked.
-             * <p>
-             * Implementers can call getItemAtPosition(position) if they need
-             * to access the data associated with the selected item.
-             *
-             * @param parent   The AdapterView where the click happened.
-             * @param view     The view within the AdapterView that was clicked (this
-             *                 will be a view provided by the adapter)
-             * @param position The position of the view in the adapter.
-             * @param id       The row id of the item that was clicked.
-             */
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SharedPreferences characSP= getSharedPreferences("characterSelected", 0);
-                SharedPreferences.Editor characEditor = characSP.edit();
-                characEditor.putInt("position", position);
-                characEditor.commit();
-
-                gridView.setAdapter(new CharacterSelectionAdapter(getApplicationContext(), position));
-            }
-        });
     }
 }
