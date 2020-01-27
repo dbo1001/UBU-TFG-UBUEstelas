@@ -2,6 +2,7 @@ package com.example.ubuestelas.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -22,11 +23,10 @@ public class DidYouKnowActivity extends AppCompatActivity {
     }
 
     public void loadText() {
-        //TODO
-        //tiene que haber un sharedpreferences donde me pase el nombre del archivo a cargar
-        //de ahí va a salir la variable que ahora está como texto fijo en mark02.json
+        SharedPreferences nameFileSP = getSharedPreferences("nameFileSP", 0);
+        String fileName = nameFileSP.getString("fileName", "error");
         try {
-            JSONObject fileToRead = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "mark02.json"));
+            JSONObject fileToRead = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), fileName + ".json"));
             String curiosity = fileToRead.getString("curiosity");
             TextView textView = findViewById(R.id.texto_curiosidad);
             textView.setText(curiosity);

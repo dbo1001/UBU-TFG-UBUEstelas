@@ -101,4 +101,20 @@ public class Util {
             e.printStackTrace();
         }
     }
+
+    public static double puzzleSolvedScore(CharSequence text) {
+        double score;
+        String minutes = "" + text.charAt(0) + text.charAt(1);
+        String seconds = "" + text.charAt(3) + text.charAt(4);
+        double secondsTot = (Integer.parseInt(minutes)*60)+ Integer.parseInt(seconds);
+        if(secondsTot<=90){
+            score=100;
+        }else if (secondsTot > 90 && secondsTot <=120){
+            double diff = secondsTot - 90;
+            score=100-diff;
+        }else{
+            score=0;
+        }
+        return score;
+    }
 }

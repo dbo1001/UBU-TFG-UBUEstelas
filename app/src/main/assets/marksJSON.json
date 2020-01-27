@@ -4,8 +4,8 @@
       "description":"Estela 1",
       "latitude": 42.123804,
       "longitude": -3.445478,
-      "type": "test",
-      "fileName": "mark02.json"
+      "type": "puzzle",
+      "fileName": "mark01.json"
     },
     {
       "description":"Estela 2",
@@ -33,7 +33,7 @@
       "latitude": 42.123162,
       "longitude": -3.444855,
       "type": "test",
-      "fileName": "mark02.json"
+      "fileName": "mark05.json"
     },
     {
       "description":"Estela 6",

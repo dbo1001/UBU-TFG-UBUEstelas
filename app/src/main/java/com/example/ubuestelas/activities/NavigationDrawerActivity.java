@@ -226,10 +226,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
                 if (!prevNameCloseMarkers.equals(nameCloseMarkers) && !nameCloseMarkers.isEmpty()) {
                     builder.setTitle(getString(R.string.choose_stela));
-// add a list
                     String[] closeMarkersString = new String[nameCloseMarkers.size()];
                     closeMarkersString = nameCloseMarkers.toArray(closeMarkersString);
-//                String[] animals = {"horse", "cow", "camel", "sheep", "goat"};
                     builder.setItems(closeMarkersString, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -258,18 +256,18 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
-                SharedPreferences sharedPrefTypeTest = getSharedPreferences("scoreEvent", 0);
-                String scoreTestString = sharedPrefTypeTest.getString("score", "-1");
-                double scoreTest = Double.parseDouble(scoreTestString);
+                SharedPreferences sharedPrefScoreEvent = getSharedPreferences("scoreEvent", 0);
+                String scoreEventString = sharedPrefScoreEvent.getString("score", "-1");
+                double scoreEvent = Double.parseDouble(scoreEventString);
                 if(currentMarkerActivity != null) {
-                    if (scoreTest == 100) {
+                    if (scoreEvent == 100) {
                         currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    } else if (scoreTest == 0) {
+                    } else if (scoreEvent == 0) {
                         currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                    } else if (scoreTest > 0 && scoreTest < 100) {
+                    } else if (scoreEvent > 0 && scoreEvent < 100) {
                         currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
                     } else {
-                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                     }
                 }
                 TextView textViewScore = findViewById(R.id.score);
@@ -305,7 +303,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     public List<Marker> getCloseMarkers(){
-        //TODO comprobar si esa estela ya la ha resuelto
         List<Boolean> completedMarkers = checkCompletedMarkers();
         List<Marker> closeMarkers= new ArrayList<>();
         int counter = 0;
