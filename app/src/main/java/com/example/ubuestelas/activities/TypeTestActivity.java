@@ -132,10 +132,14 @@ public class TypeTestActivity extends AppCompatActivity {
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
-                SharedPreferences scoreSP = getSharedPreferences("typeTestScore", 0);
-                SharedPreferences.Editor nameEditor = scoreSP.edit();
-                nameEditor.putString("score", String.valueOf(score));
-                nameEditor.commit();
+                SharedPreferences scoreSP = getSharedPreferences("scoreEvent", 0);
+                SharedPreferences.Editor scoreEditor = scoreSP.edit();
+                scoreEditor.putString("score", String.valueOf(score));
+                scoreEditor.commit();
+                SharedPreferences nameFileSP = getSharedPreferences("nameFileSP", 0);
+                SharedPreferences.Editor nameFileEditor = nameFileSP.edit();
+                nameFileEditor.putString("fileName", markName);
+                nameFileEditor.commit();
                 Intent intent = new Intent(this, DidYouKnowActivity.class);
                 startActivity(intent);
                 finish();
