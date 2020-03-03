@@ -17,7 +17,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.TypePuzzleActivity"></activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity android:name=".activities.TypeCompleteWordsActivity" />
+        <activity android:name=".activities.TypePuzzleActivity" />
         <activity android:name=".activities.DidYouKnowActivity" />
         <activity android:name=".activities.TypeTestActivity" />
         <activity
