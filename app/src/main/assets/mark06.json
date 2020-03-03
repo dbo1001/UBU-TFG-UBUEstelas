@@ -1,0 +1,38 @@
+{
+  "text": "VIS%l%L%l%S %l%EV%l%E %l% AN L%l%",
+  "gaps": [
+    {
+      "position" : "4",
+      "correct": "A",
+      "options": "A,N,M,V,U,I,R,D"
+    },
+    {
+      "position" : "6",
+      "correct": "V",
+      "options": "O,B,X,V,J,A,U,W"
+    },
+    {
+      "position" : "9",
+      "correct": "N",
+      "options": "M,W,A,K,N,T,Y,H"
+    },
+    {
+      "position" : "12",
+      "correct": "S",
+      "options": "O,D,P,Q,R,J,G,S"
+    },
+    {
+      "position" : "15",
+      "correct": "E",
+      "options": "F,E,B,Z,R,Y,L,P"
+    },
+    {
+      "position" : "21",
+      "correct": "X",
+      "options": "M,K,A,Y,X,W,S,U"
+    }
+  ],
+
+  "hint" : "Afina la mirada por el lado de la carretera",
+  "curiosity": "hay una estela de Lara en el Museum fur Vor- und Frühgeschicht de Berlin?"
+}
