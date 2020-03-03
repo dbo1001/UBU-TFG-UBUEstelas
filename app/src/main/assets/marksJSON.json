@@ -39,8 +39,8 @@
       "description":"Estela 6",
       "latitude": 42.123285,
       "longitude": -3.445400,
-      "type": "test",
-      "fileName": "mark02.json"
+      "type": "complete_words",
+      "fileName": "mark06.json"
     },
     {
       "description":"Estela 7",
