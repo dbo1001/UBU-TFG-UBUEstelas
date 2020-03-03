@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class Util {
 
@@ -107,14 +108,37 @@ public class Util {
         String minutes = "" + text.charAt(0) + text.charAt(1);
         String seconds = "" + text.charAt(3) + text.charAt(4);
         double secondsTot = (Integer.parseInt(minutes)*60)+ Integer.parseInt(seconds);
-        if(secondsTot<=90){
+        if(secondsTot<=60){
             score=100;
-        }else if (secondsTot > 90 && secondsTot <=120){
-            double diff = secondsTot - 90;
+        }else if (secondsTot > 60 && secondsTot <=120){
+            double diff = secondsTot - 60;
             score=100-diff;
         }else{
             score=0;
         }
+        return score;
+    }
+
+    public static double completeWordsScoreIfFail(double attemptNumber, double gapNumber, List<Double> errorsAttempt, double lettersNumber){
+        double score = 0;
+        double counter=0;
+        double reduction=1;
+        if (attemptNumber >= gapNumber){
+            return 0;
+        }
+        for (Double wrongs : errorsAttempt){
+            counter++;
+            if(counter==1) {
+                score = ((gapNumber - wrongs) + (wrongs * -(1 / (lettersNumber - counter))));
+            }else if(counter <= (gapNumber/2)){
+                reduction = reduction / 2;
+                score = (score + ((wrongs-(reduction * -(1 / (lettersNumber - counter))))));
+            }else{
+                score = (score + ( -(1 / (lettersNumber - counter))));
+            }
+        }
+        score = score * 100 / gapNumber;
+        score = Math.round(score*100)/100.0;
         return score;
     }
 }
