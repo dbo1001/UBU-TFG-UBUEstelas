@@ -1,0 +1,36 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+
+    <string-array name="map_entries">
+        <item>Carreteras</item>
+        <item>Satélite</item>
+        <item>Terreno</item>
+    </string-array>
+
+    <string-array name="map_values">
+        <item>MAP_TYPE_NORMAL</item>
+        <item>MAP_TYPE_SATELLITE</item>
+        <item>MAP_TYPE_TERRAIN</item>
+    </string-array>
+
+    <string-array name="difficulty_entries">
+        <item>Fácil</item>
+        <item>Medio</item>
+        <item>Difícil</item>
+    </string-array>
+
+    <string-array name="difficulty_values">
+        <item>easy</item>
+        <item>mid</item>
+        <item>hard</item>
+    </string-array>
+</resources>
