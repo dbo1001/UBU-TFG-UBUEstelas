@@ -118,6 +118,18 @@ public class TypeTestActivity extends AppCompatActivity {
                         JSONObject mark = marks.getJSONObject(i);
                         if(markName.equals(mark.getString("mark"))){
                             mark.put("solved", true);
+                            if (markName.equals(mark.getString("mark"))) {
+                                mark.put("solved", true);
+                                if (score == 100) {
+                                    mark.put("color", "green");
+                                } else if (score == 0) {
+                                    mark.put("color", "red");
+                                } else if (score > 0 && score < 100) {
+                                    mark.put("color", "yellow");
+                                } else {
+                                    mark.put("color", "azure");
+                                }
+                            }
                         }
                     }
                     obj.put("marks", marks);

@@ -67,11 +67,13 @@ public class SceneActivity extends AppCompatActivity {
 //                Intent intent = new Intent(this, MapsActivity.class);
                 Intent intent = new Intent(this, NavigationDrawerActivity.class);
                 startActivity(intent);
+                finish();
+            }else {
+                JSONObject scene = scenes.getJSONObject(counter);
+                final int resourceId = this.getResources().getIdentifier(scene.getString("image"), "drawable", this.getPackageName());
+                imageView.setImageResource(resourceId);
+                textView.setText(scene.getString("text"));
             }
-            JSONObject scene = scenes.getJSONObject(counter);
-            final int resourceId = this.getResources().getIdentifier(scene.getString("image"), "drawable", this.getPackageName());
-            imageView.setImageResource(resourceId);
-            textView.setText(scene.getString("text"));
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -100,6 +102,7 @@ public class SceneActivity extends AppCompatActivity {
                 JSONObject mark = new JSONObject();
                 mark.put("mark", "mark" + String.format("%02d", i));
                 mark.put("solved", false);
+                mark.put("color", "azure");
                 stelas.put(mark);
             }
             SharedPreferences scoreSharedPref = getSharedPreferences("characterSelected", 0);

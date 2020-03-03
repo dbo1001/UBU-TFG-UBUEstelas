@@ -24,6 +24,7 @@ import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.GestureDetectGridView;
 import com.example.ubuestelas.util.PuzzleAdapter;
 import com.example.ubuestelas.util.Util;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -252,6 +253,15 @@ public class TypePuzzleActivity extends AppCompatActivity {
                     JSONObject mark = marks.getJSONObject(i);
                     if (markName.equals(mark.getString("mark"))) {
                         mark.put("solved", true);
+                        if (score == 100) {
+                            mark.put("color", "green");
+                        } else if (score == 0) {
+                            mark.put("color", "red");
+                        } else if (score > 0 && score < 100) {
+                            mark.put("color", "yellow");
+                        } else {
+                            mark.put("color", "azure");
+                        }
                     }
                 }
                 obj.put("marks", marks);

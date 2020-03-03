@@ -13,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.preference.PreferenceManager;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
@@ -58,6 +60,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     Marker currentLocationMarker;
     HashMap<Marker,List<String>> dicMarkerAct;
     Marker currentMarkerActivity = null;
+    public String difficulty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
 
+        setDifficulty();
+        updatePreferences();
 
     }
 
@@ -90,6 +95,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//            finish();
         }
     }
 
@@ -116,6 +124,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
@@ -151,7 +160,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        setMapType();
         addJSONmarkersAndFillDic();
         getCurrentLocation();
     }
@@ -167,20 +176,44 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     public void addJSONmarkersAndFillDic(){
-        JSONObject obj;
+        JSONObject objMarks;
+        JSONObject objUserInfo;
         markerList = new ArrayList<Marker>();
         dicMarkerAct = new HashMap<Marker,List<String>>();
         try {
-            obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "marksJSON.json"));
-            JSONArray townCentre = obj.getJSONArray("townCentre");
+            objUserInfo = new JSONObject(Util.loadJSONFromFilesDir(this, "userInfo"));
+            JSONArray marksColors = objUserInfo.getJSONArray("marks");
+            objMarks = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "marksJSON.json"));
+            JSONArray townCentre = objMarks.getJSONArray("townCentre");
             JSONObject town = townCentre.getJSONObject(0);
             LatLng townLatLng = new LatLng(town.getDouble("latitude"), town.getDouble("longitude"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(townLatLng, 17.5f));
-            JSONArray marks = obj.getJSONArray("marks");
+            JSONArray marks = objMarks.getJSONArray("marks");
             for (int i = 0; i < marks.length(); i++) {
                 JSONObject mark = marks.getJSONObject(i);
+                JSONObject markColor = marksColors.getJSONObject(i);
                 LatLng stelaLatLng = new LatLng(mark.getDouble("latitude"), mark.getDouble("longitude"));
-                Marker marker = mMap.addMarker(new MarkerOptions().position(stelaLatLng).title(mark.getString("description")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                Marker marker = mMap.addMarker(new MarkerOptions().position(stelaLatLng).title(mark.getString("description")));//.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                switch (getColorForMarker(markColor.getString("mark"))){
+                    case "green":
+//                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+//                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_verde));
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_verde)));
+                        break;
+                    case "red":
+//                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_rojo)));
+                        break;
+                    case "yellow":
+//                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_amarillo)));
+                        break;
+                    case "azure":
+//                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+//                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_azul));
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_azul)));
+                        break;
+                }
                 markerList.add(marker);
                 List<String> typeAndFile = new ArrayList<String>();
                 typeAndFile.add(mark.getString("type"));
@@ -220,7 +253,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 List<String> nameCloseMarkers = new ArrayList<>();
 
                 for(Marker marker : closeMarkers){
-                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+//                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
                     nameCloseMarkers.add(marker.getTitle());
                 }
 
@@ -249,6 +282,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
                                     intent = new Intent(getBaseContext(), TypePuzzleActivity.class);
                                     startActivity(intent);
                                     break;
+                                case "complete_words":
+                                    intent = new Intent(getBaseContext(), TypeCompleteWordsActivity.class);
+                                    startActivity(intent);
+                                    break;
                             }
                         }
                     });
@@ -256,19 +293,46 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
-                SharedPreferences sharedPrefScoreEvent = getSharedPreferences("scoreEvent", 0);
-                String scoreEventString = sharedPrefScoreEvent.getString("score", "-1");
-                double scoreEvent = Double.parseDouble(scoreEventString);
+//                SharedPreferences sharedPrefScoreEvent = getSharedPreferences("scoreEvent", 0);
+//                String scoreEventString = sharedPrefScoreEvent.getString("score", "-1");
+//                double scoreEvent = Double.parseDouble(scoreEventString);
+                SharedPreferences sharedPref = getSharedPreferences("navDrawFileName", 0);
+                String fileNameMark = sharedPref.getString("fileName", "error");
+                String[] splitName = fileNameMark.split("\\.");
+                String markName = splitName[0];
+
                 if(currentMarkerActivity != null) {
-                    if (scoreEvent == 100) {
-                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    } else if (scoreEvent == 0) {
-                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                    } else if (scoreEvent > 0 && scoreEvent < 100) {
-                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                    } else {
-                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                    switch (getColorForMarker(markName)){
+                        case "green":
+//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_verde));
+                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_verde)));
+                            break;
+                        case "red":
+//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_rojo));
+                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_rojo)));
+                            break;
+                        case "yellow":
+//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_amarillo));
+                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_amarillo)));
+                            break;
+                        case "azure":
+//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_azul));
+                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_azul)));
+                            break;
                     }
+//                    if (scoreEvent == 100) {
+//                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+//                    } else if (scoreEvent == 0) {
+//                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+//                    } else if (scoreEvent > 0 && scoreEvent < 100) {
+//                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+//                    } else {
+//                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+//                    }
                 }
                 TextView textViewScore = findViewById(R.id.score);
                 textViewScore.setText(getScoreOutOfTotal());
@@ -302,6 +366,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
         });
     }
 
+    public Bitmap getBannerSized(int character){
+        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(character);
+        Bitmap b = bitmapdraw.getBitmap();
+        int width = (int) (b.getWidth()*0.25);
+        int heigth = (int) (b.getHeight()*0.25);
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, false);
+        return smallMarker;
+    }
+
     public List<Marker> getCloseMarkers(){
         List<Boolean> completedMarkers = checkCompletedMarkers();
         List<Marker> closeMarkers= new ArrayList<>();
@@ -323,7 +396,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         try {
             obj = new JSONObject(Util.loadJSONFromFilesDir(this, "userInfo"));
             JSONArray marks = obj.getJSONArray("marks");
-            for (int i = 0; i <= marks.length(); i++){
+            for (int i = 0; i < marks.length(); i++){
                 JSONObject mark = marks.getJSONObject(i);
                 completedMarkers.add(mark.getBoolean("solved"));
             }
@@ -343,6 +416,63 @@ public class NavigationDrawerActivity extends AppCompatActivity
             e.printStackTrace();
         }
         return String.valueOf(score)+"/"+String.valueOf(markerList.size()*100);
+    }
+
+    public String getColorForMarker(String nMark){
+        JSONObject obj;
+        String color ="";
+        try {
+            obj = new JSONObject(Util.loadJSONFromFilesDir(this, "userInfo"));
+            JSONArray marks = obj.getJSONArray("marks");
+            for (int i = 0; i < marks.length(); i++){
+                JSONObject mark = marks.getJSONObject(i);
+                if(nMark.equals(mark.getString("mark"))){
+                    color = mark.getString("color");
+                }
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return color;
+    }
+
+    public void updatePreferences(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this );
+        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                if (key.equals("map_type")){
+                    setMapType();
+                }else if (key.equals("difficulty")){
+                    setDifficulty();
+                }
+            }
+        };
+
+        preferences.registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    public void setMapType(){
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this );
+        String map_type = sharedPreferences.getString("map_type", "MAP_TYPE_SATELLITE");
+        switch (map_type){
+            case "MAP_TYPE_SATELLITE":
+                mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            case "MAP_TYPE_TERRAIN":
+                mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                break;
+            case "MAP_TYPE_NORMAL":
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+        }
+    }
+
+    public void setDifficulty(){
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this );
+        difficulty = sharedPreferences.getString("difficulty", "easy");
     }
 
 }

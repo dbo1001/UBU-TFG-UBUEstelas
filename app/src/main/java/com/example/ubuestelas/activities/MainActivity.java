@@ -23,4 +23,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, NameActivity.class));
 
     }
+
+    public void continueGame(View view){
+        startActivity(new Intent(this, NavigationDrawerActivity.class));
+    }
+
+    public void settingsButton(View view){
+        startActivity(new Intent(this, SettingsActivity.class));
+    }
 }

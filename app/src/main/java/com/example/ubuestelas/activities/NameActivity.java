@@ -45,6 +45,7 @@ public class NameActivity extends AppCompatActivity{
 
         Intent intent = new Intent(this, SceneActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void fillCharacters(){
