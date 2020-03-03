@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -14,6 +15,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -245,7 +247,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 }
                 currentLocation = new MarkerOptions();
 
-                currentLocation.position(new LatLng(location.getLatitude(), location.getLongitude())).title("Estoy aquí").icon(BitmapDescriptorFactory.fromBitmap(characterSized));
+                currentLocation.position(new LatLng(location.getLatitude(), location.getLongitude())).title("Estoy aquí").icon(BitmapDescriptorFactory.fromBitmap(characterSized)).zIndex(1.0f);
 
                 currentLocationMarker = mMap.addMarker(currentLocation);
 
@@ -342,8 +344,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
             public Bitmap getCharacterSized(int character){
                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(character);
                 Bitmap b = bitmapdraw.getBitmap();
-                int width = (int) (b.getWidth()*0.6);
-                int heigth = (int) (b.getHeight()*0.6);
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int widthDisplay = size.x;
+                int heightDisplay = size.y;
+                int width = (int) (widthDisplay*0.12);
+                int heigth = (int) (heightDisplay*0.12);
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, false);
                 return smallMarker;
             }
@@ -369,8 +376,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public Bitmap getBannerSized(int character){
         BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(character);
         Bitmap b = bitmapdraw.getBitmap();
-        int width = (int) (b.getWidth()*0.25);
-        int heigth = (int) (b.getHeight()*0.25);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int widthDisplay = size.x;
+        int heightDisplay = size.y;
+        int width = (int) (widthDisplay*0.1);
+        int heigth = (int) (heightDisplay*0.1);
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, false);
         return smallMarker;
     }
