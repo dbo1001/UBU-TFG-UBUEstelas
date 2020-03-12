@@ -14,7 +14,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,6 +62,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
     HashMap<Marker,List<String>> dicMarkerAct;
     Marker currentMarkerActivity = null;
     public String difficulty;
+
+    int markImageWrongAnswer;
+    int markImageNotAnswered;
+    int markImageCorrectAnswer;
+    int markImageMidAnswer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +193,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
             objMarks = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "marksJSON.json"));
             JSONArray townCentre = objMarks.getJSONArray("townCentre");
             JSONObject town = townCentre.getJSONObject(0);
+            markImageWrongAnswer = getResources().getIdentifier(objMarks.getString("markImageWrongAnswer"), "drawable", getPackageName());
+            markImageNotAnswered = getResources().getIdentifier(objMarks.getString("markImageNotAnswered"), "drawable", getPackageName());
+            markImageCorrectAnswer = getResources().getIdentifier(objMarks.getString("markImageCorrectAnswer"), "drawable", getPackageName());
+            markImageMidAnswer = getResources().getIdentifier(objMarks.getString("markImageMidAnswer"), "drawable", getPackageName());
             LatLng townLatLng = new LatLng(town.getDouble("latitude"), town.getDouble("longitude"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(townLatLng, 17.5f));
             JSONArray marks = objMarks.getJSONArray("marks");
@@ -200,20 +209,20 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     case "green":
 //                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 //                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_verde));
-                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_verde)));
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageCorrectAnswer)));
                         break;
                     case "red":
 //                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_rojo)));
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageWrongAnswer)));
                         break;
                     case "yellow":
 //                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_amarillo)));
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageMidAnswer)));
                         break;
                     case "azure":
 //                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 //                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_azul));
-                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_azul)));
+                        marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageNotAnswered)));
                         break;
                 }
                 markerList.add(marker);
@@ -308,22 +317,22 @@ public class NavigationDrawerActivity extends AppCompatActivity
                         case "green":
 //                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 //                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_verde));
-                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_verde)));
+                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageCorrectAnswer)));
                             break;
                         case "red":
 //                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 //                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_rojo));
-                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_rojo)));
+                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageWrongAnswer)));
                             break;
                         case "yellow":
 //                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
 //                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_amarillo));
-                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_amarillo)));
+                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageMidAnswer)));
                             break;
                         case "azure":
 //                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 //                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_azul));
-                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(R.drawable.estandarte_azul)));
+                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageNotAnswered)));
                             break;
                     }
 //                    if (scoreEvent == 100) {
@@ -351,7 +360,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 int heightDisplay = size.y;
                 int width = (int) (widthDisplay*0.12);
                 int heigth = (int) (heightDisplay*0.12);
-                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, false);
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, true);
                 return smallMarker;
             }
 
@@ -383,7 +392,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         int heightDisplay = size.y;
         int width = (int) (widthDisplay*0.1);
         int heigth = (int) (heightDisplay*0.1);
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, false);
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, true);
         return smallMarker;
     }
 
