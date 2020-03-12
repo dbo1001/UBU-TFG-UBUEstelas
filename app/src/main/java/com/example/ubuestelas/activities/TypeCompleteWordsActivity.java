@@ -179,7 +179,7 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
                         JSONArray gaps = fileToRead.getJSONArray("gaps");
                         JSONObject gap = gaps.getJSONObject(0);
                         String [] letts = gap.getString("options").split(",");
-                        score = Util.completeWordsScoreIfFail(attempts, gaps.length(), errorsAttempt, letts.length);
+                        score = Util.completeWordsScoreIfFail(this, attempts, gaps.length(), errorsAttempt, letts.length);
                     }
                     Toast.makeText(this,getString(R.string.correct) + ". " + getString(R.string.points_obtained, score), Toast.LENGTH_SHORT).show();
                     JSONObject obj;

@@ -1,6 +1,9 @@
 package com.example.ubuestelas.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -78,7 +81,10 @@ public class Util {
     }
 
     //Siempre que sea de solución única
-    public static double testScoreIfFail(double optionsNumber, double attemptNumber){
+    public static double testScoreIfFail(Context context, double optionsNumber, double attemptNumber){
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        String difficulty = sharedPreferences.getString("difficulty", "easy");
         double score;
         if (attemptNumber >= optionsNumber){
             return 0;
@@ -103,23 +109,54 @@ public class Util {
         }
     }
 
-    public static double puzzleSolvedScore(CharSequence text) {
-        double score;
+    public static double puzzleSolvedScore(Context context, CharSequence text) {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        String difficulty = sharedPreferences.getString("difficulty", "easy");
+        double score = 0;
         String minutes = "" + text.charAt(0) + text.charAt(1);
         String seconds = "" + text.charAt(3) + text.charAt(4);
         double secondsTot = (Integer.parseInt(minutes)*60)+ Integer.parseInt(seconds);
-        if(secondsTot<=60){
-            score=100;
-        }else if (secondsTot > 60 && secondsTot <=120){
-            double diff = secondsTot - 60;
-            score=100-diff;
-        }else{
-            score=0;
+        switch (difficulty){
+            case "easy":
+                if(secondsTot<=90){
+                    score=100;
+                }else if (secondsTot > 90 && secondsTot <=180){
+                    double diff = secondsTot - 90;
+                    score=100-diff;
+                }else{
+                    score=0;
+                }
+                break;
+            case "mid":
+                if(secondsTot<=60){
+                    score=100;
+                }else if (secondsTot > 60 && secondsTot <=120){
+                    double diff = secondsTot - 60;
+                    score=100-diff;
+                }else{
+                    score=0;
+                }
+                break;
+            case "hard":
+                if(secondsTot<=45){
+                    score=100;
+                }else if (secondsTot > 45 && secondsTot <=90){
+                    double diff = secondsTot - 45;
+                    score=100-diff;
+                }else{
+                    score=0;
+                }
+                break;
         }
+
         return score;
     }
 
-    public static double completeWordsScoreIfFail(double attemptNumber, double gapNumber, List<Double> errorsAttempt, double lettersNumber){
+    public static double completeWordsScoreIfFail(Context context, double attemptNumber, double gapNumber, List<Double> errorsAttempt, double lettersNumber){
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        String difficulty = sharedPreferences.getString("difficulty", "easy");
         double score = 0;
         double counter=0;
         double reduction=1;

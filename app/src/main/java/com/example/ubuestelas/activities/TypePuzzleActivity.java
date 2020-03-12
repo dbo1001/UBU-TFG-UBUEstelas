@@ -241,7 +241,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
         display(context);
 
         if (isSolved()) {
-            double score = Util.puzzleSolvedScore(chronometer.getText());
+            double score = Util.puzzleSolvedScore(context, chronometer.getText());
             Toast.makeText(context, ctx.getString(R.string.correct) + ". " + ctx.getString(R.string.points_obtained, score), Toast.LENGTH_SHORT).show();
 
             JSONObject obj;
