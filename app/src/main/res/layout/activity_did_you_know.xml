@@ -52,5 +52,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/texto_curiosidad"
         app:layout_constraintVertical_bias="0.945"
-        app:srcCompat="@drawable/romano" />
+        app:srcCompat="@drawable/game_host" />
 </androidx.constraintlayout.widget.ConstraintLayout>
