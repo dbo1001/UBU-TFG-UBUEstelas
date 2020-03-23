@@ -4,30 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".activities.TypeCompleteWordsActivity">
-
-    <Button
-        android:id="@+id/send_phrase"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:onClick="sendPhrase"
-        android:text="@string/send"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:background="@color/colorButton"
+        android:layout_width="254dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/border"
+        android:fontFamily="@font/romanica"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
         android:text="@string/letters_remaining"
+        android:textColor="@color/colorBlack"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,16 +27,16 @@
         android:id="@+id/letters_selection"
         android:layout_width="410dp"
         android:layout_height="116dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:columnWidth="100dp"
         android:gravity="center"
         android:horizontalSpacing="5dp"
         android:numColumns="4"
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/send_phrase"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -55,33 +47,63 @@
         android:background="@android:color/transparent"
         android:clickable="false"
         android:ems="10"
+        android:fontFamily="@font/romanica"
         android:inputType="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-    <Button
-        android:id="@+id/left_arrow"
-        android:layout_width="59dp"
-        android:layout_height="53dp"
-        android:layout_marginEnd="96dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/left_arrow"
-        android:onClick="leftArrowPressed"
-        app:layout_constraintBottom_toTopOf="@+id/letters_selection"
-        app:layout_constraintEnd_toStartOf="@+id/right_arrow"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+    <ImageButton
+        android:id="@+id/imageButton5"
+        android:layout_width="145dp"
+        android:layout_height="51dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:onClick="sendPhrase"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/send_button" />
 
-    <Button
-        android:id="@+id/right_arrow"
-        android:layout_width="59dp"
-        android:layout_height="53dp"
-        android:layout_marginEnd="104dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/right_arrow"
-        android:onClick="rightArrowPressed"
+    <ImageButton
+        android:id="@+id/imageButton7"
+        android:layout_width="48dp"
+        android:layout_height="107dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/game_hint" />
+
+    <ImageButton
+        android:id="@+id/imageButton8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginBottom="24dp"
+        android:background="@android:color/transparent"
+        android:onClick="leftArrowPressed"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/letters_selection"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/imageButton9"
+        app:layout_constraintHorizontal_bias="0.201"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/left_arrow_button" />
+
+    <ImageButton
+        android:id="@+id/imageButton9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="88dp"
+        android:layout_marginBottom="24dp"
+        android:background="@android:color/transparent"
+        android:onClick="rightArrowPressed"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/letters_selection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/right_arrow_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
