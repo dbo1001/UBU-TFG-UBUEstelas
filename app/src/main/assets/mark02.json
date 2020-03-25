@@ -1,16 +1,17 @@
 {
   "options": [
     {
-      "image": "mark02option1"
+      "option": "mark02option1"
     },
     {
-      "image": "mark02option2"
+      "option": "mark02option2"
     },
     {
-      "image": "mark02option3"
+      "option": "mark02option3"
     }
   ],
   "optionsNumber": 3,
+  "type" : "images",
   "question": "¿Cuál de estas opciones se corresponde con la estela en cuestión?",
   "correct": "mark02option1",
   "hint": "Ten cuidado no la pises al subir las escaleras",

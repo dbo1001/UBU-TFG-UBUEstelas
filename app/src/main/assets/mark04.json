@@ -1,0 +1,19 @@
+{
+  "options": [
+    {
+      "option": "40"
+    },
+    {
+      "option": "50"
+    },
+    {
+      "option": "60"
+    }
+  ],
+  "optionsNumber": 3,
+  "type" : "text",
+  "question": "¿A qué edad falleció la persona a la que está dedicada la estela?",
+  "correct": "60",
+  "hint": "Busca por la parte de atrás",
+  "curiosity": "Ambatus es uno de los nombres indígenas más populares de las estelas de Lara de los Infantes?"
+}

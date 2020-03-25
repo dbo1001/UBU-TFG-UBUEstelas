@@ -7,6 +7,7 @@
     <string name="send">Enviar</string>
     <string name="incorrect">Incorrecto</string>
     <string name="try_again">Inténtalo otra vez</string>
+    <string name="select_one">Selecciona alguna de las opciones</string>
     <string name="correct">Correcto</string>
     <string name="points_obtained">Has obtenido %1$.2f puntos</string>
     <string name="did_you_know">¿Sabías que...</string>

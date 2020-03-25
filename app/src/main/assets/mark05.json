@@ -1,16 +1,17 @@
 {
   "options": [
     {
-      "image": "mark05option1"
+      "option": "mark05option1"
     },
     {
-      "image": "mark05option2"
+      "option": "mark05option2"
     },
     {
-      "image": "mark05option3"
+      "option": "mark05option3"
     }
   ],
   "optionsNumber": 3,
+  "type" : "text",
   "question": "¿Qué estela entre estas tres opciones estás viendo?",
   "correct": "mark05option3",
   "curiosity": "en Lara de los Infantes se documentan nombres indígenas únicos en la Península?"
