@@ -245,7 +245,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, new LocationListener() {
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0.5f, new LocationListener() {
             List<String> prevNameCloseMarkers = new ArrayList<>();
             Bitmap characterSized = getCharacterSized(characterDrawable);
             @Override
@@ -405,8 +405,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 if (Util.getDistanceFromLatLong(currentLocationMarker.getPosition(), marker.getPosition()) <= 10) {
                     closeMarkers.add(marker);
                 }
-                counter++;
             }
+            counter++;
         }
         return closeMarkers;
     }
