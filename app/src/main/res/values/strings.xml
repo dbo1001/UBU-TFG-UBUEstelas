@@ -18,6 +18,7 @@
     <string name="left_arrow">◄</string>
     <string name="right_arrow">►</string>
     <string name="complete_gaps">Completa todos los huecos</string>
+    <string name="settings_button">Ajustes</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -27,12 +28,16 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_title_communication">Comunicación</string>
+    <string name="menu_home">Inicio</string>
+<!--    <string name="menu_gallery">Gallery</string>-->
+<!--    <string name="menu_slideshow">Slideshow</string>-->
+    <string name="menu_ranking">Ranking</string>
+    <string name="menu_end_game">Finalizar partida</string>
+<!--    <string name="menu_tools">Tools</string>-->
+    <string name="menu_settings">Ajustes</string>
+    <string name="menu_share">Compartir</string>
+    <string name="menu_send">Enviar</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->

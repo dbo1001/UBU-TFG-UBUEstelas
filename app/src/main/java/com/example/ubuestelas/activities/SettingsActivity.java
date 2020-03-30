@@ -33,20 +33,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    public void changeUpButton(){
-        if (getParent().equals(NavigationDrawerActivity.class)){
-
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-//                NavUtils.navigateUpFromSameTask(this);
-//                return true;
+        if(item.getItemId() == android.R.id.home){
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

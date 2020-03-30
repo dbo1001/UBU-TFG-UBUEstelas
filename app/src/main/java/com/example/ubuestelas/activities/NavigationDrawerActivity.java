@@ -67,6 +67,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     int markImageNotAnswered;
     int markImageCorrectAnswer;
     int markImageMidAnswer;
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
 
     @Override
@@ -144,14 +145,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Intent intent;
         if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_ranking) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_end_game) {
 
-        } else if (id == R.id.nav_tools) {
-
+        } else if (id == R.id.nav_settings) {
+            intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -473,8 +477,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     public void updatePreferences(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this );
-        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
+        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                 if (key.equals("map_type")){
                     setMapType();
@@ -483,6 +486,17 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 }
             }
         };
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this );
+//        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+//            @Override
+//            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+//                if (key.equals("map_type")){
+//                    setMapType();
+//                }else if (key.equals("difficulty")){
+//                    setDifficulty();
+//                }
+//            }
+//        };
 
         preferences.registerOnSharedPreferenceChangeListener(listener);
     }
