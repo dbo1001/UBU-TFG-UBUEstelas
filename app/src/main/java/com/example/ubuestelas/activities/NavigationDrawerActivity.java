@@ -358,8 +358,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 display.getSize(size);
                 int widthDisplay = size.x;
                 int heightDisplay = size.y;
-                int width = (int) (widthDisplay*0.12);
-                int heigth = (int) (heightDisplay*0.12);
+                int width;
+                int heigth;
+                if(widthDisplay<heightDisplay) {
+                    width = (int) (widthDisplay * 0.1);
+                    heigth = (int) (b.getHeight() * width) / b.getWidth();//(heightDisplay*0.12);
+                }else{
+                    heigth = (int) (heightDisplay * 0.2);
+                    width = (int) (b.getWidth() * heigth) / b.getHeight();
+                }
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, true);
                 return smallMarker;
             }
@@ -390,8 +397,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
         display.getSize(size);
         int widthDisplay = size.x;
         int heightDisplay = size.y;
-        int width = (int) (widthDisplay*0.1);
-        int heigth = (int) (heightDisplay*0.1);
+        int width;
+        int heigth;
+        if(widthDisplay<heightDisplay) {
+            width = (int) (widthDisplay * 0.1);
+            heigth = (int) (b.getHeight() * width) / b.getWidth();//(heightDisplay*0.12);
+        }else{
+            heigth = (int) (heightDisplay * 0.2);
+            width = (int) (b.getWidth() * heigth) / b.getHeight();
+        }
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, true);
         return smallMarker;
     }
