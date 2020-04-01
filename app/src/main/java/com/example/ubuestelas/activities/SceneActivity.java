@@ -22,6 +22,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Actividad donde se muestra la bienvenida a la aplicación.
+ * Se muestra el texto y la imagen pasadas por fichero.
+ *
+ * @author Marcos Pena
+ */
 public class SceneActivity extends AppCompatActivity {
 
 
@@ -29,6 +35,11 @@ public class SceneActivity extends AppCompatActivity {
 
     private int counter =0;
 
+    /**
+     * Inicializa la actividad con su respectivo layout.
+     * Se carga el primer texto con el nombre que el usuario ha introducido.
+     * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +64,10 @@ public class SceneActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Cada vez que se pulsa en la pantalla se llama a este método mientras haya más textos de bienvenida que mostrar.
+     * @param view La vista que se ha clickado.
+     */
     public void changeScene(View view){
         ImageView imageView = findViewById(R.id.imagen_escena);
         TextView textView = findViewById(R.id.scene_text);
@@ -79,6 +94,9 @@ public class SceneActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Se crea el fichero donde se guarda toda la información de progreso del juego.
+     */
     public void createJSONprogress(){
         File file = new File(this.getFilesDir(), FILE_NAME);
         FileWriter fileWriter;

@@ -15,12 +15,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Adaptador para la malla de las opciones de las letras de cada hueco.
+ *
+ * @author Marcos Pena
+ */
 public class LettersAdapter extends BaseAdapter {
 
     Context context;
 
     String[] letters;
 
+    /**
+     * Inicialización de la clase.
+     * @param context Contexto de la aplicación
+     * @param fileName Nombre del fichero de la prueba
+     * @param location Posición del hueco en la frase
+     */
     public LettersAdapter(Context context, String fileName, int location){
         this.context=context;
         this.letters=getLettersOptions(fileName, location);
@@ -86,6 +97,12 @@ public class LettersAdapter extends BaseAdapter {
         return textView;
     }
 
+    /**
+     * Obtiene, del fichero de la prueba, las letras opcionales para el hueco seleccionado.
+     * @param fileName Nombre del fichero de la prueba.
+     * @param location Posición del hueco en la frase.
+     * @return Array con las letras posibles para ese hueco.
+     */
     public String[] getLettersOptions(String fileName, int location){
         String[] letts = {};
         JSONObject obj;

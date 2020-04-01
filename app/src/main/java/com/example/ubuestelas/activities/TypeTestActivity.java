@@ -29,12 +29,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Actividad donde se carga la prueba de tipo test.
+ *
+ * @author Marcos Pena
+ */
 public class TypeTestActivity extends AppCompatActivity {
 
     JSONObject fileToRead;
     int attempts = 0;
     String markName;
 
+    /**
+     * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
+     * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +51,9 @@ public class TypeTestActivity extends AppCompatActivity {
         fillData();
     }
 
+    /**
+     * Carga la pregunta del fichero correspondiente.
+     */
     public void fillData(){
         try {
             SharedPreferences sharedPref = getSharedPreferences("navDrawFileName", 0);
@@ -62,6 +74,14 @@ public class TypeTestActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Carga las posibles respuestas a la pregunta.
+     * TODO Quitar el parametro de optionsNumber y obtenerlo de options.
+     * TODO Ajustar las imágenes a un tamaño proporcional a la pantalla.
+     * @param options Array cobtenido del fichero con las opciones para el test.
+     * @param optionsNumber Número de opciones que tiene el test.
+     * @param type Tipo del que son las opciones, imágenes o texto.
+     */
     public void setOptions(JSONArray options, int optionsNumber, String type){
         RadioGroup rg = findViewById(R.id.options_group);
 
@@ -106,6 +126,12 @@ public class TypeTestActivity extends AppCompatActivity {
 //        rg.addView(radioButton2, params2);
     }
 
+    /**
+     * Se llama cuando se le da al botón de enviar. Tras la comprobación de si es correcta la frase,
+     * en caso de serlo, se hace el cálculo de la puntuación, se guarda la información en el fichero de guardado
+     * y se finaliza la actividad. Si no es correcta, se muestra un mensaje y se continúa jugando.
+     * @param view La vista que se ha clickado.
+     */
     public void getOption(View view){
         RadioGroup rg = findViewById(R.id.options_group);
         if (rg.getCheckedRadioButtonId() != -1) {

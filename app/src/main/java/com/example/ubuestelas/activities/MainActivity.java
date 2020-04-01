@@ -13,8 +13,18 @@ import android.view.View;
 
 import com.example.ubuestelas.R;
 
+/**
+ * Actividad principal de la aplicación. Donde se inicia la aplicación cada vez que arranca.
+ *
+ * @author Marcos Pena
+ */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Inicializa la actividad con su respectivo layout. Solicita permisos, si no los tiene,
+     * para acceder a la ubicación del dispositivo.
+     * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,18 +35,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    *Se llama cuando el usuario pulsa el botón nuevo juego
+    /**
+     * Cuando el botón de nuevo juego es pulsado se llama a este método. Lleva a la actividad donde
+     * se escoge nombre y personaje.
+     * TODO Si ya tiene una partida iniciada preguntar si quiere iniciar una nueva partida.
+     * @param view La vista que se ha clickado.
      */
     public void newGame(View view) {
         startActivity(new Intent(this, NameActivity.class));
 
     }
 
+    /**
+     * Cuando el botón de continuar es pulsado se llama a este método. Lleva directamente al mapa
+     * con los datos ya guardados anteriormente en un fichero.
+     * TODO Si no tiene ninguna partida iniciada no permiti pulsar este botón.
+     * @param view La vista que se ha clickado.
+     */
     public void continueGame(View view){
         startActivity(new Intent(this, NavigationDrawerActivity.class));
     }
 
+    /**
+     * Cuando se clicka sobre la imagen de ajustes llama a este método. Abre la actividad de ajustes.
+     * @param view La vista que se ha clickado.
+     */
     public void settingsButton(View view){
         startActivity(new Intent(this, SettingsActivity.class));
     }

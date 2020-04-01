@@ -18,6 +18,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Actividad donde el usuario introduce su nombre y escoge personaje.
+ *
+ * @author Marcos Pena
+ */
 public class NameActivity extends AppCompatActivity{
 
     JSONArray chars;
@@ -27,6 +32,10 @@ public class NameActivity extends AppCompatActivity{
     int prevIdCharacter = R.id.character;
     int prevSelecCharacter = R.drawable.character01;
 
+    /**
+     * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
+     * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +43,11 @@ public class NameActivity extends AppCompatActivity{
         fillCharacters();
     }
 
+    /**
+     * Método que se llama cuando el botón continuar es pulsado. Guarda en un SharedPreferences
+     * el nombre que el usuario ha dado.
+     * @param view La vista que se ha clickado.
+     */
     public void continueToScene(View view){
 
         SharedPreferences nameSP= getSharedPreferences("nameActivity", 0);
@@ -48,6 +62,10 @@ public class NameActivity extends AppCompatActivity{
         finish();
     }
 
+    /**
+     * Carga en pantalla las imagenes de los personajes disponibles.
+     * Cuando uno de ellos es seleccionado lo guarda en un SharedPreferences.
+     */
     public void fillCharacters(){
         JSONObject obj;
         try {

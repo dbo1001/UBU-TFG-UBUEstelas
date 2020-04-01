@@ -22,6 +22,12 @@ public class Util {
 
     static final double RADIO_TIERRA = 6371;
 
+    /**
+     * Carga un archivo de tipo JSON de la carpeta de assets.
+     * @param context Contexto de la apliación.
+     * @param name Nombre del archivo a cargar.
+     * @return Devuelve una cadena con el contenido del JSON.
+     */
     public static String loadJSONFromAsset(Context context, String name) {
         String json;
         try {
@@ -46,6 +52,12 @@ public class Util {
 
     }
 
+    /**
+     * Carga un archivo de tipo JSON de la memoria del dispositivo.
+     * @param context Contexto de la apliación.
+     * @param name Nombre del archivo a cargar.
+     * @return Devuelve una cadena con el contenido del JSON.
+     */
     public static String loadJSONFromFilesDir(Context context, String name) {
         String json;
         try {
@@ -67,7 +79,12 @@ public class Util {
 
     }
 
-
+    /**
+     * Calcula la distancia en metros entre dos puntos conociendo su latitud y longitud en el mapa.
+     * @param latLng1 Latitud y longitud del punto 1.
+     * @param latLng2 Latitud y longitud del punto 2.
+     * @return Distancia en metros entre los dos puntos.
+     */
     public static double getDistanceFromLatLong(LatLng latLng1, LatLng latLng2){
         double p = Math.PI/180;
         double distance;
@@ -80,7 +97,13 @@ public class Util {
 
     }
 
-    //Siempre que sea de solución única
+    /**
+     * Calcula la puntuación de la prueba tipo test cuando se ha fallado.
+     * @param context Contexto de la aplicación.
+     * @param optionsNumber Número de opciones del test.
+     * @param attemptNumber Número de intentos que ha tardado en conseguirlo.
+     * @return Puntuación obtenida.
+     */
     public static double testScoreIfFail(Context context, double optionsNumber, double attemptNumber){
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
@@ -97,6 +120,12 @@ public class Util {
         return scoreF;
     }
 
+    /**
+     * Escribe en un fichero de tipo JSON la información pasada.
+     * @param context Contexto de la aplicación.
+     * @param name Nombre del fichero.
+     * @param data Datos que se quieren guardar.
+     */
     public static void writeJSONToFilesDir(Context context, String name, String data){
         try {
             File file = new File(context.getFilesDir(), name);
@@ -109,6 +138,13 @@ public class Util {
         }
     }
 
+    /**
+     * Calcula la puntuación obtenida en la prueba de tipo puzzle en función del tiempo tardado
+     * y de la dificultad seleccionada para jugar.
+     * @param context Contexto de la aplicación.
+     * @param text Cadena de texto con el tiempo tardado con formato MM:SS
+     * @return Puntuación obtenida.
+     */
     public static double puzzleSolvedScore(Context context, CharSequence text) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
@@ -153,6 +189,16 @@ public class Util {
         return score;
     }
 
+    /**
+     * Calcula la puntuación obtenida en la prueba de tipo completar palabras.
+     * TODO Arreglar las puntuaciones en función de la dificultad.
+     * @param context Contexto de la aplicación.
+     * @param attemptNumber Número de intentos para conseguirlo.
+     * @param gapNumber Número de huecos en la frase.
+     * @param errorsAttempt Lista con el número de errores en cada intento
+     * @param lettersNumber Número de opciones para cada hueco.
+     * @return Puntuación obtenida.
+     */
     public static double completeWordsScoreIfFail(Context context, double attemptNumber, double gapNumber, List<Double> errorsAttempt, double lettersNumber){
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);

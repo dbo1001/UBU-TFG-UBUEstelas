@@ -51,6 +51,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Actividad donde se encuentra el menú lateral y todo lo relacionado con la carga del mapa y de las actividades.
+ *
+ * @author Marcos Pena
+ */
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
@@ -69,7 +74,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
     int markImageMidAnswer;
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
 
-
+    /**
+     * Inicializa la actividad con su respectivo layout. Se inicializa el menú lateral y el mapa.
+     * Se comprueba si tiene los permisos activados y en caso contrario vuelve a solicitarlos.
+     * Se llama a otros métodos para inicializar el resto de la actividad.
+     * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +106,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Cuando se presiona el botón de atras, si el menú lateral izquierdo está abierto, lo cierra.
+     * En caso contrario realiza la función con normalidad.
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -109,6 +123,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Carga los datos de puntuación y nombre en el menú lateral.
+     * @param menu El menú en el que se ponen los items.
+     * @return true para que se muestre, false para que no.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -123,6 +142,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Cuando se selecciona un item en la barra de herramientas realiza la acción que se le indique.
+     * @param item El item del menú que se ha seleccionado.
+     * @return Heredado del método sobreescrito.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -139,6 +163,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Cuando un item del menú lateral es seleccionado, relaliza la acción que se le indica.
+     * @param item El item del menú que se ha seleccionado.
+     * @return true muestra el item como seleccionado, false no lo hace
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -167,6 +196,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Este método llama a funciones para cargar el tipo de mapa, añadir los marcadores y
+     * poner la localización del jugador.
+     * TODO En lugar de requiresApi se puede ver de hacer alguna forma para soportar versiones anteriores metiéndolo en un if
+     * @param googleMap Una instancia del GoogleMap asociada con el fragmento
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -186,6 +221,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Este método carga, según lo que ponga el fichero de posiciones, los marcadores en el mapa. TAmbién según
+     * Lo que ponga el fichero de guardado pone los colores correspondientes a cada marcador y guarda en un diccionario
+     * la relación entre cada marcador con su tipo de prueba y su fichero.
+     */
     public void addJSONmarkersAndFillDic(){
         JSONObject objMarks;
         JSONObject objUserInfo;
@@ -240,6 +280,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Obtiene la localización del jugador y el personaje que ha elegido y lo coloca en el mapa.
+     * También llama a otros métodos para comprobar la cercanía a los marcadores necesarios para iniciar
+     * cada una de las pruebas y crea el diálogo donde se le permite al usuario escoger el marcador con el que
+     * quiere jugar.
+     * TODO En lugar de requiresApi se puede ver de hacer alguna forma para soportar versiones anteriores metiéndolo en un if
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void getCurrentLocation(){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -252,6 +299,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0.5f, new LocationListener() {
             List<String> prevNameCloseMarkers = new ArrayList<>();
             Bitmap characterSized = getCharacterSized(characterDrawable);
+
+            /**
+             * Cuando cambia la ubicación del usuario se llama a este método. Colocar su posición en el mapa
+             * y lanza el dialogo para que escoja el marcado con el que quiere jugar.
+             * @param location La localización del jugador.
+             */
             @Override
             public void onLocationChanged(Location location) {
 
@@ -277,6 +330,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     String[] closeMarkersString = new String[nameCloseMarkers.size()];
                     closeMarkersString = nameCloseMarkers.toArray(closeMarkersString);
                     builder.setItems(closeMarkersString, new DialogInterface.OnClickListener() {
+                        /**
+                         * Carga el tipo de prueba que corresopnda al marcador seleccionado.
+                         * @param dialog Diálogo del que se selecciona un item.
+                         * @param which Item seleccionado dentro de la lista.
+                         */
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             currentMarkerActivity=closeMarkers.get(which);
@@ -354,6 +412,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 prevNameCloseMarkers = new ArrayList<>(nameCloseMarkers);
             }
 
+            /**
+             * Hace un cálculo del tamaño del personaje en función del tamaño de la pantalla.
+             * @param character El persoaje del que se quiere redimensionar.
+             * @return Bitmap del tamaño proporcionado del personaje.
+             */
             public Bitmap getCharacterSized(int character){
                 BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(character);
                 Bitmap b = bitmapdraw.getBitmap();
@@ -393,8 +456,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
         });
     }
 
-    public Bitmap getBannerSized(int character){
-        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(character);
+    /**
+     * Hace un cálculo del tamaño de la imagen del marcador en función del tamaño de la pantalla.
+     * @param banner Imagen del marcador que se quiere redimensionar.
+     * @return Bitmap del marcador con el tamaño proporcionado.
+     */
+    public Bitmap getBannerSized(int banner){
+        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(banner);
         Bitmap b = bitmapdraw.getBitmap();
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -414,6 +482,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return smallMarker;
     }
 
+    /**
+     * Comprueba los marcadores que están cerca de la posición del jugador.
+     * @return Lista con los marcadores a una distancia menor a 10 metros.
+     */
     public List<Marker> getCloseMarkers(){
         List<Boolean> completedMarkers = checkCompletedMarkers();
         List<Marker> closeMarkers= new ArrayList<>();
@@ -429,6 +501,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return closeMarkers;
     }
 
+    /**
+     * Comprueba de cuales de los marcadores ya han sido completadas sus pruebas.
+     * @return Lista con los marcadores ya resueltos.
+     */
     public List<Boolean> checkCompletedMarkers(){
         JSONObject obj;
         List<Boolean> completedMarkers= new ArrayList<>();
@@ -445,6 +521,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return completedMarkers;
     }
 
+    /**
+     * Método para obtener la impresión de la puntuación en pantalla en función de la cantidad
+     * de pruebas en el mapa.
+     * @return String con la puntuación actual sobre la puntuación total.
+     */
     public String getScoreOutOfTotal(){
         JSONObject obj;
         double score=0.0;
@@ -457,6 +538,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return String.valueOf(score)+"/"+String.valueOf(markerList.size()*100);
     }
 
+    /**
+     * Método donde se comprueba que color debe tener el marcador en función de su resultado o de si ha sido resuelta.
+     * @param nMark Marcador del que se quiere comprobar su color.
+     * @return String con el nombre del color solicitado.
+     */
     public String getColorForMarker(String nMark){
         JSONObject obj;
         String color ="";
@@ -475,6 +561,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
         return color;
     }
 
+    /**
+     * Método que actualiza algunas de las características de la aplicación en función de lo
+     * que haya decidido en usuario en los ajustes.
+     * Se actualiza cada vez que el usuario cambia algún parámetro en los ajustes
+     */
     public void updatePreferences(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this );
         listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -501,6 +592,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
         preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
+    /**
+     * Pone el mapa sobre el que se está jugando con el tipo de mapa que decida el usario
+     * en los ajustes.
+     */
     public void setMapType(){
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this );
@@ -518,6 +613,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Pone la dificultad de la aplicación en función de lo que haya decidido el usuario
+     * en los ajustes.
+     */
     public void setDifficulty(){
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this );

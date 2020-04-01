@@ -10,8 +10,17 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.ubuestelas.R;
 
+/**
+ * Actividad donde se cargan los ajustes de la aplicación.
+ *
+ * @author Marcos Pena
+ */
 public class SettingsActivity extends AppCompatActivity {
 
+    /**
+     * Inicializa la actividad con su respectivo layout.
+     * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +35,9 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Carga el fragmento con el xml donde se encuentra la lista de ajustes.
+     */
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -33,6 +45,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Cuando la flecha de volver atrás en la barra de herramientas es presionada vuelve
+     * a la actividad de la que se le llamó.
+     * @param item El item del menú que se ha seleccionado.
+     * @return Heredado del método sobreescrito.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 

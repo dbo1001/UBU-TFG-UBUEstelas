@@ -26,6 +26,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Actividad donde se carga la prueba de completar los huecos que faltan en una frase.
+ *
+ * @author Marcos Pena
+ */
 public class TypeCompleteWordsActivity extends AppCompatActivity {
 
     JSONObject fileToRead;
@@ -41,6 +46,10 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
 
     List<Double> errorsAttempt = new ArrayList<Double>();
 
+    /**
+     * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
+     * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +60,9 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
         fillGrid();
     }
 
+    /**
+     * Muestra la frase original con los huecos en los que hay que rellenar las letras que faltan.
+     */
     public void init(){
         try{
             SharedPreferences sharedPref = getSharedPreferences("navDrawFileName", 0);
@@ -74,6 +86,9 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Completa la malla con las opciones de letras que se obtienen del adaptador.
+     */
     public void fillGrid(){
         GridView gridView = (GridView) findViewById(R.id.letters_selection);
 
@@ -103,6 +118,12 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Cuando se pulsa la flecha hacia la izquierda se llama a este método.
+     * Mueve el cursor en la frase hacia el siguiente hueco disponible
+     * a la izquierda.
+     * @param view La vista que se ha clickado.
+     */
     public void leftArrowPressed(View view){
         try {
             if(relativePosition != 0){
@@ -118,6 +139,12 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Cuando se pulsa la flecha hacia la derecha se llama a este método.
+     * Mueve el cursor en la frase hacia el siguiente hueco disponible
+     * a la derecha.
+     * @param view La vista que se ha clickado.
+     */
     public void rightArrowPressed(View view){
         try {
             JSONArray gaps = fileToRead.getJSONArray("gaps");
@@ -133,14 +160,25 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Remarca el hueco que está seleccionado.
+     */
     public void selectPosition(){
         textToComplete.setSelection(absolutePosition-1,absolutePosition);
     }
 
+    /**
+     * Comprueba si todos los huecos tienen alguna letra colocada.
+     * @return true si no queda ningún hueco, false si algún hueco todavía está libre.
+     */
     public boolean isAllPlaced(){
         return !textToComplete.getText().toString().contains("_");
     }
 
+    /**
+     * Comprueba si la frase tiene todas las letras correctas.
+     * @return true si la frase es correcta, false si no lo es.
+     */
     public boolean checkCorrect(){
         boolean solved = true;
         List<Integer> wrongPositions = new ArrayList<Integer>();
@@ -167,6 +205,12 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
         return solved;
     }
 
+    /**
+     * Se llama cuando se le da al botón de enviar. Tras la comprobación de si es correcta la frase,
+     * en caso de serlo, se hace el cálculo de la puntuación, se guarda la información en el fichero de guardado
+     * y se finaliza la actividad. Si no es correcta, se muestra un mensaje y se continúa jugando.
+     * @param view La vista que se ha clickado.
+     */
     public void sendPhrase(View view){
         if(isAllPlaced()){
             attempts++;
@@ -234,6 +278,10 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Si la frase no es correcta marca en color rojo las letras que están equivocadas.
+     * @param wrongPositions Lista con las posiciones de las letras incorrectas.
+     */
     public void indicateWrong(List<Integer> wrongPositions){
         Spannable modifiedText = new SpannableString(textToComplete.getText());
         modifiedText.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorBlack)), 0, modifiedText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
