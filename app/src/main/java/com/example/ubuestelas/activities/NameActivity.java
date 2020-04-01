@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -40,6 +41,8 @@ public class NameActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nombre);
+        ImageButton cont = (ImageButton) findViewById(R.id.continueToScene);
+        cont.getDrawable().setColorFilter(null);
         fillCharacters();
     }
 

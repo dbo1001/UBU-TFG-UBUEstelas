@@ -85,7 +85,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/continueToScene"
         android:layout_width="262dp"
         android:layout_height="45dp"
         android:layout_marginBottom="16dp"

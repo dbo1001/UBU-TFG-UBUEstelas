@@ -19,6 +19,8 @@
     <string name="right_arrow">►</string>
     <string name="complete_gaps">Completa todos los huecos</string>
     <string name="settings_button">Ajustes</string>
+    <string name="game_not_exists">No hay ningún juego iniciado.</string>
+
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

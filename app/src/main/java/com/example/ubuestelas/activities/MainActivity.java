@@ -7,11 +7,24 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.ubuestelas.R;
+import com.example.ubuestelas.util.Util;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Actividad principal de la aplicación. Donde se inicia la aplicación cada vez que arranca.
@@ -33,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
+
+        if(Util.loadJSONFromFilesDir(this, "userInfo") == null){
+            ImageButton cont = (ImageButton) findViewById(R.id.continueButton);
+            cont.getDrawable().setColorFilter(getResources().getColor(R.color.colorButtonDisabled), PorterDuff.Mode.LIGHTEN);
+        }
     }
 
     /**
@@ -47,13 +65,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Cuando el botón de continuar es pulsado se llama a este método. Lleva directamente al mapa
-     * con los datos ya guardados anteriormente en un fichero.
-     * TODO Si no tiene ninguna partida iniciada no permiti pulsar este botón.
+     * Cuando el botón de continuar es pulsado se llama a este método. Si existe una partida iniciada,
+     * lleva directamente al mapa con los datos ya guardados anteriormente en un fichero.
      * @param view La vista que se ha clickado.
      */
     public void continueGame(View view){
-        startActivity(new Intent(this, NavigationDrawerActivity.class));
+        String exists;
+        exists = Util.loadJSONFromFilesDir(this, "userInfo");
+        if (exists != null){
+            startActivity(new Intent(this, NavigationDrawerActivity.class));
+        }else{
+//            ImageButton cont = (ImageButton) findViewById(R.id.continueButton);
+//            cont.setEnabled(false);
+//            cont.setClickable(false);
+//            cont.getDrawable().setColorFilter(getResources().getColor(R.color.colorButtonDisabled), PorterDuff.Mode.LIGHTEN);
+//            cont.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_IN);
+            Toast.makeText(this,getString(R.string.game_not_exists), Toast.LENGTH_SHORT).show();
+        }
+//        startActivity(new Intent(this, NavigationDrawerActivity.class));
     }
 
     /**
