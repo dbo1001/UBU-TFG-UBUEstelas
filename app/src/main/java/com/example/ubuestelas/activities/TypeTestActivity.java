@@ -145,7 +145,7 @@ public class TypeTestActivity extends AppCompatActivity {
                     if (attempts == 1) {
                         score = 100.00;
                     } else {
-                        score = Util.testScoreIfFail(this, fileToRead.getInt("optionsNumber"), attempts);
+                        score = Util.testScoreIfFail(fileToRead.getInt("optionsNumber"), attempts);
                     }
                     Toast.makeText(this, getString(R.string.correct) + ". " + getString(R.string.points_obtained, score), Toast.LENGTH_SHORT).show();
                     JSONObject obj;
