@@ -1,6 +1,7 @@
 package com.example.ubuestelas.util;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +29,14 @@ public class LettersAdapter extends BaseAdapter {
 
     /**
      * Inicialización de la clase.
-     * @param context Contexto de la aplicación
-     * @param fileName Nombre del fichero de la prueba
-     * @param location Posición del hueco en la frase
+     * @param context Contexto de la aplicación.
+     * @param fileName Nombre del fichero de la prueba.
+     * @param location Posición del hueco en la frase.
+     * @param difficulty Dificultad en la que juega el usuario.
      */
-    public LettersAdapter(Context context, String fileName, int location){
+    public LettersAdapter(Context context, String fileName, int location, String difficulty){
         this.context=context;
-        this.letters=getLettersOptions(fileName, location);
+        this.letters=getLettersOptions(fileName, location, difficulty);
     }
     /**
      * How many items are in the data set represented by this Adapter.
@@ -92,6 +94,7 @@ public class LettersAdapter extends BaseAdapter {
         TextView textView = new TextView(context);
         textView.setText(letters[position]);
         textView.setTextSize(24);
+        textView.setTextColor(Color.BLACK);
         textView.setGravity(Gravity.CENTER);
         textView.setBackground(context.getDrawable(R.drawable.border));
         return textView;
@@ -101,16 +104,18 @@ public class LettersAdapter extends BaseAdapter {
      * Obtiene, del fichero de la prueba, las letras opcionales para el hueco seleccionado.
      * @param fileName Nombre del fichero de la prueba.
      * @param location Posición del hueco en la frase.
+     * @param difficulty Dificultad en la que juega el usuario.
      * @return Array con las letras posibles para ese hueco.
      */
-    public String[] getLettersOptions(String fileName, int location){
+    public String[] getLettersOptions(String fileName, int location, String difficulty){
         String[] letts = {};
         JSONObject obj;
         try {
             obj = new JSONObject(Util.loadJSONFromAsset(context, fileName));
             JSONArray gaps = obj.getJSONArray("gaps");
             JSONObject gap = gaps.getJSONObject(location);
-            letts = gap.getString("options").split(",");
+            JSONObject opts = gap.getJSONObject("options");
+            letts = opts.getString(difficulty).split(",");
         }catch (JSONException e){
             e.printStackTrace();
         }

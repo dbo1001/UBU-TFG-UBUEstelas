@@ -99,15 +99,11 @@ public class Util {
 
     /**
      * Calcula la puntuación de la prueba tipo test cuando se ha fallado.
-     * @param context Contexto de la aplicación.
      * @param optionsNumber Número de opciones del test.
      * @param attemptNumber Número de intentos que ha tardado en conseguirlo.
      * @return Puntuación obtenida.
      */
-    public static double testScoreIfFail(Context context, double optionsNumber, double attemptNumber){
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(context);
-        String difficulty = sharedPreferences.getString("difficulty", "easy");
+    public static double testScoreIfFail(double optionsNumber, double attemptNumber){
         double score;
         if (attemptNumber >= optionsNumber){
             return 0;
@@ -164,7 +160,7 @@ public class Util {
                     score=0;
                 }
                 break;
-            case "mid":
+            case "normal":
                 if(secondsTot<=60){
                     score=100;
                 }else if (secondsTot > 60 && secondsTot <=120){
@@ -191,34 +187,28 @@ public class Util {
 
     /**
      * Calcula la puntuación obtenida en la prueba de tipo completar palabras.
-     * TODO Arreglar las puntuaciones en función de la dificultad.
-     * @param context Contexto de la aplicación.
      * @param attemptNumber Número de intentos para conseguirlo.
      * @param gapNumber Número de huecos en la frase.
      * @param errorsAttempt Lista con el número de errores en cada intento
      * @param lettersNumber Número de opciones para cada hueco.
      * @return Puntuación obtenida.
      */
-    public static double completeWordsScoreIfFail(Context context, double attemptNumber, double gapNumber, List<Double> errorsAttempt, double lettersNumber){
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(context);
-        String difficulty = sharedPreferences.getString("difficulty", "easy");
+    public static double completeWordsScoreIfFail(double attemptNumber, double gapNumber, List<Double> errorsAttempt, double lettersNumber){
         double score = 0;
         double counter=0;
-        double reduction=1;
         if (attemptNumber >= gapNumber){
             return 0;
         }
         for (Double wrongs : errorsAttempt){
             counter++;
             if(counter==1) {
-                score = ((gapNumber - wrongs) + (wrongs * -(1 / (lettersNumber - counter))));
-            }else if(counter <= (gapNumber/2)){
-                reduction = reduction / 2;
-                score = (score + ((wrongs-(reduction * -(1 / (lettersNumber - counter))))));
+                score = gapNumber - (wrongs/2) - wrongs*(1/(lettersNumber));
             }else{
-                score = (score + ( -(1 / (lettersNumber - counter))));
+                score = score - wrongs * (1/(lettersNumber-counter));
             }
+        }
+        if(score<0){
+            score=0;
         }
         score = score * 100 / gapNumber;
         score = Math.round(score*100)/100.0;

@@ -4,32 +4,62 @@
     {
       "position" : "4",
       "correct": "A",
-      "options": "A,N,M,V,U,I,R,D"
+      "options":
+      {
+        "easy" : "A,N,U,M",
+        "normal" : "A,N,U,M,V,R",
+        "hard" : "A,N,M,V,U,I,R,D"
+      }
     },
     {
       "position" : "6",
       "correct": "V",
-      "options": "O,B,X,V,J,A,U,W"
+      "options":
+      {
+        "easy" : "O,B,X,V",
+        "normal" : "O,B,X,V,J,A",
+        "hard" : "O,B,X,V,J,A,U,W"
+      }
     },
     {
       "position" : "9",
       "correct": "N",
-      "options": "M,W,A,K,N,T,Y,H"
+      "options":
+      {
+        "easy" : "M,A,N,T",
+        "normal" : "M,W,A,K,N,T",
+        "hard" : "M,W,A,K,N,T,Y,H"
+      }
     },
     {
       "position" : "12",
       "correct": "S",
-      "options": "O,D,P,Q,R,J,G,S"
+      "options":
+      {
+        "easy" : "R,J,G,S",
+        "normal" : "P,Q,R,J,G,S",
+        "hard" : "O,D,P,Q,R,J,G,S"
+      }
     },
     {
       "position" : "15",
       "correct": "E",
-      "options": "F,E,B,Z,R,Y,L,P"
+      "options":
+      {
+        "easy" : "F,E,B,Z",
+        "normal" : "F,E,B,Z,R,Y",
+        "hard" : "F,E,B,Z,R,Y,L,P"
+      }
     },
     {
       "position" : "21",
       "correct": "X",
-      "options": "M,K,A,Y,X,W,S,U"
+      "options":
+      {
+        "easy" : "X,W,S,U",
+        "normal" : "M,K,A,Y,X,W",
+        "hard" : "M,K,A,Y,X,W,S,U"
+      }
     }
   ],
 

@@ -24,13 +24,13 @@
 
     <string-array name="difficulty_entries">
         <item>Fácil</item>
-        <item>Medio</item>
+        <item>Normal</item>
         <item>Difícil</item>
     </string-array>
 
     <string-array name="difficulty_values">
         <item>easy</item>
-        <item>mid</item>
+        <item>normal</item>
         <item>hard</item>
     </string-array>
 </resources>

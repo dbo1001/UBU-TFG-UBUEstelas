@@ -1,6 +1,7 @@
 package com.example.ubuestelas.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -78,6 +79,7 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
             textToComplete = (EditText) findViewById(R.id.text_to_complete);
             textToComplete.setText(text);
             textToComplete.setTextSize(24);
+            textToComplete.setBackground(getDrawable(R.drawable.border));
             textToComplete.setKeyListener(null);
             selectPosition();
             textToComplete.requestFocus();
@@ -90,9 +92,13 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
      * Completa la malla con las opciones de letras que se obtienen del adaptador.
      */
     public void fillGrid(){
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        String difficulty = sharedPreferences.getString("difficulty", "easy");
+
         GridView gridView = (GridView) findViewById(R.id.letters_selection);
 
-        gridView.setAdapter(new LettersAdapter(this, fileNameMark, relativePosition));
+        gridView.setAdapter(new LettersAdapter(this, fileNameMark, relativePosition, difficulty));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
@@ -223,7 +229,7 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
                         JSONArray gaps = fileToRead.getJSONArray("gaps");
                         JSONObject gap = gaps.getJSONObject(0);
                         String [] letts = gap.getString("options").split(",");
-                        score = Util.completeWordsScoreIfFail(this, attempts, gaps.length(), errorsAttempt, letts.length);
+                        score = Util.completeWordsScoreIfFail(attempts, gaps.length(), errorsAttempt, letts.length);
                     }
                     Toast.makeText(this,getString(R.string.correct) + ". " + getString(R.string.points_obtained, score), Toast.LENGTH_SHORT).show();
                     JSONObject obj;
