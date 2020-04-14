@@ -1,10 +1,12 @@
 package com.example.ubuestelas.activities;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -49,18 +51,36 @@ public class MainActivity extends AppCompatActivity {
 
         if(Util.loadJSONFromFilesDir(this, "userInfo") == null){
             ImageButton cont = (ImageButton) findViewById(R.id.continueButton);
-            cont.getDrawable().setColorFilter(getResources().getColor(R.color.colorButtonDisabled), PorterDuff.Mode.LIGHTEN);
+            cont.getDrawable().setColorFilter(getResources().getColor(R.color.colorButtonDisabled), PorterDuff.Mode.SRC_OVER);
         }
     }
 
     /**
      * Cuando el botón de nuevo juego es pulsado se llama a este método. Lleva a la actividad donde
      * se escoge nombre y personaje.
-     * TODO Si ya tiene una partida iniciada preguntar si quiere iniciar una nueva partida.
      * @param view La vista que se ha clickado.
      */
     public void newGame(View view) {
-        startActivity(new Intent(this, NameActivity.class));
+        if(Util.loadJSONFromFilesDir(this, "userInfo") == null) {
+            startActivity(new Intent(this, NameActivity.class));
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.new_game_string);
+            builder.setMessage(R.string.ask_new_game);
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            startActivity(new Intent(getApplicationContext(), NameActivity.class));
+                        }
+                    });
+
+            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
 
     }
 
@@ -70,9 +90,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view La vista que se ha clickado.
      */
     public void continueGame(View view){
-        String exists;
-        exists = Util.loadJSONFromFilesDir(this, "userInfo");
-        if (exists != null){
+        if(Util.loadJSONFromFilesDir(this, "userInfo") != null){
             startActivity(new Intent(this, NavigationDrawerActivity.class));
         }else{
 //            ImageButton cont = (ImageButton) findViewById(R.id.continueButton);
