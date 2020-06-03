@@ -103,7 +103,10 @@ public class Util {
      * @param attemptNumber Número de intentos que ha tardado en conseguirlo.
      * @return Puntuación obtenida.
      */
-    public static double testScoreIfFail(double optionsNumber, double attemptNumber){
+    public static double testScoreIfFail(double optionsNumber, double attemptNumber, boolean hint, Context context){
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        String difficulty = sharedPreferences.getString("difficulty", "easy");
         double score;
         if (attemptNumber >= optionsNumber){
             return 0;
@@ -111,8 +114,19 @@ public class Util {
         score=1-(attemptNumber/optionsNumber);
         score *= 100;
         double scoreF = Math.round(score*100)/100.0;
-//        String strScore = String.format("%.2f", score);
-//        score = Double.valueOf(strScore);
+        if(hint){
+            switch (difficulty){
+                case "easy":
+                    scoreF = scoreF-(scoreF * 0.05);
+                    break;
+                case "normal":
+                    scoreF = scoreF-(scoreF * 0.1);
+                    break;
+                case "hard":
+                    scoreF = scoreF-(scoreF * 0.2);
+                    break;
+            }
+        }
         return scoreF;
     }
 
@@ -141,7 +155,7 @@ public class Util {
      * @param text Cadena de texto con el tiempo tardado con formato MM:SS
      * @return Puntuación obtenida.
      */
-    public static double puzzleSolvedScore(Context context, CharSequence text) {
+    public static double puzzleSolvedScore(Context context, CharSequence text, boolean hint) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
         String difficulty = sharedPreferences.getString("difficulty", "easy");
@@ -159,6 +173,9 @@ public class Util {
                 }else{
                     score=0;
                 }
+                if(hint){
+                    score = score-(score * 0.05);
+                }
                 break;
             case "normal":
                 if(secondsTot<=60){
@@ -169,6 +186,9 @@ public class Util {
                 }else{
                     score=0;
                 }
+                if(hint){
+                    score = score-(score * 0.1);
+                }
                 break;
             case "hard":
                 if(secondsTot<=45){
@@ -178,6 +198,9 @@ public class Util {
                     score=100-diff;
                 }else{
                     score=0;
+                }
+                if(hint){
+                    score = score-(score * 0.2);
                 }
                 break;
         }
@@ -193,7 +216,10 @@ public class Util {
      * @param lettersNumber Número de opciones para cada hueco.
      * @return Puntuación obtenida.
      */
-    public static double completeWordsScoreIfFail(double attemptNumber, double gapNumber, List<Double> errorsAttempt, double lettersNumber){
+    public static double completeWordsScoreIfFail(double attemptNumber, double gapNumber, List<Double> errorsAttempt, double lettersNumber, boolean hint, Context context){
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        String difficulty = sharedPreferences.getString("difficulty", "easy");
         double score = 0;
         double counter=0;
         if (attemptNumber >= gapNumber){
@@ -212,6 +238,19 @@ public class Util {
         }
         score = score * 100 / gapNumber;
         score = Math.round(score*100)/100.0;
+        if(hint){
+            switch (difficulty){
+                case "easy":
+                    score = score-(score * 0.05);
+                    break;
+                case "normal":
+                    score = score-(score * 0.1);
+                    break;
+                case "hard":
+                    score = score-(score * 0.2);
+                    break;
+            }
+        }
         return score;
     }
 }
