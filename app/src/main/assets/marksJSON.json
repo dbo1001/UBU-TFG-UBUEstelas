@@ -5,77 +5,160 @@
       "latitude": 42.123804,
       "longitude": -3.445478,
       "type": "puzzle",
-      "fileName": "mark01.json"
+      "fileName": "mark01.json",
+      "picturesAround": [
+        {
+          "pictureName": "escenaest1"
+        },
+        {
+          "pictureName": "stela1scene1"
+        }
+      ]
     },
     {
       "description":"Estela 2",
       "latitude": 42.123870,
       "longitude": -3.445599,
       "type": "test",
-      "fileName": "mark02.json"
+      "fileName": "mark02.json",
+      "picturesAround": [
+        {
+          "pictureName": "escenaest2"
+        },
+        {
+          "pictureName": "stela2scene1"
+        },
+        {
+          "pictureName": "stela2scene2"
+        }
+      ]
     },
     {
       "description":"Estela 3",
       "latitude": 42.122334,
       "longitude": -3.445216,
       "type": "test",
-      "fileName": "mark02.json"
+      "fileName": "mark03.json",
+      "picturesAround": [
+        {
+          "pictureName": "stela3scene1"
+        },
+        {
+          "pictureName": "stela3scene2"
+        }
+      ]
     },
     {
       "description":"Estela 4",
       "latitude": 42.121576,
       "longitude": -3.445009,
       "type": "test",
-      "fileName": "mark04.json"
+      "fileName": "mark04.json",
+      "picturesAround": [
+        {
+          "pictureName": "stela4scene1"
+        }
+      ]
     },
     {
       "description":"Estela 5",
       "latitude": 42.123162,
       "longitude": -3.444855,
       "type": "test",
-      "fileName": "mark05.json"
+      "fileName": "mark05.json",
+      "picturesAround": [
+        {
+          "pictureName": "stela5scene1"
+        },
+        {
+          "pictureName": "stela5scene2"
+        }
+      ]
     },
     {
       "description":"Estela 6",
       "latitude": 42.123285,
       "longitude": -3.445400,
       "type": "complete_words",
-      "fileName": "mark06.json"
+      "fileName": "mark06.json",
+      "picturesAround": [
+        {
+          "pictureName": "stela6scene1"
+        },
+        {
+          "pictureName": "stela6scene2"
+        }
+      ]
     },
     {
       "description":"Estela 7",
       "latitude": 42.122932,
       "longitude": -3.444696,
       "type": "test",
-      "fileName": "mark02.json"
+      "fileName": "mark07.json",
+      "picturesAround": [
+        {
+          "pictureName": "stela7scene1"
+        },
+        {
+          "pictureName": "stela7scene2"
+        }
+      ]
     },
     {
       "description":"Estela 8",
       "latitude": 42.123155,
       "longitude": -3.445654,
       "type": "test",
-      "fileName": "mark02.json"
+      "fileName": "mark08.json",
+      "picturesAround": [
+        {
+          "pictureName": "stela8scene1"
+        },
+        {
+          "pictureName": "stela8scene2"
+        }
+      ]
     },
     {
       "description":"Estela 9",
       "latitude": 42.123124,
       "longitude": -3.445432,
       "type": "test",
-      "fileName": "mark02.json"
+      "fileName": "mark09.json",
+      "picturesAround": [
+        {
+          "pictureName": "stela9scene1"
+        },
+        {
+          "pictureName": "stela9scene2"
+        },
+        {
+          "pictureName": "stela9scene3"
+        }
+      ]
     },
     {
       "description":"Estela 10",
       "latitude": 42.120989,
       "longitude": -3.444791,
-      "type": "test",
-      "fileName": "mark02.json"
+      "type": "complete_words",
+      "fileName": "mark10.json",
+      "picturesAround": [
+        {
+          "pictureName": "stela10scene1"
+        },
+        {
+          "pictureName": "stela10scene2"
+        }
+      ]
     }
   ],
   "townCentre": [
     {
       "name": "Lara de los Infantes",
-      "latitude": 42.123126,
-      "longitude": -3.445355
+      "latitude": 42.122650,
+      "longitude": -3.445119
     }
   ],
   "markImageNotAnswered": "estandarte_azul",

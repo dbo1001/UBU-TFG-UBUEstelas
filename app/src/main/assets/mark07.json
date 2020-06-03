@@ -1,0 +1,20 @@
+{
+  "options": [
+    {
+      "option": "Dos jinetes"
+    },
+    {
+      "option": "Escena de animales"
+    },
+    {
+      "option": "Jinete cazando un jabalí"
+    }
+  ],
+  "optionsNumber": 3,
+  "type" : "text",
+  "question": "¿Qué escena representa la estela?",
+  "correct": "Dos jinetes",
+  "hint": "No mires muy arriba",
+  "curiosity": "las estelas con jinete pueden representar guerreros o escenas de caza?",
+  "audio": "mark07"
+}

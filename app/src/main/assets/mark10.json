@@ -1,0 +1,39 @@
+{
+  "text": "A%l%RE%l%I%l%",
+  "gaps": [
+    {
+      "position" : "2",
+      "correct": "U",
+      "options":
+      {
+        "easy" : "V,N,U,P",
+        "normal" : "W,N,U,M,V,R",
+        "hard" : "P,N,M,V,U,I,R,D"
+      }
+    },
+    {
+      "position" : "5",
+      "correct": "L",
+      "options":
+      {
+        "easy" : "L,B,A,V",
+        "normal" : "L,B,X,V,J,A",
+        "hard" : "L,B,X,V,J,A,U,W"
+      }
+    },
+    {
+      "position" : "7",
+      "correct": "O",
+      "options":
+      {
+        "easy" : "N,A,O,S",
+        "normal" : "N,W,A,O,N,S",
+        "hard" : "N,W,A,O,N,S,Y,D"
+      }
+    }
+  ],
+
+  "hint" : "Mira por la esquina",
+  "curiosity": "Aurelio (o Julio, por ejemplo) no eran nombres de persona sino de grandes familias?",
+  "audio": "mark10"
+}

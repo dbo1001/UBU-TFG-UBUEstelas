@@ -1,0 +1,20 @@
+{
+  "options": [
+    {
+      "option": "Persona cazando"
+    },
+    {
+      "option": "Persona sentada"
+    },
+    {
+      "option": "Persona rezando"
+    }
+  ],
+  "optionsNumber": 3,
+  "type" : "text",
+  "question": "¿Qué escena representa la estela?",
+  "correct": "Persona sentada",
+  "hint": "Es una pajar, mira encimma del portón",
+  "curiosity": "las representaciones del “banquete funerario” suelen corresponder en su mayoría a estelas de mujeres?",
+  "audio": "mark08"
+}

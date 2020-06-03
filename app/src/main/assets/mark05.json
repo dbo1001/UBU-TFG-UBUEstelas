@@ -11,8 +11,10 @@
     }
   ],
   "optionsNumber": 3,
-  "type" : "text",
+  "type" : "images",
   "question": "¿Qué estela entre estas tres opciones estás viendo?",
   "correct": "mark05option3",
-  "curiosity": "en Lara de los Infantes se documentan nombres indígenas únicos en la Península?"
+  "hint": "Levanta la cabeza",
+  "curiosity": "en Lara de los Infantes se documentan nombres indígenas únicos en la Península?",
+  "audio": "mark05"
 }

@@ -1,0 +1,20 @@
+{
+  "options": [
+    {
+      "option": "mark09option1"
+    },
+    {
+      "option": "mark09option2"
+    },
+    {
+      "option": "mark09option3"
+    }
+  ],
+  "optionsNumber": 3,
+  "type" : "images",
+  "question": "¿Cuál de estas opciones es?",
+  "correct": "mark09option3",
+  "hint": "Mira por la parte de atrás",
+  "curiosity": "en Lara de los Infantes se ha encontrado un fragmento de la estatua de un Verraco (hoy en el Museo)?",
+  "audio": "mark09"
+}

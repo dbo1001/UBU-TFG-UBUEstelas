@@ -14,6 +14,7 @@
   "type" : "images",
   "question": "¿Cuál de estas opciones se corresponde con la estela en cuestión?",
   "correct": "mark02option1",
-  "hint": "Ten cuidado no la pises al subir las escaleras",
-  "curiosity": "las hexapétalas que aparecen en muchas estelas de Lara de los Infantes, son símbolos astrales relacionados con la creencia en otra vida?"
+  "hint": "Ten cuidado, no la pises al subir las escaleras",
+  "curiosity": "las hexapétalas que aparecen en muchas estelas de Lara de los Infantes, son símbolos astrales relacionados con la creencia en otra vida?",
+  "audio": "mark02"
 }

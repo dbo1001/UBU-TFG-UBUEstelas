@@ -1,0 +1,20 @@
+{
+  "options": [
+    {
+      "option": "Escena de pesca"
+    },
+    {
+      "option": "Jinete con lanza"
+    },
+    {
+      "option": "Paisaje con bandera"
+    }
+  ],
+  "optionsNumber": 3,
+  "type" : "text",
+  "question": "¿Qué representa la estela que estás viendo?",
+  "correct": "Jinete con lanza",
+  "hint": "Si no la ves, echa una carta al buzón",
+  "curiosity": "las estelas con jinete son típicas de esta zona de Lara de los Infantes?",
+  "audio": "mark03"
+}
