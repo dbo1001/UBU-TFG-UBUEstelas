@@ -21,9 +21,21 @@
     <string name="complete_gaps">Completa todos los huecos</string>
     <string name="settings_button">Ajustes</string>
     <string name="game_not_exists">No hay ningún juego iniciado.</string>
-    <string name="ask_new_game">¿Estás seguro de que deseas borrar la partida guardada y empezar un nuevo juego?</string>
+    <string name="ask_new_game">Borrar partida guardada y empezar un nuevo juego</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
+    <string name="hint">Pista</string>
+    <string name="hint_explain">Si pulsas aquí recibirás una pista, pero esto podría afectar a tu puntuación</string>
+    <string name="ok">Aceptar</string>
+    <string name="end_game">Fin del juego</string>
+    <string name="information">Información</string>
+    <string name="environment_text">Aquí puedes ver el entorno en el que se encuentra la estela que tienes cerca</string>
+    <string name="back_main_menu">Volver al menú principal</string>
+    <string name="select_character">Selecciona un personaje</string>
+    <string name="end_game_confirmation">Si finalizas la partida no podrás retomarla</string>
+    <string name="shared_text">Llevo una puntuación de %1$s puntos en el juego de Ruta de las Estelas</string>
+    <string name="stela_video">Vídeo estelas</string>
+    <string name="did_you_know_info_text">Si pulsas sobre la interrogación en la barra de herramientas podrás ver un vídeo de la estela en 3D</string>
 
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
@@ -36,11 +48,11 @@
 
     <string name="menu_title_communication">Comunicación</string>
     <string name="menu_home">Inicio</string>
-<!--    <string name="menu_gallery">Gallery</string>-->
-<!--    <string name="menu_slideshow">Slideshow</string>-->
+    <!--    <string name="menu_gallery">Gallery</string>-->
+    <!--    <string name="menu_slideshow">Slideshow</string>-->
     <string name="menu_ranking">Ranking</string>
     <string name="menu_end_game">Finalizar partida</string>
-<!--    <string name="menu_tools">Tools</string>-->
+    <!--    <string name="menu_tools">Tools</string>-->
     <string name="menu_settings">Ajustes</string>
     <string name="menu_share">Compartir</string>
     <string name="menu_send">Enviar</string>

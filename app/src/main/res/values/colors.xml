@@ -8,4 +8,6 @@
     <color name="colorWrong">#C70909</color>
     <color name="colorBlack">#000000</color>
     <color name="colorButtonDisabled">#90C7C5C5</color>
+    <color name="colorButtonShowCase">#0E6511</color>
+    <color name="colorSemiTransparent">#B7000000</color>
 </resources>
