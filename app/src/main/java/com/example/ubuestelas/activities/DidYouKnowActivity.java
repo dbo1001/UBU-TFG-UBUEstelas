@@ -3,16 +3,32 @@ package com.example.ubuestelas.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Layout;
+import android.text.TextPaint;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
 
 /**
  * Actividad que se muestra despues de cada prueba en el juego para mostrar alguna curiosidad.
@@ -20,6 +36,8 @@ import org.json.JSONObject;
  * @author Marcos Pena
  */
 public class DidYouKnowActivity extends AppCompatActivity {
+
+    MediaPlayer voice;
 
     /**
      * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
@@ -30,6 +48,50 @@ public class DidYouKnowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_did_you_know);
         loadText();
+        loadGif();
+        SharedPreferences didYouKnowActicitySP= getSharedPreferences("didYouKnowActicity", 0);
+        boolean first = didYouKnowActicitySP.getBoolean("first", true);
+        if(first) {
+            Button button = new Button(this);
+            button.setText(R.string.ok);
+            button.setTextSize(24);
+            button.setTextColor(Color.BLACK);
+            button.setBackgroundColor(Color.WHITE);
+
+            new ShowcaseView.Builder(this)
+                    .withNewStyleShowcase()
+                    .setContentTitle(R.string.did_you_know_info_text)
+                    .replaceEndButton(button)
+                    .setStyle(R.style.CustomShowcaseThemeDYKA)
+                    .hideOnTouchOutside()
+                    .build();
+
+        }
+        SharedPreferences.Editor didYouKnowActicityEditor = didYouKnowActicitySP.edit();
+        didYouKnowActicityEditor.putBoolean("first", false);
+        didYouKnowActicityEditor.apply();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.did_you_know_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if (id == R.id.stela_video_button) {
+            if(voice.isPlaying()){
+                voice.stop();
+            }
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/"));
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -43,6 +105,9 @@ public class DidYouKnowActivity extends AppCompatActivity {
             String curiosity = fileToRead.getString("curiosity");
             TextView textView = findViewById(R.id.texto_curiosidad);
             textView.setText(curiosity);
+            int resourceAudioID = this.getResources().getIdentifier(fileToRead.getString("audio"), "raw", this.getPackageName());
+            voice = MediaPlayer.create(this, resourceAudioID);
+            voice.start();
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -53,6 +118,30 @@ public class DidYouKnowActivity extends AppCompatActivity {
      * @param view La vista que se ha clickado.
      */
     public void goToMap(View view) {
+        if(voice.isPlaying()){
+            voice.stop();
+        }
         finish();
+    }
+
+    public void loadGif(){
+        GifImageView gifImageView = (GifImageView) findViewById(R.id.did_you_know_gif);
+        Intent intent = getIntent();
+        double score = intent.getDoubleExtra("score",0);
+        if(score<50){
+            gifImageView.setImageResource(R.drawable.larito_wrong);
+        }else{
+            gifImageView.setImageResource(R.drawable.larito_correct);
+        }
+        GifDrawable gifDrawable =(GifDrawable) gifImageView.getDrawable();
+        gifDrawable.setLoopCount(1);
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(voice.isPlaying()){
+            voice.stop();
+        }
+        super.onBackPressed();
     }
 }
