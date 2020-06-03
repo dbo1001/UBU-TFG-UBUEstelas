@@ -2,19 +2,26 @@ package com.example.ubuestelas.activities;
 
 import android.app.Activity;
 import android.content.Context;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Handler;
@@ -24,6 +31,9 @@ import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.GestureDetectGridView;
 import com.example.ubuestelas.util.PuzzleAdapter;
 import com.example.ubuestelas.util.Util;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import org.json.JSONArray;
@@ -56,6 +66,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
 
     private static Context ctx;
     private static Activity activity;
+    private static boolean hintUsed = false;
 
     JSONObject fileToRead;
     static String markName;
@@ -78,6 +89,36 @@ public class TypePuzzleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type_puzzle);
 
+
+        chronometer = (Chronometer) findViewById(R.id.timer);
+        chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+
+        Bundle bundle = getIntent().getExtras();
+        boolean first = bundle.getBoolean("first_game");
+        if(first){
+            Button button = new Button(this);
+            button.setText(R.string.ok);
+            button.setTextSize(24);
+            button.setTextColor(Color.BLACK);
+            button.setBackgroundColor(Color.WHITE);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    chronometer.start();
+                }
+            });
+//            button.setBackground(getResources().getDrawable(R.drawable.border));
+            Target target = new ViewTarget(R.id.hint_puzzle, this);
+            new ShowcaseView.Builder(this)
+                    .setTarget(target)
+                    .setContentTitle(R.string.hint)
+                    .setContentText(R.string.hint_explain)
+                    .replaceEndButton(button)
+                    .setStyle(R.style.CustomShowcaseTheme)
+                    .hideOnTouchOutside()
+                    .build();
+        }
+
         init();
 
 //        initTimer();
@@ -89,6 +130,8 @@ public class TypePuzzleActivity extends AppCompatActivity {
         scramble();
 
         setDimensions();
+
+
     }
 
 //    private void startCounting() {
@@ -148,8 +191,6 @@ public class TypePuzzleActivity extends AppCompatActivity {
 
     public void init() {
         try {
-            chronometer = (Chronometer) findViewById(R.id.timer);
-            chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             chronometer.start();
             ctx = this;
             activity = this;
@@ -193,8 +234,16 @@ public class TypePuzzleActivity extends AppCompatActivity {
                 int displayWidth = mGridView.getMeasuredWidth();
                 int displayHeight = mGridView.getHeight();//getMeasuredHeight();
 
-                int statusbarHeight = getStatusBarHeight(getApplicationContext())*3;
-                int requiredHeight = displayHeight - statusbarHeight;
+                int statusbarHeight;
+                int requiredHeight;
+                int orientation = getResources().getConfiguration().orientation;
+                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    statusbarHeight = getStatusBarHeight(getApplicationContext());
+                    requiredHeight = displayHeight - statusbarHeight;
+                } else {
+                    statusbarHeight = getStatusBarHeight(getApplicationContext())*3;
+                    requiredHeight = displayHeight - statusbarHeight;
+                }
 
                 mColumnWidth = displayWidth / COLUMNS;
                 //mColumnHeight = (displayHeight / COLUMNS);
@@ -241,7 +290,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
         display(context);
 
         if (isSolved()) {
-            double score = Util.puzzleSolvedScore(context, chronometer.getText());
+            double score = Util.puzzleSolvedScore(context, chronometer.getText(), hintUsed);
             Toast.makeText(context, ctx.getString(R.string.correct) + ". " + ctx.getString(R.string.points_obtained, score), Toast.LENGTH_SHORT).show();
 
             JSONObject obj;
@@ -282,6 +331,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
                 nameFileEditor.putString("fileName", markName);
                 nameFileEditor.commit();
                 Intent intent = new Intent(ctx, DidYouKnowActivity.class);
+                intent.putExtra("score", score);
                 ctx.startActivity(intent);
                 activity.finish();
             }catch (JSONException e){
@@ -382,5 +432,20 @@ public class TypePuzzleActivity extends AppCompatActivity {
         super.onResume();
         chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
         chronometer.start();
+    }
+
+    public void hintClick(View view){
+        try {
+            hintUsed=true;
+            String hint = fileToRead.getString("hint");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.hint).setMessage(hint).setPositiveButton(R.string.ok,null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            ImageButton imageButton = (ImageButton) findViewById(R.id.hint_puzzle);
+            imageButton.setImageResource(R.drawable.game_hint_used);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 }

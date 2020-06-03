@@ -1,24 +1,31 @@
 package com.example.ubuestelas.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.LettersAdapter;
 import com.example.ubuestelas.util.Util;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +54,8 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
 
     List<Double> errorsAttempt = new ArrayList<Double>();
 
+    boolean hintUsed = false;
+
     /**
      * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
      * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
@@ -59,6 +68,26 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
         init();
 
         fillGrid();
+
+        Bundle bundle = getIntent().getExtras();
+        boolean first = bundle.getBoolean("first_game");
+        if(first){
+            Button button = new Button(this);
+            button.setText(R.string.ok);
+            button.setTextSize(24);
+            button.setTextColor(Color.BLACK);
+            button.setBackgroundColor(Color.WHITE);
+//            button.setBackground(getResources().getDrawable(R.drawable.border));
+            Target target = new ViewTarget(R.id.hint_complete, this);
+            new ShowcaseView.Builder(this)
+                    .setTarget(target)
+                    .setContentTitle(R.string.hint)
+                    .setContentText(R.string.hint_explain)
+                    .replaceEndButton(button)
+                    .setStyle(R.style.CustomShowcaseTheme)
+                    .hideOnTouchOutside()
+                    .build();
+        }
     }
 
     /**
@@ -225,11 +254,27 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
                     double score;
                     if (attempts==1){
                         score=100.00;
+                        if(hintUsed){
+                            SharedPreferences sharedPreferences =
+                                    PreferenceManager.getDefaultSharedPreferences(this);
+                            String difficulty = sharedPreferences.getString("difficulty", "easy");
+                            switch (difficulty){
+                                case "easy":
+                                    score = score-(score * 0.05);
+                                    break;
+                                case "normal":
+                                    score = score-(score * 0.1);
+                                    break;
+                                case "hard":
+                                    score = score-(score * 0.2);
+                                    break;
+                            }
+                        }
                     }else {
                         JSONArray gaps = fileToRead.getJSONArray("gaps");
                         JSONObject gap = gaps.getJSONObject(0);
                         String [] letts = gap.getString("options").split(",");
-                        score = Util.completeWordsScoreIfFail(attempts, gaps.length(), errorsAttempt, letts.length);
+                        score = Util.completeWordsScoreIfFail(attempts, gaps.length(), errorsAttempt, letts.length, hintUsed, this);
                     }
                     Toast.makeText(this,getString(R.string.correct) + ". " + getString(R.string.points_obtained, score), Toast.LENGTH_SHORT).show();
                     JSONObject obj;
@@ -271,6 +316,7 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
                     nameFileEditor.putString("fileName", markName);
                     nameFileEditor.commit();
                     Intent intent = new Intent(this, DidYouKnowActivity.class);
+                    intent.putExtra("score", score);
                     startActivity(intent);
                     finish();
                 }else{
@@ -296,6 +342,21 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
             modifiedText = textToComplete.getText();//new SpannableString(textToComplete.getText());
             modifiedText.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorWrong)), position-1, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             textToComplete.setText(modifiedText);
+        }
+    }
+
+    public void hintClick(View view){
+        try {
+            hintUsed=true;
+            String hint = fileToRead.getString("hint");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.hint).setMessage(hint).setPositiveButton(R.string.ok,null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            ImageButton imageButton = (ImageButton) findViewById(R.id.hint_complete);
+            imageButton.setImageResource(R.drawable.game_hint_used);
+        }catch (JSONException e){
+            e.printStackTrace();
         }
     }
 }
