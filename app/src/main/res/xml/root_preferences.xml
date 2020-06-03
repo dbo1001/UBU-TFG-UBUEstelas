@@ -19,10 +19,6 @@
 
     <PreferenceCategory app:title="@string/general">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
         <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,16 +32,6 @@
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/map">
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
-
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
         <ListPreference
             app:defaultValue="MAP_TYPE_SATELLITE"
             app:entries="@array/map_entries"
