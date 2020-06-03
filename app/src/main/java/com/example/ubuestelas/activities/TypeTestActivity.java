@@ -1,15 +1,29 @@
 package com.example.ubuestelas.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.preference.PreferenceManager;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -17,6 +31,11 @@ import android.widget.Toast;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionItemTarget;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +59,8 @@ public class TypeTestActivity extends AppCompatActivity {
     int attempts = 0;
     String markName;
 
+    boolean hintUsed;
+
     /**
      * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
      * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
@@ -49,6 +70,25 @@ public class TypeTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type_test);
         fillData();
+        Bundle bundle = getIntent().getExtras();
+        boolean first = bundle.getBoolean("first_game");
+        if(first){
+            Button button = new Button(this);
+            button.setText(R.string.ok);
+            button.setTextSize(24);
+            button.setTextColor(Color.BLACK);
+            button.setBackgroundColor(Color.WHITE);
+//            button.setBackground(getResources().getDrawable(R.drawable.border));
+            Target target = new ViewTarget(R.id.hint_test, this);
+            new ShowcaseView.Builder(this)
+                    .setTarget(target)
+                    .setContentTitle(R.string.hint)
+                    .setContentText(R.string.hint_explain)
+                    .replaceEndButton(button)
+                    .setStyle(R.style.CustomShowcaseTheme)
+                    .hideOnTouchOutside()
+                    .build();
+        }
     }
 
     /**
@@ -76,8 +116,6 @@ public class TypeTestActivity extends AppCompatActivity {
 
     /**
      * Carga las posibles respuestas a la pregunta.
-     * TODO Quitar el parametro de optionsNumber y obtenerlo de options.
-     * TODO Ajustar las imágenes a un tamaño proporcional a la pantalla.
      * @param options Array cobtenido del fichero con las opciones para el test.
      * @param optionsNumber Número de opciones que tiene el test.
      * @param type Tipo del que son las opciones, imágenes o texto.
@@ -91,13 +129,26 @@ public class TypeTestActivity extends AppCompatActivity {
                 JSONObject option = options.getJSONObject(i);
                 if(type.equals("images")) {
                     int resourceId = this.getResources().getIdentifier(option.getString("option"), "drawable", this.getPackageName());
-                    radioButton.setCompoundDrawablesWithIntrinsicBounds(resourceId, 0, 0, 0);
+                    Drawable drawable = getResources().getDrawable(resourceId);
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    int widthDisplay = size.x;
+                    int heightDisplay = size.y;
+                    int width;
+                    int heigth;
+                    if(widthDisplay<heightDisplay) {
+                        width = (int) (widthDisplay * 0.75);
+                        heigth = (int) (drawable.getIntrinsicHeight() * width) / drawable.getIntrinsicWidth();
+                    }else{
+                        heigth = (int) (heightDisplay * 0.6);
+                        width = (int) (drawable.getIntrinsicWidth() * heigth) / drawable.getIntrinsicHeight();
+                    }
+                    drawable.setBounds(0,0,width,heigth);
+                    radioButton.setCompoundDrawables(drawable,null,null,null);
+//                    radioButton.setCompoundDrawablesWithIntrinsicBounds(resourceId, 0, 0, 0);
                     radioButton.setText(option.getString("option"));
                     radioButton.setTextColor(Color.TRANSPARENT);
-//                radioButton.setText(option.getString("image"));
-//                radioButton.setButtonDrawable(getResources().getDrawable(resourceId));
-//                radioButton.setButtonDrawable(resourceId);
-//                    radioButton.setId(i);//set radiobutton id and store it somewhere
                     RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
                     rg.addView(radioButton, params);
                 }else{
@@ -112,18 +163,6 @@ public class TypeTestActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-//        RadioButton radioButton = new RadioButton(this);
-//        int resourceId = this.getResources().getIdentifier("mark02option4", "drawable", this.getPackageName());
-//        radioButton.setCompoundDrawablesWithIntrinsicBounds(resourceId,0,0,0);
-////        radioButton.setId(3);//set radiobutton id and store it somewhere
-//        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
-//        rg.addView(radioButton, params);
-//        RadioButton radioButton2 = new RadioButton(this);
-//        int resourceId2 = this.getResources().getIdentifier("mark02option5", "drawable", this.getPackageName());
-//        radioButton2.setCompoundDrawablesWithIntrinsicBounds(resourceId2,0,0,0);
-////        radioButton.setId(3);//set radiobutton id and store it somewhere
-//        RadioGroup.LayoutParams params2 = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
-//        rg.addView(radioButton2, params2);
     }
 
     /**
@@ -144,8 +183,24 @@ public class TypeTestActivity extends AppCompatActivity {
                 if (correctAnswer.equals(radioButton.getText())) {
                     if (attempts == 1) {
                         score = 100.00;
+                        if(hintUsed){
+                            SharedPreferences sharedPreferences =
+                                    PreferenceManager.getDefaultSharedPreferences(this);
+                            String difficulty = sharedPreferences.getString("difficulty", "easy");
+                            switch (difficulty){
+                                case "easy":
+                                    score = score-(score * 0.05);
+                                    break;
+                                case "normal":
+                                    score = score-(score * 0.1);
+                                    break;
+                                case "hard":
+                                    score = score-(score * 0.2);
+                                    break;
+                            }
+                        }
                     } else {
-                        score = Util.testScoreIfFail(fileToRead.getInt("optionsNumber"), attempts);
+                        score = Util.testScoreIfFail(fileToRead.getInt("optionsNumber"), attempts, hintUsed, this);
                     }
                     Toast.makeText(this, getString(R.string.correct) + ". " + getString(R.string.points_obtained, score), Toast.LENGTH_SHORT).show();
                     JSONObject obj;
@@ -191,6 +246,7 @@ public class TypeTestActivity extends AppCompatActivity {
                     nameFileEditor.putString("fileName", markName);
                     nameFileEditor.commit();
                     Intent intent = new Intent(this, DidYouKnowActivity.class);
+                    intent.putExtra("score", score);
                     startActivity(intent);
                     finish();
                 } else {
@@ -203,5 +259,20 @@ public class TypeTestActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.select_one) + ".", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public void hintClick(View view){
+        try {
+            hintUsed=true;
+            String hint = fileToRead.getString("hint");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.hint).setMessage(hint).setPositiveButton(R.string.ok,null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            ImageButton imageButton = (ImageButton) findViewById(R.id.hint_test);
+            imageButton.setImageResource(R.drawable.game_hint_used);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 }
