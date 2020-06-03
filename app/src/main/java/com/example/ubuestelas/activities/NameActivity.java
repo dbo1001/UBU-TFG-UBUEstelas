@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
@@ -32,6 +33,8 @@ public class NameActivity extends AppCompatActivity{
 
     int prevIdCharacter = R.id.character;
     int prevSelecCharacter = R.drawable.character01;
+
+    boolean selected;
 
     /**
      * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
@@ -59,10 +62,13 @@ public class NameActivity extends AppCompatActivity{
         String name = editText.getText().toString();
         nameEditor.putString("name", name);
         nameEditor.commit();
-
-        Intent intent = new Intent(this, SceneActivity.class);
-        startActivity(intent);
-        finish();
+        if(!selected){
+            Toast.makeText(this, getString(R.string.select_character) + ". ", Toast.LENGTH_SHORT).show();
+        }else {
+            Intent intent = new Intent(this, SceneActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     /**
@@ -98,6 +104,7 @@ public class NameActivity extends AppCompatActivity{
                                       public void onClick(View v) {
                                           for (int i = 0; i<chars.length(); i++) {
                                               if (v.getId() == R.id.character + i) {
+                                                  selected=true;
                                                   ImageView ivSelected = (ImageView) findViewById(R.id.character + i);
                                                   ImageView ivPreviousSelected = (ImageView) findViewById(prevIdCharacter);
                                                   ivPreviousSelected.setImageResource(prevSelecCharacter);
