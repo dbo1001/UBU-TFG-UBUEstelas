@@ -1,0 +1,13 @@
+{
+  "marks_completed_format": "Estelas : %comp% de %mtot%",
+  "points_obtained_format": "Puntuación: %obt% de %ptot%",
+  "image": "larito_farewell_voice",
+  "outstanding": "Has demostrado un gran conocimiento sobre las estelas de Nova Augusta, por lo tanto yo Caius Laritius Máximus te concedo la ciudadanía Novaugustana.",
+  "outstanding_audio": "outstanding",
+  "mention": "Tus conocimientos sobre las estelas romanas son notables, por lo tanto yo Caius Laritius Máximus te nombro Consul de Nova Augusta.",
+  "mention_audio": "mention",
+  "pass": "Has realizado una buena prueba, pero te faltan bastantes cosas por aprender.",
+  "pass_audio": "pass",
+  "fail": "\"Faciles origines nunquam fuerunt\" como decimos aquí los comienzos nunca fueron fáciles, vas por buen camino, seguro que la próxima vez te sale mucho mejor.",
+  "fail_audio": "fail"
+}
