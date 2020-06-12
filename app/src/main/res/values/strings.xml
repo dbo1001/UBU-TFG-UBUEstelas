@@ -35,16 +35,17 @@
     <string name="end_game_confirmation">Si finalizas la partida no podrás retomarla</string>
     <string name="shared_text">Llevo una puntuación de %1$s puntos en el juego de Ruta de las Estelas</string>
     <string name="stela_video">Vídeo estelas</string>
-    <string name="did_you_know_info_text">Si pulsas sobre la interrogación en la barra de herramientas podrás ver un vídeo de la estela en 3D</string>
+    <string name="did_you_know_info_text">Si pulsas sobre la estela en la barra de herramientas podrás ver un vídeo de la estela en 3D</string>
+    <string name="not_video">No hay vídeo disponible de esta estela</string>
 
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Abrir menú</string>
+    <string name="navigation_drawer_close">Cerrar menú</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Ajustes</string>
 
     <string name="menu_title_communication">Comunicación</string>
     <string name="menu_home">Inicio</string>
@@ -56,24 +57,14 @@
     <string name="menu_settings">Ajustes</string>
     <string name="menu_share">Compartir</string>
     <string name="menu_send">Enviar</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Ajustes</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
     <string name="map">Mapa</string>
     <string name="general">General</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
     <string name="map_type_title">Tipo de mapa</string>
     <string name="difficulty">Dificultad</string>
 
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>
