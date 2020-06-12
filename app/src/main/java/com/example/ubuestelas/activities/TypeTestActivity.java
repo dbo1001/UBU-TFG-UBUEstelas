@@ -150,6 +150,7 @@ public class TypeTestActivity extends AppCompatActivity {
                     radioButton.setText(option.getString("option"));
                     radioButton.setTextColor(Color.TRANSPARENT);
                     RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0,0,0,10);
                     rg.addView(radioButton, params);
                 }else{
                     radioButton.setText(option.getString("option"));

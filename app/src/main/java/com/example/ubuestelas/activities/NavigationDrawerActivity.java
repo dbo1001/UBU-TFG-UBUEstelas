@@ -85,7 +85,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     int markImageNotAnswered;
     int markImageCorrectAnswer;
     int markImageMidAnswer;
-    private SharedPreferences.OnSharedPreferenceChangeListener listener;
     boolean finish = false;
 
     /**
@@ -168,7 +167,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
@@ -238,7 +236,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * TODO En lugar de requiresApi se puede ver de hacer alguna forma para soportar versiones anteriores metiéndolo en un if
      * @param googleMap Una instancia del GoogleMap asociada con el fragmento
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -328,7 +325,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * quiere jugar.
      * TODO En lugar de requiresApi se puede ver de hacer alguna forma para soportar versiones anteriores metiéndolo en un if
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public void getCurrentLocation(){
         final Context context = this;
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -464,12 +460,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
                                     for (Marker m : updatedCloseMarkers) {
                                         if (m.equals(marker)) {
                                             createMarksDialogBuilder(updatedNameCloseMarkers, updatedCloseMarkers);
-                                            AlertDialog updatedDialog = builder.create();
+                                            final AlertDialog updatedDialog = builder.create();
                                             updatedDialog.show();
                                             ImageView imgV = (ImageView) updatedDialog.findViewById(R.id.iconInfo);
                                             imgV.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
+                                                    updatedDialog.dismiss();
                                                     Intent intent = new Intent(getBaseContext(), ImageSliderActivity.class);
                                                     intent.putExtra("closeMarks", (Serializable) updatedNameCloseMarkers);
                                                     startActivity(intent);
@@ -500,6 +497,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                             imgV.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    dialog.dismiss();
                                     Intent intent = new Intent(getBaseContext(), ImageSliderActivity.class);
                                     intent.putExtra("closeMarks", (Serializable) nameCloseMarkers);
                                     startActivity(intent);
@@ -824,11 +822,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
      */
     public void updatePreferences(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this );
-        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                if (key.equals("map_type")){
+                if (key.equals("map_type")) {
                     setMapType();
-                }else if (key.equals("difficulty")){
+                } else if (key.equals("difficulty")) {
                     setDifficulty();
                 }
             }
@@ -887,6 +885,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
         TextView textViewScore = findViewById(R.id.score);
         textViewScore.setText(getScoreOutOfTotal());
         checkEndGame();
+        SharedPreferences didYouKnowActicitySP= getSharedPreferences("didYouKnowActicity", 0);
+        SharedPreferences.Editor didYouKnowActicityEditor = didYouKnowActicitySP.edit();
+        didYouKnowActicityEditor.putBoolean("firstAudio", true);
+        didYouKnowActicityEditor.apply();
     }
 
     public void checkEndGame(){
