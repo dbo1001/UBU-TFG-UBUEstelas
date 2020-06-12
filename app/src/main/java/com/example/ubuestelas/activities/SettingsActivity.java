@@ -5,7 +5,6 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.ubuestelas.R;
@@ -49,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
      * Cuando la flecha de volver atrás en la barra de herramientas es presionada vuelve
      * a la actividad de la que se le llamó.
      * @param item El item del menú que se ha seleccionado.
-     * @return Heredado del método sobreescrito.
+     * @return Heredado del método sobrescrito.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

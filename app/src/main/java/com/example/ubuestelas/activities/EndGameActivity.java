@@ -4,7 +4,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -22,8 +21,8 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class EndGameActivity extends AppCompatActivity {
 
-    MediaPlayer voice;
-    GifDrawable gifDrawable;
+    private MediaPlayer voice;
+    private GifDrawable gifDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +44,11 @@ public class EndGameActivity extends AppCompatActivity {
         }
     }
 
-    public void setGifAndAudio() {
+    private void setGifAndAudio() {
         JSONObject obj;
         try {
             obj = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "endGame.json"));
-            GifImageView gifImageView = (GifImageView) findViewById(R.id.end_game_gif);
+            GifImageView gifImageView = findViewById(R.id.end_game_gif);
             int resourceGifId = this.getResources().getIdentifier(obj.getString("image"), "drawable", this.getPackageName());
             gifImageView.setImageResource(resourceGifId);
             gifDrawable = (GifDrawable) gifImageView.getDrawable();
@@ -62,14 +61,14 @@ public class EndGameActivity extends AppCompatActivity {
     /**
      * Rellena los textos en la pantalla final.
      */
-    public void fillText(){
-        TextView marksCompTV = (TextView) findViewById(R.id.marks_completed);
-        TextView pointsObtainedTV = (TextView) findViewById(R.id.points_obtained);
-        TextView finalTextTV = (TextView) findViewById(R.id.final_text);
+    private void fillText(){
+        TextView marksCompTV = findViewById(R.id.marks_completed);
+        TextView pointsObtainedTV = findViewById(R.id.points_obtained);
+        TextView finalTextTV = findViewById(R.id.final_text);
 
         JSONObject endGameJO;
         try{
-            double marksCS[]= checkCompletedMarkersAndScore();
+            double[] marksCS = checkCompletedMarkersAndScore();
             endGameJO = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(),"endGame.json"));
             String marksCompS = endGameJO.getString("marks_completed_format");
             marksCompS=marksCompS.replace("%comp%",String.valueOf((int)marksCS[0]));
@@ -114,7 +113,7 @@ public class EndGameActivity extends AppCompatActivity {
      * Comprueba de cuales de los marcadores ya han sido completadas sus pruebas.
      * @return Lista con los marcadores ya resueltos.
      */
-    public double[] checkCompletedMarkersAndScore(){
+    private double[] checkCompletedMarkersAndScore(){
         JSONObject obj;
         int completed=0;
         int total=0;

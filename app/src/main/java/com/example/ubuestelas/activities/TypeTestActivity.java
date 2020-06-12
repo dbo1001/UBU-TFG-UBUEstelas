@@ -2,26 +2,16 @@ package com.example.ubuestelas.activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
 
-import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -32,21 +22,12 @@ import android.widget.Toast;
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionItemTarget;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Actividad donde se carga la prueba de tipo test.
@@ -55,11 +36,11 @@ import java.util.List;
  */
 public class TypeTestActivity extends AppCompatActivity {
 
-    JSONObject fileToRead;
-    int attempts = 0;
-    String markName;
+    private JSONObject fileToRead;
+    private int attempts = 0;
+    private String markName;
 
-    boolean hintUsed;
+    private boolean hintUsed;
 
     /**
      * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
@@ -94,7 +75,7 @@ public class TypeTestActivity extends AppCompatActivity {
     /**
      * Carga la pregunta del fichero correspondiente.
      */
-    public void fillData(){
+    private void fillData(){
         try {
             SharedPreferences sharedPref = getSharedPreferences("navDrawFileName", 0);
             String fileNameMark = sharedPref.getString("fileName", "error");
@@ -120,7 +101,7 @@ public class TypeTestActivity extends AppCompatActivity {
      * @param optionsNumber Número de opciones que tiene el test.
      * @param type Tipo del que son las opciones, imágenes o texto.
      */
-    public void setOptions(JSONArray options, int optionsNumber, String type){
+    private void setOptions(JSONArray options, int optionsNumber, String type){
         RadioGroup rg = findViewById(R.id.options_group);
 
         for(int i =0; i<optionsNumber; i++){
@@ -129,7 +110,7 @@ public class TypeTestActivity extends AppCompatActivity {
                 JSONObject option = options.getJSONObject(i);
                 if(type.equals("images")) {
                     int resourceId = this.getResources().getIdentifier(option.getString("option"), "drawable", this.getPackageName());
-                    Drawable drawable = getResources().getDrawable(resourceId);
+                    Drawable drawable = getDrawable(resourceId);
                     Display display = getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
@@ -139,10 +120,10 @@ public class TypeTestActivity extends AppCompatActivity {
                     int heigth;
                     if(widthDisplay<heightDisplay) {
                         width = (int) (widthDisplay * 0.75);
-                        heigth = (int) (drawable.getIntrinsicHeight() * width) / drawable.getIntrinsicWidth();
+                        heigth = (drawable.getIntrinsicHeight() * width) / drawable.getIntrinsicWidth();
                     }else{
                         heigth = (int) (heightDisplay * 0.6);
-                        width = (int) (drawable.getIntrinsicWidth() * heigth) / drawable.getIntrinsicHeight();
+                        width = (drawable.getIntrinsicWidth() * heigth) / drawable.getIntrinsicHeight();
                     }
                     drawable.setBounds(0,0,width,heigth);
                     radioButton.setCompoundDrawables(drawable,null,null,null);
@@ -176,7 +157,7 @@ public class TypeTestActivity extends AppCompatActivity {
         RadioGroup rg = findViewById(R.id.options_group);
         if (rg.getCheckedRadioButtonId() != -1) {
             int selectedId = rg.getCheckedRadioButtonId();
-            RadioButton radioButton = (RadioButton) findViewById(selectedId);
+            RadioButton radioButton = findViewById(selectedId);
             attempts++;
             try {
                 String correctAnswer = fileToRead.getString("correct");
@@ -241,11 +222,11 @@ public class TypeTestActivity extends AppCompatActivity {
                     SharedPreferences scoreSP = getSharedPreferences("scoreEvent", 0);
                     SharedPreferences.Editor scoreEditor = scoreSP.edit();
                     scoreEditor.putString("score", String.valueOf(score));
-                    scoreEditor.commit();
+                    scoreEditor.apply();
                     SharedPreferences nameFileSP = getSharedPreferences("nameFileSP", 0);
                     SharedPreferences.Editor nameFileEditor = nameFileSP.edit();
                     nameFileEditor.putString("fileName", markName);
-                    nameFileEditor.commit();
+                    nameFileEditor.apply();
                     Intent intent = new Intent(this, DidYouKnowActivity.class);
                     intent.putExtra("score", score);
                     startActivity(intent);
@@ -270,7 +251,7 @@ public class TypeTestActivity extends AppCompatActivity {
             builder.setTitle(R.string.hint).setMessage(hint).setPositiveButton(R.string.ok,null);
             AlertDialog dialog = builder.create();
             dialog.show();
-            ImageButton imageButton = (ImageButton) findViewById(R.id.hint_test);
+            ImageButton imageButton = findViewById(R.id.hint_test);
             imageButton.setImageResource(R.drawable.game_hint_used);
         }catch (JSONException e){
             e.printStackTrace();

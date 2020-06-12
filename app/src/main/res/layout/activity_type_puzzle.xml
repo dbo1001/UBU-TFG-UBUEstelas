@@ -41,7 +41,8 @@
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/game_hint" />
+        app:srcCompat="@drawable/game_hint"
+        android:contentDescription="@string/hint" />
 
     <!--    <TextView-->
     <!--        android:id="@+id/timer"-->

@@ -21,11 +21,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Handler;
-import android.widget.ToggleButton;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.GestureDetectGridView;
@@ -34,7 +30,6 @@ import com.example.ubuestelas.util.Util;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,10 +37,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class TypePuzzleActivity extends AppCompatActivity {
 
@@ -62,14 +54,14 @@ public class TypePuzzleActivity extends AppCompatActivity {
     public static final String right = "right";
 
     private static String[] tileList;
-    static List<Drawable> imagenes;
+    private static List<Drawable> imagenes;
 
     private static Context ctx;
     private static Activity activity;
     private static boolean hintUsed = false;
 
-    JSONObject fileToRead;
-    static String markName;
+    private JSONObject fileToRead;
+    private static String markName;
 
 //    static Thread thread;
 //
@@ -90,7 +82,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_type_puzzle);
 
 
-        chronometer = (Chronometer) findViewById(R.id.timer);
+        chronometer = findViewById(R.id.timer);
         chronometer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
 
         Bundle bundle = getIntent().getExtras();
@@ -172,7 +164,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
 
 //    }
 
-    public void divide() {
+    private void divide() {
         try {
             String markImage = fileToRead.getString("image");
             int resourceId = this.getResources().getIdentifier(markImage, "drawable", this.getPackageName());
@@ -189,7 +181,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
         }
     }
 
-    public void init() {
+    private void init() {
         try {
             chronometer.start();
             ctx = this;
@@ -200,7 +192,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
             markName = splitName[0];
             fileToRead = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), fileNameMark));
 
-            mGridView = (GestureDetectGridView) findViewById(R.id.grid);
+            mGridView = findViewById(R.id.grid);
             mGridView.setNumColumns(COLUMNS);
 
             tileList = new String[DIMENSIONS];
@@ -212,7 +204,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
         }
     }
 
-    public void scramble() {
+    private void scramble() {
         int index;
         String temp;
         Random random = new Random();
@@ -225,7 +217,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
         }
     }
 
-    public void setDimensions() {
+    private void setDimensions() {
         ViewTreeObserver vto = mGridView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -254,7 +246,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
         });
     }
 
-    public int getStatusBarHeight(Context context) {
+    private int getStatusBarHeight(Context context) {
         int result = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen",
                 "android");
@@ -266,14 +258,14 @@ public class TypePuzzleActivity extends AppCompatActivity {
         return result;
     }
 
-    public static void display(Context context) {
+    private static void display(Context context) {
         ArrayList<Button> buttons = new ArrayList<>();
         Button button;
 
-        for (int i = 0; i < tileList.length; i++) {
+        for (String s : tileList) {
             button = new Button(context);
-            for(int j = 0; j < tileList.length; j++) {
-                if (tileList[i].equals(String.valueOf(j))) {
+            for (int j = 0; j < tileList.length; j++) {
+                if (s.equals(String.valueOf(j))) {
                     button.setBackground(imagenes.get(j));
                     buttons.add(button);
                 }
@@ -283,7 +275,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
         mGridView.setAdapter(new PuzzleAdapter(buttons, mColumnWidth, mColumnHeight));
     }
 
-    public static void swap(Context context, int currentPosition, int swap) {
+    private static void swap(Context context, int currentPosition, int swap) {
         String newPosition = tileList[currentPosition + swap];
         tileList[currentPosition + swap] = tileList[currentPosition];
         tileList[currentPosition] = newPosition;
@@ -325,11 +317,11 @@ public class TypePuzzleActivity extends AppCompatActivity {
                 SharedPreferences scoreSP = ctx.getSharedPreferences("scoreEvent", 0);
                 SharedPreferences.Editor scoreEditor = scoreSP.edit();
                 scoreEditor.putString("score", String.valueOf(score));
-                scoreEditor.commit();
+                scoreEditor.apply();
                 SharedPreferences nameFileSP = ctx.getSharedPreferences("nameFileSP", 0);
                 SharedPreferences.Editor nameFileEditor = nameFileSP.edit();
                 nameFileEditor.putString("fileName", markName);
-                nameFileEditor.commit();
+                nameFileEditor.apply();
                 Intent intent = new Intent(ctx, DidYouKnowActivity.class);
                 intent.putExtra("score", score);
                 ctx.startActivity(intent);
@@ -351,10 +343,20 @@ public class TypePuzzleActivity extends AppCompatActivity {
 
             // Upper-center tiles
         } else if (position > 0 && position < COLUMNS - 1) {
-            if (direction.equals(left)) swap(context, position, -1);
-            else if (direction.equals(down)) swap(context, position, COLUMNS);
-            else if (direction.equals(right)) swap(context, position, 1);
-            else Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
+            switch (direction) {
+                case left:
+                    swap(context, position, -1);
+                    break;
+                case down:
+                    swap(context, position, COLUMNS);
+                    break;
+                case right:
+                    swap(context, position, 1);
+                    break;
+                default:
+                    Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
             // Upper-right-corner tile
         } else if (position == COLUMNS - 1) {
@@ -365,23 +367,42 @@ public class TypePuzzleActivity extends AppCompatActivity {
             // Left-side tiles
         } else if (position > COLUMNS - 1 && position < DIMENSIONS - COLUMNS &&
                 position % COLUMNS == 0) {
-            if (direction.equals(up)) swap(context, position, -COLUMNS);
-            else if (direction.equals(right)) swap(context, position, 1);
-            else if (direction.equals(down)) swap(context, position, COLUMNS);
-            else Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
+            switch (direction) {
+                case up:
+                    swap(context, position, -COLUMNS);
+                    break;
+                case right:
+                    swap(context, position, 1);
+                    break;
+                case down:
+                    swap(context, position, COLUMNS);
+                    break;
+                default:
+                    Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
             // Right-side AND bottom-right-corner tiles
         } else if (position == COLUMNS * 2 - 1 || position == COLUMNS * 3 - 1) {
-            if (direction.equals(up)) swap(context, position, -COLUMNS);
-            else if (direction.equals(left)) swap(context, position, -1);
-            else if (direction.equals(down)) {
+            switch (direction) {
+                case up:
+                    swap(context, position, -COLUMNS);
+                    break;
+                case left:
+                    swap(context, position, -1);
+                    break;
+                case down:
 
-                // Tolerates only the right-side tiles to swap downwards as opposed to the bottom-
-                // right-corner tile.
-                if (position <= DIMENSIONS - COLUMNS - 1) swap(context, position,
-                        COLUMNS);
-                else Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
-            } else Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
+                    // Tolerates only the right-side tiles to swap downwards as opposed to the bottom-
+                    // right-corner tile.
+                    if (position <= DIMENSIONS - COLUMNS - 1) swap(context, position,
+                            COLUMNS);
+                    else Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
             // Bottom-left corner tile
         } else if (position == DIMENSIONS - COLUMNS) {
@@ -391,21 +412,41 @@ public class TypePuzzleActivity extends AppCompatActivity {
 
             // Bottom-center tiles
         } else if (position < DIMENSIONS - 1 && position > DIMENSIONS - COLUMNS) {
-            if (direction.equals(up)) swap(context, position, -COLUMNS);
-            else if (direction.equals(left)) swap(context, position, -1);
-            else if (direction.equals(right)) swap(context, position, 1);
-            else Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
+            switch (direction) {
+                case up:
+                    swap(context, position, -COLUMNS);
+                    break;
+                case left:
+                    swap(context, position, -1);
+                    break;
+                case right:
+                    swap(context, position, 1);
+                    break;
+                default:
+                    Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
             // Center tiles
         } else {
-            if (direction.equals(up)) swap(context, position, -COLUMNS);
-            else if (direction.equals(left)) swap(context, position, -1);
-            else if (direction.equals(right)) swap(context, position, 1);
-            else swap(context, position, COLUMNS);
+            switch (direction) {
+                case up:
+                    swap(context, position, -COLUMNS);
+                    break;
+                case left:
+                    swap(context, position, -1);
+                    break;
+                case right:
+                    swap(context, position, 1);
+                    break;
+                default:
+                    swap(context, position, COLUMNS);
+                    break;
+            }
         }
     }
 
-    public static boolean isSolved() {
+    private static boolean isSolved() {
         boolean solved = false;
 
         for (int i = 0; i < tileList.length; i++) {
@@ -442,7 +483,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
             builder.setTitle(R.string.hint).setMessage(hint).setPositiveButton(R.string.ok,null);
             AlertDialog dialog = builder.create();
             dialog.show();
-            ImageButton imageButton = (ImageButton) findViewById(R.id.hint_puzzle);
+            ImageButton imageButton = findViewById(R.id.hint_puzzle);
             imageButton.setImageResource(R.drawable.game_hint_used);
         }catch (JSONException e){
             e.printStackTrace();

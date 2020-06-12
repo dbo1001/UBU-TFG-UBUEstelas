@@ -42,7 +42,7 @@ public class GestureDetectGridView extends GridView {
         init(context);
     }
 
-    public void init(final Context context) {
+    private void init(final Context context) {
         gDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDown(MotionEvent event) {

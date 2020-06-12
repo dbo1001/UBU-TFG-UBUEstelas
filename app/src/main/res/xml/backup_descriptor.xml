@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <exclude
+        domain="sharedpref"
+        path="navDrawFileName.xml" />
+    <exclude
+        domain="sharedpref"
+        path="scoreEvent.xml" />
+    <exclude
+        domain="sharedpref"
+        path="nameActivity.xml" />
+    <exclude
+        domain="sharedpref"
+        path="nameFileSP.xml" />
+    <exclude
+        domain="sharedpref"
+        path="imageSliderActivity.xml" />
+    <exclude
+        domain="sharedpref"
+        path="characterSelected.xml" />
+    <exclude
+        domain="sharedpref"
+        path="didYouKnowActivity.xml" />
+</full-backup-content>

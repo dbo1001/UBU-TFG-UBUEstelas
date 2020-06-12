@@ -1,6 +1,5 @@
 package com.example.ubuestelas.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -11,12 +10,10 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -26,8 +23,6 @@ import android.widget.TextView;
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.Target;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,8 +32,8 @@ import java.util.List;
 
 public class ImageSliderActivity extends AppCompatActivity {
 
-    ConstraintLayout constraintLayout;
-    ImageView iv;
+    private ConstraintLayout constraintLayout;
+    private ImageView iv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +64,11 @@ public class ImageSliderActivity extends AppCompatActivity {
         imageSAEditor.apply();
     }
 
-    public void init(){
-        constraintLayout = (ConstraintLayout) findViewById(R.id.image_slider_constraint);
+    private void init(){
+        constraintLayout = findViewById(R.id.image_slider_constraint);
         iv = new ImageView(this);
         List<String> closeMarks = (List<String>) getIntent().getSerializableExtra("closeMarks");
-        LinearLayout linearLayoutV = (LinearLayout) findViewById(R.id.layout_image_slider);
+        LinearLayout linearLayoutV = findViewById(R.id.layout_image_slider);
         JSONObject objMarks;
         try {
             objMarks = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "marksJSON.json"));
@@ -83,7 +78,7 @@ public class ImageSliderActivity extends AppCompatActivity {
                 markTV.setText(mark+":");
                 markTV.setTextSize(24);
                 markTV.setTextColor(Color.BLACK);
-                markTV.setBackground(getResources().getDrawable(R.drawable.border));
+                markTV.setBackground(getDrawable(R.drawable.border));
                 markTV.setPadding(10,0,10,0);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(10,30,10,10);
@@ -112,7 +107,7 @@ public class ImageSliderActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     iv.setImageBitmap(getImageScreenResized(getResources().getIdentifier(pictureName, "drawable", getApplicationContext().getPackageName())));
-                                    iv.setBackgroundColor(getResources().getColor(R.color.colorSemiTransparent));
+                                    iv.setBackgroundColor(getColor(R.color.colorSemiTransparent));
                                     LinearLayout.LayoutParams vgLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                                     vgLp.gravity=Gravity.CENTER;
                                     iv.setLayoutParams(vgLp);
@@ -144,7 +139,7 @@ public class ImageSliderActivity extends AppCompatActivity {
         }
     }
 
-    public Bitmap getImageSmallResized(int image){
+    private Bitmap getImageSmallResized(int image){
         Bitmap b = BitmapFactory.decodeResource(getResources(),image);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -152,19 +147,18 @@ public class ImageSliderActivity extends AppCompatActivity {
         int widthDisplay = size.x;
         int heightDisplay = size.y;
         int width;
-        int heigth;
+        int height;
         if(widthDisplay<heightDisplay) {
-            width = (int) (widthDisplay / 3);
-            heigth = (int) (b.getHeight() * width) / b.getWidth();
+            width = widthDisplay / 3;
+            height = (b.getHeight() * width) / b.getWidth();
         }else{
-            heigth = (int) (heightDisplay / 3);
-            width = (int) (b.getWidth() * heigth) / b.getHeight();
+            height = heightDisplay / 3;
+            width = (b.getWidth() * height) / b.getHeight();
         }
-        Bitmap smallImage = Bitmap.createScaledBitmap(b, width, heigth, true);
-        return smallImage;
+        return Bitmap.createScaledBitmap(b, width, height, true);
     }
 
-    public Bitmap getImageScreenResized(int image){
+    private Bitmap getImageScreenResized(int image){
 //        BitmapDrawable bitmapDrawable = (BitmapDrawable) image;
 //        Bitmap b = bitmapDrawable.getBitmap();
         Bitmap b = BitmapFactory.decodeResource(getResources(),image);
@@ -176,14 +170,13 @@ public class ImageSliderActivity extends AppCompatActivity {
         int width;
         int heigth;
         if(widthDisplay<heightDisplay) {
-            width = (int) (widthDisplay);
-            heigth = (int) (b.getHeight() * width) / b.getWidth();
+            width = widthDisplay;
+            heigth = (b.getHeight() * width) / b.getWidth();
         }else{
-            heigth = (int) (heightDisplay);
-            width = (int) (b.getWidth() * heigth) / b.getHeight();
+            heigth = heightDisplay;
+            width = (b.getWidth() * heigth) / b.getHeight();
         }
-        Bitmap screenImage = Bitmap.createScaledBitmap(b, width, heigth, true);
-        return screenImage;
+        return Bitmap.createScaledBitmap(b, width, heigth, true);
     }
 
     @Override
@@ -196,7 +189,7 @@ public class ImageSliderActivity extends AppCompatActivity {
         }
     }
 
-    public boolean hasImage(ImageView view) {
+    private boolean hasImage(ImageView view) {
         Drawable drawable = view.getDrawable();
         boolean hasImage = (drawable != null);
 

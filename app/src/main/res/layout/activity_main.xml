@@ -19,7 +19,8 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/settings_button" />
+        app:srcCompat="@drawable/settings_button"
+        android:contentDescription="@string/menu_settings" />
 
     <ImageButton
         android:id="@+id/newGameButton"
@@ -34,7 +35,8 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/new_game_button" />
+        app:srcCompat="@drawable/new_game_button"
+        android:contentDescription="@string/new_game_string" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -58,5 +60,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:srcCompat="@drawable/continue_button" />
+        app:srcCompat="@drawable/continue_button"
+        android:contentDescription="@string/continue_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

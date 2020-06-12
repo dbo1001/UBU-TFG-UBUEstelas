@@ -10,17 +10,16 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class Util {
 
-    static final double RADIO_TIERRA = 6371;
+    private static final double RADIO_TIERRA = 6371;
 
     /**
      * Carga un archivo de tipo JSON de la carpeta de assets.
@@ -41,7 +40,7 @@ public class Util {
 
             is.close();
 
-            json = new String(buffer, "UTF-8");
+            json = new String(buffer, StandardCharsets.UTF_8);
 
 
         } catch (IOException ex) {
@@ -62,11 +61,11 @@ public class Util {
         String json;
         try {
             File file = new File(context.getFilesDir(), name);
-            StringBuffer output = new StringBuffer();
+            StringBuilder output = new StringBuilder();
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = bufferedReader.readLine()) != null){
-                output.append(line + "\n");
+                output.append(line).append("\n");
             }
             json = output.toString();
             bufferedReader.close();

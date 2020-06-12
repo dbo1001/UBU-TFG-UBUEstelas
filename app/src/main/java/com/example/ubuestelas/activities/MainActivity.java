@@ -9,24 +9,15 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Actividad principal de la aplicación. Donde se inicia la aplicación cada vez que arranca.
@@ -50,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(Util.loadJSONFromFilesDir(this, "userInfo") == null){
-            ImageButton cont = (ImageButton) findViewById(R.id.continueButton);
-            cont.getDrawable().setColorFilter(getResources().getColor(R.color.colorButtonDisabled), PorterDuff.Mode.SRC_OVER);
+            ImageButton cont = findViewById(R.id.continueButton);
+            cont.getDrawable().setColorFilter(getColor(R.color.colorButtonDisabled), PorterDuff.Mode.SRC_OVER);
         }
     }
 

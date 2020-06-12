@@ -15,7 +15,8 @@
         android:clickable="true"
         android:focusable="true"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_info_images" />
+        app:srcCompat="@drawable/ic_info_images"
+        android:contentDescription="@string/information" />
 
     <TextView
         android:id="@+id/textView5"

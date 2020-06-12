@@ -33,7 +33,7 @@ import pl.droidsonroids.gif.GifImageView;
  */
 public class DidYouKnowActivity extends AppCompatActivity {
 
-    MediaPlayer voice;
+    private MediaPlayer voice;
 
     /**
      * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
@@ -45,8 +45,8 @@ public class DidYouKnowActivity extends AppCompatActivity {
         setContentView(R.layout.activity_did_you_know);
         loadTextAndAudio();
         loadGif();
-        SharedPreferences didYouKnowActicitySP= getSharedPreferences("didYouKnowActicity", 0);
-        boolean first = didYouKnowActicitySP.getBoolean("first", true);
+        SharedPreferences didYouKnowActivitySP= getSharedPreferences("didYouKnowActivity", 0);
+        boolean first = didYouKnowActivitySP.getBoolean("first", true);
         if(first) {
             Button button = new Button(this);
             button.setText(R.string.ok);
@@ -63,9 +63,9 @@ public class DidYouKnowActivity extends AppCompatActivity {
                     .build();
 
         }
-        SharedPreferences.Editor didYouKnowActicityEditor = didYouKnowActicitySP.edit();
-        didYouKnowActicityEditor.putBoolean("first", false);
-        didYouKnowActicityEditor.apply();
+        SharedPreferences.Editor didYouKnowActivityEditor = didYouKnowActivitySP.edit();
+        didYouKnowActivityEditor.putBoolean("first", false);
+        didYouKnowActivityEditor.apply();
     }
 
     @Override
@@ -101,11 +101,11 @@ public class DidYouKnowActivity extends AppCompatActivity {
     /**
      * Carga el texto que extrae del archivo correspondiente a la prueba que se acaba de hacer.
      */
-    public void loadTextAndAudio() {
+    private void loadTextAndAudio() {
         SharedPreferences nameFileSP = getSharedPreferences("nameFileSP", 0);
         String fileName = nameFileSP.getString("fileName", "error");
-        SharedPreferences didYouKnowActicitySP= getSharedPreferences("didYouKnowActicity", 0);
-        boolean firstAudio = didYouKnowActicitySP.getBoolean("firstAudio", true);
+        SharedPreferences didYouKnowActivitySP= getSharedPreferences("didYouKnowActivity", 0);
+        boolean firstAudio = didYouKnowActivitySP.getBoolean("firstAudio", true);
         try {
             JSONObject fileToRead = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), fileName + ".json"));
             String curiosity = fileToRead.getString("curiosity");
@@ -116,9 +116,9 @@ public class DidYouKnowActivity extends AppCompatActivity {
                 voice = MediaPlayer.create(this, resourceAudioID);
                 voice.start();
             }
-            SharedPreferences.Editor didYouKnowActicityEditor = didYouKnowActicitySP.edit();
-            didYouKnowActicityEditor.putBoolean("firstAudio", false);
-            didYouKnowActicityEditor.apply();
+            SharedPreferences.Editor didYouKnowActivityEditor = didYouKnowActivitySP.edit();
+            didYouKnowActivityEditor.putBoolean("firstAudio", false);
+            didYouKnowActivityEditor.apply();
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -137,8 +137,8 @@ public class DidYouKnowActivity extends AppCompatActivity {
         finish();
     }
 
-    public void loadGif(){
-        GifImageView gifImageView = (GifImageView) findViewById(R.id.did_you_know_gif);
+    private void loadGif(){
+        GifImageView gifImageView = findViewById(R.id.did_you_know_gif);
         Intent intent = getIntent();
         double score = intent.getDoubleExtra("score",0);
         if(score<50){
@@ -160,7 +160,7 @@ public class DidYouKnowActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public String getVideoURL(){
+    private String getVideoURL(){
         SharedPreferences nameFileSP = getSharedPreferences("nameFileSP", 0);
         String fileName = nameFileSP.getString("fileName", "error");
         String video = "";

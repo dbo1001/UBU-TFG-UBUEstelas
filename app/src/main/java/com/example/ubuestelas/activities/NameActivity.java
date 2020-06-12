@@ -27,14 +27,14 @@ import org.json.JSONObject;
  */
 public class NameActivity extends AppCompatActivity{
 
-    JSONArray chars;
-    Integer[] characs = {};
-    Integer[] characsSelec = {};
+    private JSONArray chars;
+    private Integer[] characs = {};
+    private Integer[] characsSelec = {};
 
-    int prevIdCharacter = R.id.character;
-    int prevSelecCharacter = R.drawable.character01;
+    private int prevIdCharacter = R.id.character;
+    private int prevSelecCharacter = R.drawable.character01;
 
-    boolean selected;
+    private boolean selected;
 
     /**
      * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
@@ -44,7 +44,7 @@ public class NameActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nombre);
-        ImageButton cont = (ImageButton) findViewById(R.id.continueToScene);
+        ImageButton cont = findViewById(R.id.continueToScene);
         cont.getDrawable().setColorFilter(null);
         fillCharacters();
     }
@@ -61,7 +61,7 @@ public class NameActivity extends AppCompatActivity{
         EditText editText = findViewById(R.id.input_name);
         String name = editText.getText().toString();
         nameEditor.putString("name", name);
-        nameEditor.commit();
+        nameEditor.apply();
         if(!selected){
             Toast.makeText(this, getString(R.string.select_character) + ". ", Toast.LENGTH_SHORT).show();
         }else {
@@ -75,7 +75,7 @@ public class NameActivity extends AppCompatActivity{
      * Carga en pantalla las imagenes de los personajes disponibles.
      * Cuando uno de ellos es seleccionado lo guarda en un SharedPreferences.
      */
-    public void fillCharacters(){
+    private void fillCharacters(){
         JSONObject obj;
         try {
             obj = new JSONObject(Util.loadJSONFromAsset(this, "characters.json"));
@@ -89,7 +89,7 @@ public class NameActivity extends AppCompatActivity{
             }}catch (JSONException e){
             e.printStackTrace();
         }
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.images_scroll);
+        LinearLayout linearLayout = findViewById(R.id.images_scroll);
         for (int i =0; i<characs.length; i++) {
             ImageView iv = new ImageView (this);
             iv.setImageResource(characs[i]);
@@ -105,8 +105,8 @@ public class NameActivity extends AppCompatActivity{
                                           for (int i = 0; i<chars.length(); i++) {
                                               if (v.getId() == R.id.character + i) {
                                                   selected=true;
-                                                  ImageView ivSelected = (ImageView) findViewById(R.id.character + i);
-                                                  ImageView ivPreviousSelected = (ImageView) findViewById(prevIdCharacter);
+                                                  ImageView ivSelected = findViewById(R.id.character + i);
+                                                  ImageView ivPreviousSelected = findViewById(prevIdCharacter);
                                                   ivPreviousSelected.setImageResource(prevSelecCharacter);
                                                   ivPreviousSelected.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                                                   ivSelected.setImageResource(characsSelec[i]);
@@ -116,7 +116,7 @@ public class NameActivity extends AppCompatActivity{
                                                   SharedPreferences characSP= getSharedPreferences("characterSelected", 0);
                                                   SharedPreferences.Editor characEditor = characSP.edit();
                                                   characEditor.putInt("drawableCharac", characs[i]);
-                                                  characEditor.commit();
+                                                  characEditor.apply();
                                               }
                                           }
                                       }});

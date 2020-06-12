@@ -41,20 +41,20 @@ import java.util.List;
  */
 public class TypeCompleteWordsActivity extends AppCompatActivity {
 
-    JSONObject fileToRead;
-    static String markName;
-    String fileNameMark;
+    private JSONObject fileToRead;
+    private static String markName;
+    private String fileNameMark;
 
-    EditText textToComplete;
+    private EditText textToComplete;
 
-    int relativePosition = 0;
-    int absolutePosition = 0;
+    private int relativePosition = 0;
+    private int absolutePosition = 0;
 
-    int attempts = 0;
+    private int attempts = 0;
 
-    List<Double> errorsAttempt = new ArrayList<Double>();
+    private final List<Double> errorsAttempt = new ArrayList<>();
 
-    boolean hintUsed = false;
+    private boolean hintUsed = false;
 
     /**
      * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
@@ -93,7 +93,7 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
     /**
      * Muestra la frase original con los huecos en los que hay que rellenar las letras que faltan.
      */
-    public void init(){
+    private void init(){
         try{
             SharedPreferences sharedPref = getSharedPreferences("navDrawFileName", 0);
             fileNameMark = sharedPref.getString("fileName", "error");
@@ -105,7 +105,7 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
             JSONObject gap = gaps.getJSONObject(relativePosition);
             absolutePosition = gap.getInt("position");
             text = text.replace("%l%", "_");
-            textToComplete = (EditText) findViewById(R.id.text_to_complete);
+            textToComplete = findViewById(R.id.text_to_complete);
             textToComplete.setText(text);
             textToComplete.setTextSize(24);
             textToComplete.setBackground(getDrawable(R.drawable.border));
@@ -120,12 +120,12 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
     /**
      * Completa la malla con las opciones de letras que se obtienen del adaptador.
      */
-    public void fillGrid(){
+    private void fillGrid(){
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
         String difficulty = sharedPreferences.getString("difficulty", "easy");
 
-        GridView gridView = (GridView) findViewById(R.id.letters_selection);
+        GridView gridView = findViewById(R.id.letters_selection);
 
         gridView.setAdapter(new LettersAdapter(this, fileNameMark, relativePosition, difficulty));
 
@@ -198,7 +198,7 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
     /**
      * Remarca el hueco que está seleccionado.
      */
-    public void selectPosition(){
+    private void selectPosition(){
         textToComplete.setSelection(absolutePosition-1,absolutePosition);
     }
 
@@ -206,7 +206,7 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
      * Comprueba si todos los huecos tienen alguna letra colocada.
      * @return true si no queda ningún hueco, false si algún hueco todavía está libre.
      */
-    public boolean isAllPlaced(){
+    private boolean isAllPlaced(){
         return !textToComplete.getText().toString().contains("_");
     }
 
@@ -214,9 +214,9 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
      * Comprueba si la frase tiene todas las letras correctas.
      * @return true si la frase es correcta, false si no lo es.
      */
-    public boolean checkCorrect(){
+    private boolean checkCorrect(){
         boolean solved = true;
-        List<Integer> wrongPositions = new ArrayList<Integer>();
+        List<Integer> wrongPositions = new ArrayList<>();
         double errorsNumber = 0;
         try {
             JSONArray gaps = fileToRead.getJSONArray("gaps");
@@ -310,11 +310,11 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
                     SharedPreferences scoreSP = getSharedPreferences("scoreEvent", 0);
                     SharedPreferences.Editor scoreEditor = scoreSP.edit();
                     scoreEditor.putString("score", String.valueOf(score));
-                    scoreEditor.commit();
+                    scoreEditor.apply();
                     SharedPreferences nameFileSP = getSharedPreferences("nameFileSP", 0);
                     SharedPreferences.Editor nameFileEditor = nameFileSP.edit();
                     nameFileEditor.putString("fileName", markName);
-                    nameFileEditor.commit();
+                    nameFileEditor.apply();
                     Intent intent = new Intent(this, DidYouKnowActivity.class);
                     intent.putExtra("score", score);
                     startActivity(intent);
@@ -334,13 +334,13 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
      * Si la frase no es correcta marca en color rojo las letras que están equivocadas.
      * @param wrongPositions Lista con las posiciones de las letras incorrectas.
      */
-    public void indicateWrong(List<Integer> wrongPositions){
+    private void indicateWrong(List<Integer> wrongPositions){
         Spannable modifiedText = new SpannableString(textToComplete.getText());
-        modifiedText.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorBlack)), 0, modifiedText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        modifiedText.setSpan(new ForegroundColorSpan(getColor(R.color.colorBlack)), 0, modifiedText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         textToComplete.setText(modifiedText);
         for(Integer position : wrongPositions) {
             modifiedText = textToComplete.getText();//new SpannableString(textToComplete.getText());
-            modifiedText.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorWrong)), position-1, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            modifiedText.setSpan(new ForegroundColorSpan(getColor(R.color.colorWrong)), position-1, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             textToComplete.setText(modifiedText);
         }
     }
@@ -353,7 +353,7 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
             builder.setTitle(R.string.hint).setMessage(hint).setPositiveButton(R.string.ok,null);
             AlertDialog dialog = builder.create();
             dialog.show();
-            ImageButton imageButton = (ImageButton) findViewById(R.id.hint_complete);
+            ImageButton imageButton = findViewById(R.id.hint_complete);
             imageButton.setImageResource(R.drawable.game_hint_used);
         }catch (JSONException e){
             e.printStackTrace();

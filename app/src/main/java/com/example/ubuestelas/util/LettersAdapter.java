@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.ubuestelas.R;
-import com.google.android.gms.common.util.ArrayUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,9 +22,9 @@ import org.json.JSONObject;
  */
 public class LettersAdapter extends BaseAdapter {
 
-    Context context;
+    private final Context context;
 
-    String[] letters;
+    private final String[] letters;
 
     /**
      * Inicialización de la clase.
@@ -107,7 +106,7 @@ public class LettersAdapter extends BaseAdapter {
      * @param difficulty Dificultad en la que juega el usuario.
      * @return Array con las letras posibles para ese hueco.
      */
-    public String[] getLettersOptions(String fileName, int location, String difficulty){
+    private String[] getLettersOptions(String fileName, int location, String difficulty){
         String[] letts = {};
         JSONObject obj;
         try {

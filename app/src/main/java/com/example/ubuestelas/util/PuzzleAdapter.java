@@ -8,8 +8,9 @@ import android.widget.Button;
 import java.util.ArrayList;
 
 public class PuzzleAdapter extends BaseAdapter {
-    private ArrayList<Button> mButtons = null;
-    private int mColumnWidth, mColumnHeight;
+    private final ArrayList<Button> mButtons;
+    private final int mColumnWidth;
+    private final int mColumnHeight;
 
     public PuzzleAdapter(ArrayList<Button> buttons, int columnWidth, int columnHeight) {
         mButtons = buttons;
@@ -25,7 +26,7 @@ public class PuzzleAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return (Object) mButtons.get(position);
+        return mButtons.get(position);
     }
 
     @Override

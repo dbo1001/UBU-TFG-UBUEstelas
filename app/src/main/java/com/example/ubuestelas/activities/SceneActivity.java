@@ -4,16 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
@@ -43,9 +37,9 @@ public class SceneActivity extends AppCompatActivity {
 
     private int counter =0;
 
-    MediaPlayer voice;
+    private MediaPlayer voice;
 
-    GifDrawable gifDrawable;
+    private GifDrawable gifDrawable;
 
     /**
      * Inicializa la actividad con su respectivo layout.
@@ -72,7 +66,7 @@ public class SceneActivity extends AppCompatActivity {
             textView.setText(text);
 
             int resourceGifId = this.getResources().getIdentifier(scene.getString("image"), "drawable", this.getPackageName());
-            GifImageView gifImageView = (GifImageView) findViewById(R.id.scene_gif);
+            GifImageView gifImageView = findViewById(R.id.scene_gif);
             gifImageView.setImageResource(resourceGifId);
             gifDrawable =(GifDrawable) gifImageView.getDrawable();
 //            gifDrawable.setLoopCount(2);
@@ -110,7 +104,7 @@ public class SceneActivity extends AppCompatActivity {
      * @param view La vista que se ha clickado.
      */
     public void changeScene(View view){
-        GifImageView gifImageView = (GifImageView) findViewById(R.id.scene_gif);
+        GifImageView gifImageView = findViewById(R.id.scene_gif);
 //        ImageView imageView = findViewById(R.id.imagen_escena);
         TextView textView = findViewById(R.id.scene_text);
         counter++;
@@ -154,7 +148,7 @@ public class SceneActivity extends AppCompatActivity {
     /**
      * Se crea el fichero donde se guarda toda la información de progreso del juego.
      */
-    public void createJSONprogress(){
+    private void createJSONprogress(){
         File file = new File(this.getFilesDir(), FILE_NAME);
         FileWriter fileWriter;
         BufferedWriter bufferedWriter;
@@ -191,9 +185,7 @@ public class SceneActivity extends AppCompatActivity {
             bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(complete.toString());
             bufferedWriter.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }catch (JSONException e){
+        }catch (IOException | JSONException e){
             e.printStackTrace();
         }
 
@@ -207,8 +199,8 @@ public class SceneActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void clearSharedPreferences(){
+    private void clearSharedPreferences(){
         this.getSharedPreferences("imageSliderActivity", 0).edit().clear().apply();
-        this.getSharedPreferences("didYouKnowActicity", 0).edit().clear().apply();
+        this.getSharedPreferences("didYouKnowActivity", 0).edit().clear().apply();
     }
 }

@@ -9,26 +9,20 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,10 +35,6 @@ import androidx.preference.PreferenceManager;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.Target;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -65,7 +55,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Actividad donde se encuentra el menú lateral y todo lo relacionado con la carga del mapa y de las actividades.
+ * Actividad donde se encuentra el menú lateral y lo relacionado con la carga del mapa y de las actividades.
  *
  * @author Marcos Pena
  */
@@ -73,19 +63,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
-    FusedLocationProviderClient fusedLocationProviderClient;
-    MarkerOptions currentLocation;
-    List<Marker> markerList = new ArrayList<Marker>();
-    Marker currentLocationMarker;
-    HashMap<Marker,List<String>> dicMarkerAct;
-    Marker currentMarkerActivity = null;
-    public String difficulty;
+    private MarkerOptions currentLocation;
+    private final List<Marker> markerList = new ArrayList<>();
+    private Marker currentLocationMarker;
+    private HashMap<Marker,List<String>> dicMarkerAct;
+    private Marker currentMarkerActivity = null;
 
-    int markImageWrongAnswer;
-    int markImageNotAnswered;
-    int markImageCorrectAnswer;
-    int markImageMidAnswer;
-    boolean finish = false;
+    private boolean finish = false;
 
     /**
      * Inicializa la actividad con su respectivo layout. Se inicializa el menú lateral y el mapa.
@@ -114,7 +98,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
 
-        setDifficulty();
         updatePreferences();
 
     }
@@ -233,7 +216,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     /**
      * Este método llama a funciones para cargar el tipo de mapa, añadir los marcadores y
      * poner la localización del jugador.
-     * TODO En lugar de requiresApi se puede ver de hacer alguna forma para soportar versiones anteriores metiéndolo en un if
      * @param googleMap Una instancia del GoogleMap asociada con el fragmento
      */
     @Override
@@ -259,25 +241,24 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * Lo que ponga el fichero de guardado pone los colores correspondientes a cada marcador y guarda en un diccionario
      * la relación entre cada marcador con su tipo de prueba y su fichero.
      */
-    public void addJSONmarkersAndFillDic(){
+    private void addJSONmarkersAndFillDic(){
         JSONObject objMarks;
         JSONObject objUserInfo;
         for (Marker m : markerList){
             m.remove();
         }
         markerList.clear();
-//        markerList = new ArrayList<Marker>();
-        dicMarkerAct = new HashMap<Marker,List<String>>();
+        dicMarkerAct = new HashMap<>();
         try {
             objUserInfo = new JSONObject(Util.loadJSONFromFilesDir(this, "userInfo"));
             JSONArray marksColors = objUserInfo.getJSONArray("marks");
             objMarks = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), "marksJSON.json"));
             JSONArray townCentre = objMarks.getJSONArray("townCentre");
             JSONObject town = townCentre.getJSONObject(0);
-            markImageWrongAnswer = getResources().getIdentifier(objMarks.getString("markImageWrongAnswer"), "drawable", getPackageName());
-            markImageNotAnswered = getResources().getIdentifier(objMarks.getString("markImageNotAnswered"), "drawable", getPackageName());
-            markImageCorrectAnswer = getResources().getIdentifier(objMarks.getString("markImageCorrectAnswer"), "drawable", getPackageName());
-            markImageMidAnswer = getResources().getIdentifier(objMarks.getString("markImageMidAnswer"), "drawable", getPackageName());
+            int markImageWrongAnswer = getResources().getIdentifier(objMarks.getString("markImageWrongAnswer"), "drawable", getPackageName());
+            int markImageNotAnswered = getResources().getIdentifier(objMarks.getString("markImageNotAnswered"), "drawable", getPackageName());
+            int markImageCorrectAnswer = getResources().getIdentifier(objMarks.getString("markImageCorrectAnswer"), "drawable", getPackageName());
+            int markImageMidAnswer = getResources().getIdentifier(objMarks.getString("markImageMidAnswer"), "drawable", getPackageName());
             LatLng townLatLng = new LatLng(town.getDouble("latitude"), town.getDouble("longitude"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(townLatLng, 17.5f));
             JSONArray marks = objMarks.getJSONArray("marks");
@@ -308,7 +289,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                         break;
                 }
                 markerList.add(marker);
-                List<String> typeAndFile = new ArrayList<String>();
+                List<String> typeAndFile = new ArrayList<>();
                 typeAndFile.add(mark.getString("type"));
                 typeAndFile.add(mark.getString("fileName"));
                 dicMarkerAct.put(marker,typeAndFile);
@@ -323,9 +304,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * También llama a otros métodos para comprobar la cercanía a los marcadores necesarios para iniciar
      * cada una de las pruebas y crea el diálogo donde se le permite al usuario escoger el marcador con el que
      * quiere jugar.
-     * TODO En lugar de requiresApi se puede ver de hacer alguna forma para soportar versiones anteriores metiéndolo en un if
      */
-    public void getCurrentLocation(){
+    private void getCurrentLocation(){
         final Context context = this;
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -345,7 +325,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0.5f, new LocationListener() {
             List<String> prevNameCloseMarkers = new ArrayList<>();
-            Bitmap characterSized = getCharacterSized(characterDrawable);
+            final Bitmap characterSized = getCharacterSized(characterDrawable);
 
             /**
              * Cuando cambia la ubicación del usuario se llama a este método. Colocar su posición en el mapa
@@ -369,79 +349,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 final List<String> nameCloseMarkers = new ArrayList<>();
 
                 for (Marker marker : closeMarkers) {
-//                    marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
                     nameCloseMarkers.add(marker.getTitle());
                 }
 
                 if (!prevNameCloseMarkers.equals(nameCloseMarkers) && !nameCloseMarkers.isEmpty()) {
-                    //builder.setTitle(getString(R.string.choose_stela));
-//                    String[] closeMarkersString = new String[nameCloseMarkers.size()];
-//                    closeMarkersString = nameCloseMarkers.toArray(closeMarkersString);
-//                    builder.setItems(closeMarkersString, new DialogInterface.OnClickListener() {
-//                        /**
-//                         * Carga el tipo de prueba que corresopnda al marcador seleccionado.
-//                         * @param dialog Diálogo del que se selecciona un item.
-//                         * @param which Item seleccionado dentro de la lista.
-//                         */
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            currentMarkerActivity=closeMarkers.get(which);
-//                            List<String> markerChosen = dicMarkerAct.get(currentMarkerActivity);
-//                            SharedPreferences fileNameSP = getSharedPreferences("navDrawFileName", 0);
-//                            SharedPreferences.Editor nameEditor = fileNameSP.edit();
-//                            String fileNameChosen = markerChosen.get(1);
-//                            nameEditor.putString("fileName", fileNameChosen);
-//                            nameEditor.commit();
-//                            Intent intent;
-//                            boolean first;
-//                            List<Boolean> completed = checkCompletedMarkers();
-//                            if(completed.contains(Boolean.TRUE)){
-//                                first=false;
-//                            }else{
-//                                first=true;
-//                            }
-//                            switch (markerChosen.get(0)){
-//                                case "test":
-//                                    intent = new Intent(getBaseContext(), TypeTestActivity.class);
-//                                    intent.putExtra("first_game", first);
-//                                    startActivity(intent);
-//                                    break;
-//                                case "puzzle":
-//                                    intent = new Intent(getBaseContext(), TypePuzzleActivity.class);
-//                                    intent.putExtra("first_game", first);
-//                                    startActivity(intent);
-//                                    break;
-//                                case "complete_words":
-//                                    intent = new Intent(getBaseContext(), TypeCompleteWordsActivity.class);
-//                                    intent.putExtra("first_game", first);
-//                                    startActivity(intent);
-//                                    break;
-//                            }
-//                        }
-//                    });
-
-
-                    //builder.setIcon(R.drawable.ic_info_images);
-//                    LayoutInflater inflater = getLayoutInflater();
-//                    View view = inflater.inflate(R.layout.custom_title_dialog_alert, null);
-//                    builder.setCustomTitle(view);
-
                     if(!finish) {
                         createMarksDialogBuilder(nameCloseMarkers, closeMarkers);
                         final AlertDialog dialog = builder.create();
                         if(!((Activity) context).isFinishing()) {
                             dialog.show();
-
-
-//                    Target target = new ViewTarget(R.id.iconInfo, getParent());
-//                    new ShowcaseView.Builder(getParent())
-//                            .setTarget(target)
-//                            .setContentTitle(R.string.hint)
-//                            .setContentText(R.string.hint_explain)
-//                            //.replaceEndButton(button)
-//                            .setStyle(R.style.CustomShowcaseTheme)
-//                            .hideOnTouchOutside()
-//                            .build();
 
                             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
@@ -462,7 +378,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                                             createMarksDialogBuilder(updatedNameCloseMarkers, updatedCloseMarkers);
                                             final AlertDialog updatedDialog = builder.create();
                                             updatedDialog.show();
-                                            ImageView imgV = (ImageView) updatedDialog.findViewById(R.id.iconInfo);
+                                            ImageView imgV = updatedDialog.findViewById(R.id.iconInfo);
                                             imgV.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -478,22 +394,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                                     return true;
                                 }
                             });
-
-//                    dialogBuilder.setTitle("Estas son las imagenes de las estelas");
-//                    dialogBuilder.setMessage("Estela que salga:");
-//                    dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss();
-//                        }
-//                    });
-//                    ImageView imageView = new ImageView(getApplicationContext());
-//                    imageView.setImageResource(R.drawable.estela1old);
-//                    dialogBuilder.setView(imageView);
-//                    final AlertDialog alertDialog = dialogBuilder.create();
-
-
-                            ImageView imgV = (ImageView) dialog.findViewById(R.id.iconInfo);
+                            ImageView imgV = dialog.findViewById(R.id.iconInfo);
                             imgV.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -501,108 +402,19 @@ public class NavigationDrawerActivity extends AppCompatActivity
                                     Intent intent = new Intent(getBaseContext(), ImageSliderActivity.class);
                                     intent.putExtra("closeMarks", (Serializable) nameCloseMarkers);
                                     startActivity(intent);
-
-//                            dialog.dismiss();
-//                            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(CategoryPage.this);
-//                            dialogBuilder.setTitle("Estas son las imagenes de las estelas");
-//                            dialogBuilder.setMessage("Estela que salga:");
-//                            ImageView imageView = new ImageView(getApplicationContext());
-//                            imageView.setImageResource(R.drawable.estela1old);
-//                            dialogBuilder.setView(imageView);
-//                            AlertDialog alertDialog = dialogBuilder.create();
-//                            alertDialog.show();
-
-//                            dialog.dismiss();
-//                            RelativeLayout imgLayout = new RelativeLayout(getApplicationContext());
-//
-//                            ImageView iv = new ImageView(getApplicationContext());
-//                            iv.setImageResource(R.drawable.estela1old);
-//
-//                            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//
-//                            lp.setMargins(50, 50, 0, 0);
-//                            lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-//                            lp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-//
-//                            imgLayout.addView(iv, lp);
-//
-//                            DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//                            drawerLayout.addView(imgLayout);
-
                                 }
                             });
                         }
                     }
 
-//                    Button button = new Button(getApplicationContext());
-//                    button.setText(R.string.ok);
-//                    button.setTextSize(24);
-//                    button.setTextColor(Color.BLACK);
-//                    button.setBackgroundColor(Color.WHITE);
-//
-////                    Target target = new ViewTarget(R.id.iconInfo, getParent());
-////                    if(dialog.findViewById(R.id.iconInfo) != null) {
-////                        Target target = new ViewTarget(R.id.iconInfo, getParent());
-////                        Target target = dialog.findViewById(R.id.iconInfo);
-//                        new ShowcaseView.Builder(getParent())
-////                                .setTarget(target)
-//                                .setContentTitle(R.string.hint)
-//                                .setContentText(R.string.hint_explain)
-//                                .replaceEndButton(button)
-//                                .setStyle(R.style.CustomShowcaseTheme)
-//                                .hideOnTouchOutside()
-//                                .build();
-////                    }
-
 
                 }
-//                SharedPreferences sharedPrefScoreEvent = getSharedPreferences("scoreEvent", 0);
-//                String scoreEventString = sharedPrefScoreEvent.getString("score", "-1");
-//                double scoreEvent = Double.parseDouble(scoreEventString);
-                SharedPreferences sharedPref = getSharedPreferences("navDrawFileName", 0);
-                String fileNameMark = sharedPref.getString("fileName", "error");
-                String[] splitName = fileNameMark.split("\\.");
-                String markName = splitName[0];
-
-//                if(currentMarkerActivity != null) {
-//                    switch (getColorForMarker(markName)){
-//                        case "green":
-////                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-////                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_verde));
-//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageCorrectAnswer)));
-//                            break;
-//                        case "red":
-////                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-////                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_rojo));
-//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageWrongAnswer)));
-//                            break;
-//                        case "yellow":
-////                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-////                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_amarillo));
-//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageMidAnswer)));
-//                            break;
-//                        case "azure":
-////                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-////                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_azul));
-//                            currentMarkerActivity.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageNotAnswered)));
-//                            break;
-//                    }
-////                    if (scoreEvent == 100) {
-////                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-////                    } else if (scoreEvent == 0) {
-////                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-////                    } else if (scoreEvent > 0 && scoreEvent < 100) {
-////                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
-////                    } else {
-////                        currentMarkerActivity.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-////                    }
-//                }
                 TextView textViewScore = findViewById(R.id.score);
                 textViewScore.setText(getScoreOutOfTotal());
                 prevNameCloseMarkers = new ArrayList<>(nameCloseMarkers);
             }
 
-            public void createMarksDialogBuilder(List<String> nameCloseMarkers, final List<Marker> closeMarkers) {
+            void createMarksDialogBuilder(List<String> nameCloseMarkers, final List<Marker> closeMarkers) {
                 String[] closeMarkersString = new String[nameCloseMarkers.size()];
                 closeMarkersString = nameCloseMarkers.toArray(closeMarkersString);
                 builder.setItems(closeMarkersString, new DialogInterface.OnClickListener() {
@@ -619,15 +431,11 @@ public class NavigationDrawerActivity extends AppCompatActivity
                         SharedPreferences.Editor nameEditor = fileNameSP.edit();
                         String fileNameChosen = markerChosen.get(1);
                         nameEditor.putString("fileName", fileNameChosen);
-                        nameEditor.commit();
+                        nameEditor.apply();
                         Intent intent;
                         boolean first;
                         List<Boolean> completed = checkCompletedMarkers();
-                        if (completed.contains(Boolean.TRUE)) {
-                            first = false;
-                        } else {
-                            first = true;
-                        }
+                        first = !completed.contains(Boolean.TRUE);
                         switch (markerChosen.get(0)) {
                             case "test":
                                 intent = new Intent(getBaseContext(), TypeTestActivity.class);
@@ -659,7 +467,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
              * @param character El persoaje del que se quiere redimensionar.
              * @return Bitmap del tamaño proporcionado del personaje.
              */
-            public Bitmap getCharacterSized(int character) {
+            Bitmap getCharacterSized(int character) {
                 //BitmapDrawable bitmapdraw = getResources().getDrawable(character);
                 Bitmap b = BitmapFactory.decodeResource(getResources(), character); //bitmapdraw.getBitmap();
                 Display display = getWindowManager().getDefaultDisplay();
@@ -671,13 +479,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 int heigth;
                 if (widthDisplay < heightDisplay) {
                     width = (int) (widthDisplay * 0.1);
-                    heigth = (int) (b.getHeight() * width) / b.getWidth();//(heightDisplay*0.12);
+                    heigth = (b.getHeight() * width) / b.getWidth();//(heightDisplay*0.12);
                 } else {
                     heigth = (int) (heightDisplay * 0.2);
-                    width = (int) (b.getWidth() * heigth) / b.getHeight();
+                    width = (b.getWidth() * heigth) / b.getHeight();
                 }
-                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, true);
-                return smallMarker;
+                return Bitmap.createScaledBitmap(b, width, heigth, true);
             }
 
             @Override
@@ -703,8 +510,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * @param banner Imagen del marcador que se quiere redimensionar.
      * @return Bitmap del marcador con el tamaño proporcionado.
      */
-    public Bitmap getBannerSized(int banner){
-        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(banner);
+    private Bitmap getBannerSized(int banner){
+        BitmapDrawable bitmapdraw = (BitmapDrawable)getDrawable(banner);
         Bitmap b = bitmapdraw.getBitmap();
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -715,20 +522,19 @@ public class NavigationDrawerActivity extends AppCompatActivity
         int heigth;
         if(widthDisplay<heightDisplay) {
             width = (int) (widthDisplay * 0.1);
-            heigth = (int) (b.getHeight() * width) / b.getWidth();//(heightDisplay*0.12);
+            heigth = (b.getHeight() * width) / b.getWidth();//(heightDisplay*0.12);
         }else{
             heigth = (int) (heightDisplay * 0.2);
-            width = (int) (b.getWidth() * heigth) / b.getHeight();
+            width = (b.getWidth() * heigth) / b.getHeight();
         }
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, heigth, true);
-        return smallMarker;
+        return Bitmap.createScaledBitmap(b, width, heigth, true);
     }
 
     /**
      * Comprueba los marcadores que están cerca de la posición del jugador.
      * @return Lista con los marcadores a una distancia menor a 10 metros.
      */
-    public List<Marker> getCloseMarkers(){
+    private List<Marker> getCloseMarkers(){
         List<Boolean> completedMarkers = checkCompletedMarkers();
         List<Marker> closeMarkers= new ArrayList<>();
         int counter = 0;
@@ -747,7 +553,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * Comprueba de cuales de los marcadores ya han sido completadas sus pruebas.
      * @return Lista con los marcadores ya resueltos.
      */
-    public List<Boolean> checkCompletedMarkers(){
+    private List<Boolean> checkCompletedMarkers(){
         JSONObject obj;
         List<Boolean> completedMarkers= new ArrayList<>();
         try {
@@ -768,7 +574,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * de pruebas en el mapa.
      * @return String con la puntuación actual sobre la puntuación total.
      */
-    public String getScoreOutOfTotal(){
+    private String getScoreOutOfTotal(){
         JSONObject obj;
         double score=0.0;
         try {
@@ -777,10 +583,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
         }catch (JSONException e){
             e.printStackTrace();
         }
-        return String.valueOf(score)+"/"+String.valueOf(markerList.size()*100);
+        return score +"/"+ markerList.size() * 100;
     }
 
-    public double getScore(){
+    private double getScore(){
         JSONObject obj;
         double score=0.0;
         try {
@@ -797,7 +603,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * @param nMark Marcador del que se quiere comprobar su color.
      * @return String con el nombre del color solicitado.
      */
-    public String getColorForMarker(String nMark){
+    private String getColorForMarker(String nMark){
         JSONObject obj;
         String color ="";
         try {
@@ -820,29 +626,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * que haya decidido en usuario en los ajustes.
      * Se actualiza cada vez que el usuario cambia algún parámetro en los ajustes
      */
-    public void updatePreferences(){
+    private void updatePreferences(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this );
         SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                 if (key.equals("map_type")) {
                     setMapType();
-                } else if (key.equals("difficulty")) {
-                    setDifficulty();
                 }
             }
         };
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this );
-//        SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-//            @Override
-//            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-//                if (key.equals("map_type")){
-//                    setMapType();
-//                }else if (key.equals("difficulty")){
-//                    setDifficulty();
-//                }
-//            }
-//        };
-
         preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
@@ -850,7 +642,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * Pone el mapa sobre el que se está jugando con el tipo de mapa que decida el usario
      * en los ajustes.
      */
-    public void setMapType(){
+    private void setMapType(){
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this );
         String map_type = sharedPreferences.getString("map_type", "MAP_TYPE_SATELLITE");
@@ -867,17 +659,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         }
     }
 
-    /**
-     * Pone la dificultad de la aplicación en función de lo que haya decidido el usuario
-     * en los ajustes.
-     */
-    public void setDifficulty(){
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(this );
-        difficulty = sharedPreferences.getString("difficulty", "easy");
-    }
-
-
     @Override
     public void onRestart(){
         super.onRestart();
@@ -885,13 +666,13 @@ public class NavigationDrawerActivity extends AppCompatActivity
         TextView textViewScore = findViewById(R.id.score);
         textViewScore.setText(getScoreOutOfTotal());
         checkEndGame();
-        SharedPreferences didYouKnowActicitySP= getSharedPreferences("didYouKnowActicity", 0);
-        SharedPreferences.Editor didYouKnowActicityEditor = didYouKnowActicitySP.edit();
-        didYouKnowActicityEditor.putBoolean("firstAudio", true);
-        didYouKnowActicityEditor.apply();
+        SharedPreferences didYouKnowActivitySP= getSharedPreferences("didYouKnowActivity", 0);
+        SharedPreferences.Editor didYouKnowActivityEditor = didYouKnowActivitySP.edit();
+        didYouKnowActivityEditor.putBoolean("firstAudio", true);
+        didYouKnowActivityEditor.apply();
     }
 
-    public void checkEndGame(){
+    private void checkEndGame(){
         List<Boolean> marksCompleted = checkCompletedMarkers();
         if(!marksCompleted.contains(false)){
             Intent intent = new Intent(this, EndGameActivity.class);

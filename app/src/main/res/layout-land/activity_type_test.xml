@@ -18,7 +18,8 @@
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/game_hint" />
+        app:srcCompat="@drawable/game_hint"
+        android:contentDescription="@string/hint" />
 
     <TextView
         android:id="@+id/question_text"
@@ -27,8 +28,8 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/border"
         android:fontFamily="@font/romanica"
-        android:paddingLeft="10dp"
-        android:paddingRight="5dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="5dp"
         android:paddingBottom="5dp"
         android:textColor="@color/colorBlack"
         android:textSize="24sp"
@@ -75,6 +76,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView3"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/send_button" />
+        app:srcCompat="@drawable/send_button"
+        android:contentDescription="@string/send" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

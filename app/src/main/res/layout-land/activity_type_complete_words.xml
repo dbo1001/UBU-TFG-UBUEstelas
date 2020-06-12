@@ -71,7 +71,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/send_button" />
+        app:srcCompat="@drawable/send_button"
+        android:contentDescription="@string/send" />
 
     <ImageButton
         android:id="@+id/hint_complete"
@@ -84,7 +85,8 @@
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/game_hint" />
+        app:srcCompat="@drawable/game_hint"
+        android:contentDescription="@string/hint" />
 
     <ImageButton
         android:id="@+id/imageButton9"
@@ -97,7 +99,8 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/letters_selection"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/right_arrow_button" />
+        app:srcCompat="@drawable/right_arrow_button"
+        android:contentDescription="@string/right" />
 
     <ImageButton
         android:id="@+id/imageButton8"
@@ -112,5 +115,6 @@
         app:layout_constraintEnd_toStartOf="@+id/imageButton9"
         app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/left_arrow_button" />
+        app:srcCompat="@drawable/left_arrow_button"
+        android:contentDescription="@string/left" />
 </androidx.constraintlayout.widget.ConstraintLayout>
