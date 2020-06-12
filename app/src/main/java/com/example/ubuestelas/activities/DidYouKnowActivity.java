@@ -6,23 +6,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Layout;
-import android.text.TextPaint;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.Target;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +43,7 @@ public class DidYouKnowActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_did_you_know);
-        loadText();
+        loadTextAndAudio();
         loadGif();
         SharedPreferences didYouKnowActicitySP= getSharedPreferences("didYouKnowActicity", 0);
         boolean first = didYouKnowActicitySP.getBoolean("first", true);
@@ -83,11 +79,19 @@ public class DidYouKnowActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.stela_video_button) {
-            if(voice.isPlaying()){
-                voice.stop();
+            String video = getVideoURL();
+            if(video.equals("NOT_VIDEO")){
+                Toast.makeText(this, getString(R.string.not_video) + ".", Toast.LENGTH_SHORT).show();
+            }else {
+                if (voice != null) {
+                    if (voice.isPlaying()) {
+                        voice.stop();
+                    }
+                }
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(video));
+                intent.putExtra("force_fullscreen",true);
+                startActivity(intent);
             }
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/"));
-            startActivity(intent);
             return true;
         }
 
@@ -97,17 +101,24 @@ public class DidYouKnowActivity extends AppCompatActivity {
     /**
      * Carga el texto que extrae del archivo correspondiente a la prueba que se acaba de hacer.
      */
-    public void loadText() {
+    public void loadTextAndAudio() {
         SharedPreferences nameFileSP = getSharedPreferences("nameFileSP", 0);
         String fileName = nameFileSP.getString("fileName", "error");
+        SharedPreferences didYouKnowActicitySP= getSharedPreferences("didYouKnowActicity", 0);
+        boolean firstAudio = didYouKnowActicitySP.getBoolean("firstAudio", true);
         try {
             JSONObject fileToRead = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), fileName + ".json"));
             String curiosity = fileToRead.getString("curiosity");
             TextView textView = findViewById(R.id.texto_curiosidad);
             textView.setText(curiosity);
-            int resourceAudioID = this.getResources().getIdentifier(fileToRead.getString("audio"), "raw", this.getPackageName());
-            voice = MediaPlayer.create(this, resourceAudioID);
-            voice.start();
+            if(firstAudio) {
+                int resourceAudioID = this.getResources().getIdentifier(fileToRead.getString("audio"), "raw", this.getPackageName());
+                voice = MediaPlayer.create(this, resourceAudioID);
+                voice.start();
+            }
+            SharedPreferences.Editor didYouKnowActicityEditor = didYouKnowActicitySP.edit();
+            didYouKnowActicityEditor.putBoolean("firstAudio", false);
+            didYouKnowActicityEditor.apply();
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -118,8 +129,10 @@ public class DidYouKnowActivity extends AppCompatActivity {
      * @param view La vista que se ha clickado.
      */
     public void goToMap(View view) {
-        if(voice.isPlaying()){
-            voice.stop();
+        if (voice != null) {
+            if (voice.isPlaying()) {
+                voice.stop();
+            }
         }
         finish();
     }
@@ -139,9 +152,24 @@ public class DidYouKnowActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        if(voice.isPlaying()){
-            voice.stop();
+        if (voice != null) {
+            if (voice.isPlaying()) {
+                voice.stop();
+            }
         }
         super.onBackPressed();
+    }
+
+    public String getVideoURL(){
+        SharedPreferences nameFileSP = getSharedPreferences("nameFileSP", 0);
+        String fileName = nameFileSP.getString("fileName", "error");
+        String video = "";
+        try {
+            JSONObject fileToRead = new JSONObject(Util.loadJSONFromAsset(getApplicationContext(), fileName + ".json"));
+            video = fileToRead.getString("video");
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return video;
     }
 }
