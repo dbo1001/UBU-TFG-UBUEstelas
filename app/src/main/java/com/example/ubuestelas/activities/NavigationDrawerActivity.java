@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +37,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
+import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -224,6 +227,27 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setMapType();
         addJSONmarkersAndFillDic();
         getCurrentLocation();
+        SharedPreferences newNavigationDrawerActivitySP= getSharedPreferences("newNavigationDrawerActivity", 0);
+        boolean first = newNavigationDrawerActivitySP.getBoolean("first", true);
+        if(first) {
+            Button button = new Button(this);
+            button.setText(R.string.ok);
+            button.setTextSize(24);
+            button.setTextColor(Color.BLACK);
+            button.setBackgroundColor(Color.WHITE);
+
+            new ShowcaseView.Builder(this)
+                    .withNewStyleShowcase()
+                    .setContentTitle(R.string.game_explain)
+                    .replaceEndButton(button)
+                    .setStyle(R.style.CustomShowcaseThemeDYKA)
+                    .hideOnTouchOutside()
+                    .build();
+
+        }
+        SharedPreferences.Editor newNavigationDrawerActivityEditor = newNavigationDrawerActivitySP.edit();
+        newNavigationDrawerActivityEditor.putBoolean("first", false);
+        newNavigationDrawerActivityEditor.apply();
     }
 
     /**

@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ubuestelas.R;
 import com.example.ubuestelas.util.Util;
@@ -78,6 +79,7 @@ public class SceneActivity extends AppCompatActivity {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     gifDrawable.stop();
+                    Toast.makeText(getApplicationContext(), getString(R.string.push_to_go), Toast.LENGTH_LONG).show();
                 }
             });
 //            VideoView videoView = (VideoView) findViewById(R.id.presentation_video);
@@ -202,5 +204,6 @@ public class SceneActivity extends AppCompatActivity {
     private void clearSharedPreferences(){
         this.getSharedPreferences("imageSliderActivity", 0).edit().clear().apply();
         this.getSharedPreferences("didYouKnowActivity", 0).edit().clear().apply();
+        this.getSharedPreferences("newNavigationDrawerActivity", 0).edit().clear().apply();
     }
 }
