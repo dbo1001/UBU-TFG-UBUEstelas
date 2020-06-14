@@ -74,6 +74,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     private boolean finish = false;
 
+    AlertDialog dialog = null;
+    AlertDialog updatedDialog = null;
+
+
     /**
      * Inicializa la actividad con su respectivo layout. Se inicializa el menú lateral y el mapa.
      * Se comprueba si tiene los permisos activados y en caso contrario vuelve a solicitarlos.
@@ -379,7 +383,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 if (!prevNameCloseMarkers.equals(nameCloseMarkers) && !nameCloseMarkers.isEmpty()) {
                     if(!finish) {
                         createMarksDialogBuilder(nameCloseMarkers, closeMarkers);
-                        final AlertDialog dialog = builder.create();
+                        dialog = builder.create();
                         if(!((Activity) context).isFinishing()) {
                             dialog.show();
 
@@ -400,7 +404,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                                     for (Marker m : updatedCloseMarkers) {
                                         if (m.equals(marker)) {
                                             createMarksDialogBuilder(updatedNameCloseMarkers, updatedCloseMarkers);
-                                            final AlertDialog updatedDialog = builder.create();
+                                            updatedDialog = builder.create();
                                             updatedDialog.show();
                                             ImageView imgV = updatedDialog.findViewById(R.id.iconInfo);
                                             imgV.setOnClickListener(new View.OnClickListener() {
@@ -451,6 +455,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which) {
                         currentMarkerActivity = closeMarkers.get(which);
                         List<String> markerChosen = dicMarkerAct.get(currentMarkerActivity);
+                        if(markerChosen == null){
+                            return;
+                        }
                         SharedPreferences fileNameSP = getSharedPreferences("navDrawFileName", 0);
                         SharedPreferences.Editor nameEditor = fileNameSP.edit();
                         String fileNameChosen = markerChosen.get(1);
@@ -702,6 +709,21 @@ public class NavigationDrawerActivity extends AppCompatActivity
             Intent intent = new Intent(this, EndGameActivity.class);
             startActivity(intent);
             finish();
+        }
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        if(dialog != null) {
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+        if(updatedDialog != null) {
+            if (updatedDialog.isShowing()) {
+                updatedDialog.dismiss();
+            }
         }
     }
 
