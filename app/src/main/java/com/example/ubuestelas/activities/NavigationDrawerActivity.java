@@ -176,7 +176,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
-        } else if (id == R.id.nav_ranking) {
+//        } else if (id == R.id.nav_ranking) {
 
         } else if (id == R.id.nav_end_game) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
