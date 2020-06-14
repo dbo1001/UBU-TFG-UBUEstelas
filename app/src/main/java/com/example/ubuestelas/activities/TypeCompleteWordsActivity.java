@@ -77,7 +77,6 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
             button.setTextSize(24);
             button.setTextColor(Color.BLACK);
             button.setBackgroundColor(Color.WHITE);
-//            button.setBackground(getResources().getDrawable(R.drawable.border));
             Target target = new ViewTarget(R.id.hint_complete, this);
             new ShowcaseView.Builder(this)
                     .setTarget(target)
@@ -302,9 +301,6 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
                     double scoreFile = obj.getDouble("score");
                     scoreFile += score;
                     double scoreToFile = Math.round(scoreFile*100)/100.0;
-//                    String scoreFormat = String.format("%.2f",scoreFile);
-//                    Double scoreToFile = Double.valueOf(scoreFormat);
-//                    double scoreToFile = Double.parseDouble(scoreFormat);
                     obj.put("score", scoreToFile);
                     Util.writeJSONToFilesDir(this,"userInfo", obj.toString());
                     SharedPreferences scoreSP = getSharedPreferences("scoreEvent", 0);
@@ -339,12 +335,17 @@ public class TypeCompleteWordsActivity extends AppCompatActivity {
         modifiedText.setSpan(new ForegroundColorSpan(getColor(R.color.colorBlack)), 0, modifiedText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         textToComplete.setText(modifiedText);
         for(Integer position : wrongPositions) {
-            modifiedText = textToComplete.getText();//new SpannableString(textToComplete.getText());
+            modifiedText = textToComplete.getText();
             modifiedText.setSpan(new ForegroundColorSpan(getColor(R.color.colorWrong)), position-1, position, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             textToComplete.setText(modifiedText);
         }
     }
 
+    /**
+     * Al pulsar en el icono de la pista se llama a este método.
+     * Muestra un diálogo con la pista correspondiente a esa prueba.
+     * @param view Vista que se ha clickado.
+     */
     public void hintClick(View view){
         try {
             hintUsed=true;

@@ -84,14 +84,8 @@ public class MainActivity extends AppCompatActivity {
         if(Util.loadJSONFromFilesDir(this, "userInfo") != null){
             startActivity(new Intent(this, NavigationDrawerActivity.class));
         }else{
-//            ImageButton cont = (ImageButton) findViewById(R.id.continueButton);
-//            cont.setEnabled(false);
-//            cont.setClickable(false);
-//            cont.getDrawable().setColorFilter(getResources().getColor(R.color.colorButtonDisabled), PorterDuff.Mode.LIGHTEN);
-//            cont.getBackground().setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_IN);
             Toast.makeText(this,getString(R.string.game_not_exists), Toast.LENGTH_SHORT).show();
         }
-//        startActivity(new Intent(this, NavigationDrawerActivity.class));
     }
 
     /**

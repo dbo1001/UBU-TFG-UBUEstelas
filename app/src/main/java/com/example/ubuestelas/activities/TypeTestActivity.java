@@ -59,7 +59,6 @@ public class TypeTestActivity extends AppCompatActivity {
             button.setTextSize(24);
             button.setTextColor(Color.BLACK);
             button.setBackgroundColor(Color.WHITE);
-//            button.setBackground(getResources().getDrawable(R.drawable.border));
             Target target = new ViewTarget(R.id.hint_test, this);
             new ShowcaseView.Builder(this)
                     .setTarget(target)
@@ -127,7 +126,6 @@ public class TypeTestActivity extends AppCompatActivity {
                     }
                     drawable.setBounds(0,0,width,heigth);
                     radioButton.setCompoundDrawables(drawable,null,null,null);
-//                    radioButton.setCompoundDrawablesWithIntrinsicBounds(resourceId, 0, 0, 0);
                     radioButton.setText(option.getString("option"));
                     radioButton.setTextColor(Color.TRANSPARENT);
                     RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
@@ -137,7 +135,6 @@ public class TypeTestActivity extends AppCompatActivity {
                     radioButton.setText(option.getString("option"));
                     radioButton.setTextColor(Color.BLACK);
                     radioButton.setTextSize(24);
-//                    radioButton.setTypeface(getResources().getFont(R.font.romanica));
                     RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
                     rg.addView(radioButton, params);
                 }
@@ -211,9 +208,6 @@ public class TypeTestActivity extends AppCompatActivity {
                         double scoreFile = obj.getDouble("score");
                         scoreFile += score;
                         double scoreToFile = Math.round(scoreFile * 100) / 100.0;
-//                    String scoreFormat = String.format("%.2f",scoreFile);
-//                    Double scoreToFile = Double.valueOf(scoreFormat);
-//                    double scoreToFile = Double.parseDouble(scoreFormat);
                         obj.put("score", scoreToFile);
                         Util.writeJSONToFilesDir(this, "userInfo", obj.toString());
                     } catch (JSONException e) {
@@ -243,6 +237,11 @@ public class TypeTestActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Al pulsar en el icono de la pista se llama a este método.
+     * Muestra un diálogo con la pista correspondiente a esa prueba.
+     * @param view Vista que se ha clickado.
+     */
     public void hintClick(View view){
         try {
             hintUsed=true;

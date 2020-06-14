@@ -30,11 +30,21 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+/**
+ * Actividad que muestra imágenes de la zona de los marcadores cercanos.
+ *
+ * @author Marcos Pena
+ */
 public class ImageSliderActivity extends AppCompatActivity {
 
     private ConstraintLayout constraintLayout;
     private ImageView iv;
 
+    /**
+     * Inicializa la actividad con su respectivo layout. Si es la primera vez que se llega aquí muestra un showcaseView con información.
+     * Se llama a otros métodos para inicializar el resto de la actividad.
+     * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +58,8 @@ public class ImageSliderActivity extends AppCompatActivity {
             button.setTextSize(24);
             button.setTextColor(Color.BLACK);
             button.setBackgroundColor(Color.WHITE);
-//            button.setBackground(getResources().getDrawable(R.drawable.border));
-//        Target target = new ViewTarget(R.id.hint_test, this);
+
             new ShowcaseView.Builder(this)
-//                .setTarget(target)
                     .setContentTitle(R.string.information)
                     .setContentText(R.string.environment_text)
                     .replaceEndButton(button)
@@ -64,6 +72,9 @@ public class ImageSliderActivity extends AppCompatActivity {
         imageSAEditor.apply();
     }
 
+    /**
+     * Inicializa todos los textos e imágenes de la pantalla.
+     */
     private void init(){
         constraintLayout = findViewById(R.id.image_slider_constraint);
         iv = new ImageView(this);
@@ -99,7 +110,6 @@ public class ImageSliderActivity extends AppCompatActivity {
                             final String pictureName = picture.getString("pictureName");
                             final ImageView imageView = new ImageView(this);
                             imageView.setImageBitmap(getImageSmallResized(getResources().getIdentifier(pictureName, "drawable", this.getPackageName())));
-//                            imageView.setImageResource(getResources().getIdentifier(pictureName, "drawable", this.getPackageName()));
                             LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                             ll.setMargins(20,0,0,0);
                             imageView.setLayoutParams(ll);
@@ -119,9 +129,6 @@ public class ImageSliderActivity extends AppCompatActivity {
                                                 constraintLayout.removeView(iv);
                                                 iv.setImageDrawable(null);
                                             }
-//                                            constraintLayout.removeView(v);
-//                                            iv = new ImageView(getApplicationContext());
-//                                            iv.setImageDrawable(null);
                                         }
                                     });
                                 }
@@ -139,6 +146,11 @@ public class ImageSliderActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Redimensiona las imágenes para mostrar varias en pantalla.
+     * @param image Imagen para redimensionar.
+     * @return Bitmap con la imagen redimensioanada.
+     */
     private Bitmap getImageSmallResized(int image){
         Bitmap b = BitmapFactory.decodeResource(getResources(),image);
         Display display = getWindowManager().getDefaultDisplay();
@@ -158,9 +170,12 @@ public class ImageSliderActivity extends AppCompatActivity {
         return Bitmap.createScaledBitmap(b, width, height, true);
     }
 
+    /**
+     * Redimensiona la imagen para que ocupe el ancho completo de la pantalla.
+     * @param image Imagen para redimensionar.
+     * @return Bitmap con la imagen redimensionada.
+     */
     private Bitmap getImageScreenResized(int image){
-//        BitmapDrawable bitmapDrawable = (BitmapDrawable) image;
-//        Bitmap b = bitmapDrawable.getBitmap();
         Bitmap b = BitmapFactory.decodeResource(getResources(),image);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -179,6 +194,9 @@ public class ImageSliderActivity extends AppCompatActivity {
         return Bitmap.createScaledBitmap(b, width, heigth, true);
     }
 
+    /**
+     * Sobrescrito el método al pulsar el botón de atrás para que cierre la imagen si está en pantalla completa.
+     */
     @Override
     public void onBackPressed(){
         if(hasImage(iv)){
@@ -189,6 +207,11 @@ public class ImageSliderActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que comprueba si hay una imagen abierta en tamaño grande.
+     * @param view ImageView que contiene la imagen completa.
+     * @return true si está abierta, false si no lo esta.
+     */
     private boolean hasImage(ImageView view) {
         Drawable drawable = view.getDrawable();
         boolean hasImage = (drawable != null);

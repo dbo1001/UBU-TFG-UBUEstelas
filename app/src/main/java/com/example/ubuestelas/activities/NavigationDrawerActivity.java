@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -120,9 +121,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
         }
     }
 
@@ -133,12 +131,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         SharedPreferences sharedPref= getSharedPreferences("nameActivity",0);
         String name = sharedPref.getString("name", "amigo");
         TextView textViewName = findViewById(R.id.user_name);
         textViewName.setText(name);
-        //Se setea también el valor inicial del score en el menú lateral
         TextView textViewScore = findViewById(R.id.score);
         textViewScore.setText(getScoreOutOfTotal());
         getMenuInflater().inflate(R.menu.navigation_drawer, menu);
@@ -152,9 +148,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
@@ -170,7 +163,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
      * @param item El item del menú que se ha seleccionado.
      * @return true muestra el item como seleccionado, false no lo hace
      */
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -180,6 +172,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
+        //Apartado donde se encontraría el ranking
 //        } else if (id == R.id.nav_ranking) {
 
         } else if (id == R.id.nav_end_game) {
@@ -192,7 +185,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
                             Intent intent = new Intent(getApplicationContext(), EndGameActivity.class);
                             startActivity(intent);
                             NavigationDrawerActivity.this.finish();
-//                            ((Activity) getApplicationContext()).finish();
                         }
                     })
                     .setNegativeButton(R.string.no, null);
@@ -211,9 +203,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
             Intent shareIntent = Intent.createChooser(sendIntent, null);
             startActivity(shareIntent);
 
-        } //else if (id == R.id.nav_send) {
-
-//        }
+        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -265,8 +255,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
     /**
-     * Este método carga, según lo que ponga el fichero de posiciones, los marcadores en el mapa. TAmbién según
-     * Lo que ponga el fichero de guardado pone los colores correspondientes a cada marcador y guarda en un diccionario
+     * Este método carga, según lo que ponga el fichero de posiciones, los marcadores en el mapa. También según
+     * lo que ponga el fichero de guardado pone los colores correspondientes a cada marcador y guarda en un diccionario
      * la relación entre cada marcador con su tipo de prueba y su fichero.
      */
     private void addJSONmarkersAndFillDic(){
@@ -298,21 +288,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 Marker marker = mMap.addMarker(new MarkerOptions().position(stelaLatLng).title(mark.getString("description")));//.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 switch (getColorForMarker(markColor.getString("mark"))){
                     case "green":
-//                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-//                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_verde));
                         marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageCorrectAnswer)));
                         break;
                     case "red":
-//                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                         marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageWrongAnswer)));
                         break;
                     case "yellow":
-//                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
                         marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageMidAnswer)));
                         break;
                     case "azure":
-//                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-//                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.estandarte_azul));
                         marker.setIcon(BitmapDescriptorFactory.fromBitmap(getBannerSized(markImageNotAnswered)));
                         break;
                 }
@@ -336,7 +320,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private void getCurrentLocation(){
         final Context context = this;
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         SharedPreferences sharedPrefChar = getSharedPreferences("characterSelected",0);
         final int characterDrawable = sharedPrefChar.getInt("drawableCharac",R.drawable.character01);
@@ -486,7 +469,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
                         }
                     }
                 });
-                //builder.setIcon(R.drawable.ic_info_images);
                 LayoutInflater inflater = getLayoutInflater();
                 View view = inflater.inflate(R.layout.custom_title_dialog_alert, null);
                 builder.setCustomTitle(view);
@@ -499,8 +481,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
              * @return Bitmap del tamaño proporcionado del personaje.
              */
             Bitmap getCharacterSized(int character) {
-                //BitmapDrawable bitmapdraw = getResources().getDrawable(character);
-                Bitmap b = BitmapFactory.decodeResource(getResources(), character); //bitmapdraw.getBitmap();
+                Bitmap b = BitmapFactory.decodeResource(getResources(), character);
                 Display display = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
@@ -510,7 +491,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 int heigth;
                 if (widthDisplay < heightDisplay) {
                     width = (int) (widthDisplay * 0.1);
-                    heigth = (b.getHeight() * width) / b.getWidth();//(heightDisplay*0.12);
+                    heigth = (b.getHeight() * width) / b.getWidth();
                 } else {
                     heigth = (int) (heightDisplay * 0.2);
                     width = (b.getWidth() * heigth) / b.getHeight();
@@ -518,20 +499,22 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 return Bitmap.createScaledBitmap(b, width, heigth, true);
             }
 
+            /**
+             * Cuando el usuario desactiva su ubicación, muestra un mensaje pidiendo que se vuelva a activar.
+             * @param provider
+             */
             @Override
             public void onProviderDisabled(String provider) {
-                // TODO Auto-generated method stub
+                Toast.makeText(getApplicationContext(), getString(R.string.disabled_location), Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onProviderEnabled(String provider) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void onStatusChanged(String provider, int status,
                                         Bundle extras) {
-                // TODO Auto-generated method stub
             }
         });
     }
@@ -553,7 +536,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         int heigth;
         if(widthDisplay<heightDisplay) {
             width = (int) (widthDisplay * 0.1);
-            heigth = (b.getHeight() * width) / b.getWidth();//(heightDisplay*0.12);
+            heigth = (b.getHeight() * width) / b.getWidth();
         }else{
             heigth = (int) (heightDisplay * 0.2);
             width = (b.getWidth() * heigth) / b.getHeight();

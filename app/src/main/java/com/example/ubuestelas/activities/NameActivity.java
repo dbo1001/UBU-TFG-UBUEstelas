@@ -95,10 +95,6 @@ public class NameActivity extends AppCompatActivity{
             iv.setImageResource(characs[i]);
             iv.setId(R.id.character+i);
             iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-//            iv.setMinimumWidth(50);
-//            iv.requestLayout();
-//            iv.getLayoutParams().width=300;
-//            iv.setLayoutParams(new LinearLayout.LayoutParams(600, LinearLayout.LayoutParams.WRAP_CONTENT));
             iv.setOnClickListener(new View.OnClickListener() {
                                       @Override
                                       public void onClick(View v) {

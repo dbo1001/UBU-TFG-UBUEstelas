@@ -39,6 +39,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Actividad donde se carga la prueba del puzzle.
+ *
+ * @author Dave Park
+ * @author Marcos Pena
+ */
 public class TypePuzzleActivity extends AppCompatActivity {
 
     private static GestureDetectGridView mGridView;
@@ -63,19 +69,14 @@ public class TypePuzzleActivity extends AppCompatActivity {
     private JSONObject fileToRead;
     private static String markName;
 
-//    static Thread thread;
-//
-//    private Handler handler = new Handler();
-//
-//    int number = 0;
-//
-//    private int time = 0;
-//    private Timer timer;
-//    private TextView textViewTimer;
-
     private static Chronometer chronometer;
     private long pauseOffset;
 
+    /**
+     * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
+     * Se inicializa el temporizador.
+     * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +100,6 @@ public class TypePuzzleActivity extends AppCompatActivity {
                     chronometer.start();
                 }
             });
-//            button.setBackground(getResources().getDrawable(R.drawable.border));
             Target target = new ViewTarget(R.id.hint_puzzle, this);
             new ShowcaseView.Builder(this)
                     .setTarget(target)
@@ -113,10 +113,6 @@ public class TypePuzzleActivity extends AppCompatActivity {
 
         init();
 
-//        initTimer();
-
-//        startCounting();
-
         divide();
 
         scramble();
@@ -126,44 +122,9 @@ public class TypePuzzleActivity extends AppCompatActivity {
 
     }
 
-//    private void startCounting() {
-//        handler.post(run);
-//    }
-//
-//    private Runnable run = new Runnable() {
-//        TextView timer = (TextView) findViewById(R.id.timer) ;
-//        @Override
-//        public void run() {
-//            number++;
-//            timer.setText(number);
-//            handler.postDelayed(this, 1000);
-//        }
-//    };
-
-//    private void initTimer() {
-//        timer = new Timer();
-//        TimerTask timerTask = new TimerTask() {
-//
-//            @Override
-//            public void run() {
-//                runOnUiThread(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        textViewTimer.setText(String.format(Locale.getDefault(), "%d", time));
-//                        if (time >= 0)
-//                            time += 1;
-//                        else {
-//                            textViewTimer.setText(R.string.did_you_know);
-//                        }
-//                    }
-//                });
-//            }
-//        };
-//        timer.scheduleAtFixedRate(timerTask, 0, 1000);
-
-//    }
-
+    /**
+     * Lee la imagen del archivo y la divide en trozos.
+     */
     private void divide() {
         try {
             String markImage = fileToRead.getString("image");
@@ -181,6 +142,9 @@ public class TypePuzzleActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Comienza el temporizador y se inicializan algunas variables.
+     */
     private void init() {
         try {
             chronometer.start();
@@ -204,6 +168,9 @@ public class TypePuzzleActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Mezcla las piezas del puzzle de forma aleatoria.
+     */
     private void scramble() {
         int index;
         String temp;
@@ -217,6 +184,9 @@ public class TypePuzzleActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Redimensiona los tamaños para que cuadre con la pantalla.
+     */
     private void setDimensions() {
         ViewTreeObserver vto = mGridView.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -238,7 +208,6 @@ public class TypePuzzleActivity extends AppCompatActivity {
                 }
 
                 mColumnWidth = displayWidth / COLUMNS;
-                //mColumnHeight = (displayHeight / COLUMNS);
                 mColumnHeight = requiredHeight / COLUMNS;
 
                 display(getApplicationContext());
@@ -246,6 +215,11 @@ public class TypePuzzleActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Obtiene el tamaño de la barra de herramientas.
+     * @param context Contexto de la aplicación.
+     * @return Tamaño de la barra de herramientas
+     */
     private int getStatusBarHeight(Context context) {
         int result = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen",
@@ -258,6 +232,10 @@ public class TypePuzzleActivity extends AppCompatActivity {
         return result;
     }
 
+    /**
+     * Muestra las imágenes en sus respectivos lugares.
+     * @param context Contexto de la aplicación.
+     */
     private static void display(Context context) {
         ArrayList<Button> buttons = new ArrayList<>();
         Button button;
@@ -275,6 +253,12 @@ public class TypePuzzleActivity extends AppCompatActivity {
         mGridView.setAdapter(new PuzzleAdapter(buttons, mColumnWidth, mColumnHeight));
     }
 
+    /**
+     * Intercambia las piezas de sitio. También comprueba si se ha resuelto y finaliza la actividad.
+     * @param context Contexto de la aplicación.
+     * @param currentPosition Posición actual de la pieza.
+     * @param swap Posición con la que se va a intercambiar.
+     */
     private static void swap(Context context, int currentPosition, int swap) {
         String newPosition = tileList[currentPosition + swap];
         tileList[currentPosition + swap] = tileList[currentPosition];
@@ -309,9 +293,6 @@ public class TypePuzzleActivity extends AppCompatActivity {
                 double scoreFile = obj.getDouble("score");
                 scoreFile += score;
                 double scoreToFile = Math.round(scoreFile * 100) / 100.0;
-//                    String scoreFormat = String.format("%.2f",scoreFile);
-//                    Double scoreToFile = Double.valueOf(scoreFormat);
-//                    double scoreToFile = Double.parseDouble(scoreFormat);
                 obj.put("score", scoreToFile);
                 Util.writeJSONToFilesDir(ctx, "userInfo", obj.toString());
                 SharedPreferences scoreSP = ctx.getSharedPreferences("scoreEvent", 0);
@@ -332,6 +313,12 @@ public class TypePuzzleActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Calcula los movimientos de la piezas en función de lo que ha indicado el jugador.
+     * @param context Contexto de la aplicación.
+     * @param direction Dirección en la que ha movido.
+     * @param position Posición de la pieza que ha movido.
+     */
     public static void moveTiles(Context context, String direction, int position) {
 
         // Upper-left-corner tile
@@ -446,6 +433,10 @@ public class TypePuzzleActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Comprueba si el puzzle ya está resuelto.
+     * @return true si el puzzle está resuelto.
+     */
     private static boolean isSolved() {
         boolean solved = false;
 
@@ -461,6 +452,9 @@ public class TypePuzzleActivity extends AppCompatActivity {
         return solved;
     }
 
+    /**
+     * Pausa el cronómetro cuando se pausa la aplicación.
+     */
     @Override
     protected void onPause(){
         super.onPause();
@@ -468,6 +462,9 @@ public class TypePuzzleActivity extends AppCompatActivity {
         pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
     }
 
+    /**
+     * reanuda el cronometro cuando se reanuda la aplicación.
+     */
     @Override
     protected void onResume(){
         super.onResume();
@@ -475,6 +472,11 @@ public class TypePuzzleActivity extends AppCompatActivity {
         chronometer.start();
     }
 
+    /**
+     * Al pulsar en el icono de la pista se llama a este método.
+     * Muestra un diálogo con la pista correspondiente a esa prueba.
+     * @param view Vista que se ha clickado.
+     */
     public void hintClick(View view){
         try {
             hintUsed=true;

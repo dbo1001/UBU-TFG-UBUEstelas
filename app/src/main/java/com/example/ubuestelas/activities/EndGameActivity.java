@@ -19,11 +19,20 @@ import org.json.JSONObject;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
+/**
+ * Actividad que se muestra al finalizar el juego.
+ *
+ * @author Marcos Pena
+ */
 public class EndGameActivity extends AppCompatActivity {
 
     private MediaPlayer voice;
     private GifDrawable gifDrawable;
 
+    /**
+     * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
+     * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +42,9 @@ public class EndGameActivity extends AppCompatActivity {
         setFinish();
     }
 
+    /**
+     * En el archivo de guardado indica que la partida ya ha finalizado.
+     */
     private void setFinish() {
         JSONObject obj;
         try {
@@ -44,6 +56,9 @@ public class EndGameActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Arranca el GIF y el audio correspondiente
+     */
     private void setGifAndAudio() {
         JSONObject obj;
         try {
@@ -135,6 +150,10 @@ public class EndGameActivity extends AppCompatActivity {
         return new double[] {completed,total,score};
     }
 
+    /**
+     * Vuelve al menú principal tras mostrar un diálogo de confirmación.
+     * @param view La vista que se ha clickado.
+     */
     public void goMainMenu(View view){
         if(voice.isPlaying()){
             voice.stop();
@@ -145,8 +164,6 @@ public class EndGameActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
-//                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                        startActivity(intent);
                     }
                 })
                .setNegativeButton(R.string.no, null);
@@ -154,6 +171,9 @@ public class EndGameActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /**
+     * Sobrescribe el método al pulsar el botón de atrás para que vuelva al menú principal.
+     */
     @Override
     public void onBackPressed(){
         if(voice.isPlaying()){

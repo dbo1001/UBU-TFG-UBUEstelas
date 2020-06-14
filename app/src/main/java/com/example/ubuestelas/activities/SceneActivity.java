@@ -70,7 +70,6 @@ public class SceneActivity extends AppCompatActivity {
             GifImageView gifImageView = findViewById(R.id.scene_gif);
             gifImageView.setImageResource(resourceGifId);
             gifDrawable =(GifDrawable) gifImageView.getDrawable();
-//            gifDrawable.setLoopCount(2);
 
             int resourceAudioID = this.getResources().getIdentifier(scene.getString("audio"), "raw", this.getPackageName());
             voice = MediaPlayer.create(this, resourceAudioID);
@@ -82,20 +81,6 @@ public class SceneActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.push_to_go), Toast.LENGTH_LONG).show();
                 }
             });
-//            VideoView videoView = (VideoView) findViewById(R.id.presentation_video);
-//            String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.waving_roman;
-//            Uri uri = Uri.parse(videoPath);
-//            videoView.setVideoURI(uri);
-//            videoView.start();
-
-//            WebView webView =  (WebView) findViewById(R.id.web_view_scene);
-//            webView.setBackgroundColor(Color.TRANSPARENT); //for gif without background
-//            String videoPath = "android.resource://" + getPackageName() + "/" + R.drawable.larito_waving;
-//            webView.loadUrl(videoPath);
-
-
-
-
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -107,7 +92,6 @@ public class SceneActivity extends AppCompatActivity {
      */
     public void changeScene(View view){
         GifImageView gifImageView = findViewById(R.id.scene_gif);
-//        ImageView imageView = findViewById(R.id.imagen_escena);
         TextView textView = findViewById(R.id.scene_text);
         counter++;
         JSONObject obj;
@@ -120,7 +104,6 @@ public class SceneActivity extends AppCompatActivity {
             JSONArray scenes = obj.getJSONArray("scenes");
             int scenesNumber = obj.getInt("scenesNumber");
             if (counter == scenesNumber){
-//                Intent intent = new Intent(this, MapsActivity.class);
                 Intent intent = new Intent(this, NavigationDrawerActivity.class);
                 startActivity(intent);
                 finish();
@@ -129,8 +112,6 @@ public class SceneActivity extends AppCompatActivity {
                 int resourceGifId = this.getResources().getIdentifier(scene.getString("image"), "drawable", this.getPackageName());
                 gifImageView.setImageResource(resourceGifId);
                 gifDrawable =(GifDrawable) gifImageView.getDrawable();
-//                gifDrawable.setLoopCount(2);
-//                imageView.setImageResource(resourceId);
                 textView.setText(scene.getString("text"));
                 int resourceAudioID = this.getResources().getIdentifier(scene.getString("audio"), "raw", this.getPackageName());
                 voice = MediaPlayer.create(this, resourceAudioID);
@@ -193,6 +174,9 @@ public class SceneActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Sobrescribe el método al pulsar el botón de atras para que si se está reproduciendo audio, este se detenga.
+     */
     @Override
     public void onBackPressed(){
         if(voice.isPlaying()){
@@ -201,6 +185,9 @@ public class SceneActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    /**
+     * Borra los sharedPreferences que se pueden haber creado en partidas anteriores.
+     */
     private void clearSharedPreferences(){
         this.getSharedPreferences("imageSliderActivity", 0).edit().clear().apply();
         this.getSharedPreferences("didYouKnowActivity", 0).edit().clear().apply();

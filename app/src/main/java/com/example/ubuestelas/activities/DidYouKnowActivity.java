@@ -27,7 +27,7 @@ import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
 /**
- * Actividad que se muestra despues de cada prueba en el juego para mostrar alguna curiosidad.
+ * Actividad que se muestra después de cada prueba en el juego para mostrar alguna curiosidad.
  *
  * @author Marcos Pena
  */
@@ -36,7 +36,8 @@ public class DidYouKnowActivity extends AppCompatActivity {
     private MediaPlayer voice;
 
     /**
-     * Inicializa la actividad con su respectivo layout. Se llama a otros métodos para inicializar el resto de la actividad.
+     * Inicializa la actividad con su respectivo layout. Se muestra el ShowcaseView si es la primera vez que se entra en esta pantalla.
+     * Se llama a otros métodos para inicializar el resto de la actividad.
      * @param savedInstanceState Si la actividad se ha reiniciado se le pasa el contenido de datos más reciente.
      */
     @Override
@@ -68,12 +69,23 @@ public class DidYouKnowActivity extends AppCompatActivity {
         didYouKnowActivityEditor.apply();
     }
 
+    /**
+     * Inicializa el contenido de la barra de herramientas.
+     * @param menu El menú en el que se colocan los items.
+     * @return true para que se muestre el menú
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.did_you_know_menu, menu);
         return true;
     }
 
+    /**
+     * Se llama a este método cuando se selecciona una opción del menú de opciones.
+     * Indica que se debe hacer en cada opción.
+     * @param item El item que se ha seleccionado
+     * @return  false para procesar el menú de forma normal, true para usarlo aquí.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
@@ -100,6 +112,7 @@ public class DidYouKnowActivity extends AppCompatActivity {
 
     /**
      * Carga el texto que extrae del archivo correspondiente a la prueba que se acaba de hacer.
+     * Inicializa el audio correspondiente con la prueba.
      */
     private void loadTextAndAudio() {
         SharedPreferences nameFileSP = getSharedPreferences("nameFileSP", 0);
@@ -137,6 +150,9 @@ public class DidYouKnowActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Carga el gif que corresponde en función de la puntuación obtenida.
+     */
     private void loadGif(){
         GifImageView gifImageView = findViewById(R.id.did_you_know_gif);
         Intent intent = getIntent();
@@ -150,6 +166,9 @@ public class DidYouKnowActivity extends AppCompatActivity {
         gifDrawable.setLoopCount(1);
     }
 
+    /**
+     * Sobrescribe el método cuando se pulsa el botón de atrás para que pare el audio.
+     */
     @Override
     public void onBackPressed(){
         if (voice != null) {
@@ -160,6 +179,10 @@ public class DidYouKnowActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    /**
+     * Obtiene la URL del vídeo correspondiente con la prueba que se acaba de realizar.
+     * @return Cadena de texto con la url del vídeo.
+     */
     private String getVideoURL(){
         SharedPreferences nameFileSP = getSharedPreferences("nameFileSP", 0);
         String fileName = nameFileSP.getString("fileName", "error");

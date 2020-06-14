@@ -37,6 +37,7 @@ public class LettersAdapter extends BaseAdapter {
         this.context=context;
         this.letters=getLettersOptions(fileName, location, difficulty);
     }
+
     /**
      * How many items are in the data set represented by this Adapter.
      *

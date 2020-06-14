@@ -39,6 +39,7 @@
     <string name="right">Derecha</string>
     <string name="game_explain">Acércate a los puntos en el mapa para activar las estelas. \nCuándo estés cerca podrás ver imágenes de la zona en la que se encuentran pulsando el botón de información.</string>
     <string name="push_to_go">Pulsa para avanzar</string>
+    <string name="disabled_location">La ubicación es necesaria para jugar. Actívala de nuevo.</string>
 
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
@@ -51,11 +52,8 @@
 
     <string name="menu_title_communication">Comunicación</string>
     <string name="menu_home">Inicio</string>
-    <!--    <string name="menu_gallery">Gallery</string>-->
-    <!--    <string name="menu_slideshow">Slideshow</string>-->
     <string name="menu_ranking">Ranking</string>
     <string name="menu_end_game">Finalizar partida</string>
-    <!--    <string name="menu_tools">Tools</string>-->
     <string name="menu_settings">Ajustes</string>
     <string name="menu_share">Compartir</string>
     <string name="menu_send">Enviar</string>
