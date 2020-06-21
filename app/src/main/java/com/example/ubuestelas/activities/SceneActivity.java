@@ -120,6 +120,7 @@ public class SceneActivity extends AppCompatActivity {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         gifDrawable.stop();
+                        Toast.makeText(getApplicationContext(), getString(R.string.push_to_go), Toast.LENGTH_LONG).show();
                     }
                 });
             }
