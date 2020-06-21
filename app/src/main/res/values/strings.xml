@@ -37,7 +37,7 @@
     <string name="not_video">No hay vídeo disponible de esta estela</string>
     <string name="left">Izquierda</string>
     <string name="right">Derecha</string>
-    <string name="game_explain">Acércate a los puntos en el mapa para activar las estelas. \nCuándo estés cerca podrás ver imágenes de la zona en la que se encuentran pulsando el botón de información.</string>
+    <string name="game_explain">Acércate a los puntos en el mapa para activar las estelas. \n\nCuándo estés cerca podrás ver imágenes de la zona en la que se encuentran las estelas pulsando el botón de información.</string>
     <string name="push_to_go">Pulsa para avanzar</string>
     <string name="disabled_location">La ubicación es necesaria para jugar. Actívala de nuevo.</string>
 
