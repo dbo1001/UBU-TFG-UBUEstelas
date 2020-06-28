@@ -169,8 +169,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
             finish();
         //Apartado donde se encontraría el ranking
 //        } else if (id == R.id.nav_ranking) {
@@ -676,6 +674,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     @Override
     public void onRestart(){
         super.onRestart();
+        setMapType();
         addJSONmarkersAndFillDic();
         TextView textViewScore = findViewById(R.id.score);
         textViewScore.setText(getScoreOutOfTotal());

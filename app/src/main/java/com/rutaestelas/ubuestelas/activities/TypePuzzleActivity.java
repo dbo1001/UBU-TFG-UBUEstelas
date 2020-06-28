@@ -326,7 +326,7 @@ public class TypePuzzleActivity extends AppCompatActivity {
 
             if (direction.equals(right)) swap(context, position, 1);
             else if (direction.equals(down)) swap(context, position, COLUMNS);
-            else Toast.makeText(context, "Invalid move", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(context, R.string.invalid_move, Toast.LENGTH_SHORT).show();
 
             // Upper-center tiles
         } else if (position > 0 && position < COLUMNS - 1) {

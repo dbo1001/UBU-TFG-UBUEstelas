@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -193,5 +194,22 @@ public class SceneActivity extends AppCompatActivity {
         this.getSharedPreferences("imageSliderActivity", 0).edit().clear().apply();
         this.getSharedPreferences("didYouKnowActivity", 0).edit().clear().apply();
         this.getSharedPreferences("newNavigationDrawerActivity", 0).edit().clear().apply();
+    }
+
+    /**
+     * Cuando la flecha de volver atrás en la barra de herramientas es presionada vuelve
+     * a la actividad de la que se le llamó.
+     * @param item El item del menú que se ha seleccionado.
+     * @return Heredado del método sobrescrito.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == android.R.id.home){
+            if(voice.isPlaying()){
+                voice.stop();
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

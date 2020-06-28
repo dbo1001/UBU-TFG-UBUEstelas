@@ -31,7 +31,7 @@
     <string name="back_main_menu">Volver al menú principal</string>
     <string name="select_character">Selecciona un personaje</string>
     <string name="end_game_confirmation">Si finalizas la partida no podrás retomarla</string>
-    <string name="shared_text">Llevo una puntuación de %1$s puntos en el juego de Ruta de las Estelas. Descárgatelo en: https://github.com/mpc0082/UBUEstelas/releases</string>
+    <string name="shared_text">Llevo una puntuación de %1$s puntos en el juego de Ruta de las Estelas. Descárgatelo en: https://play.google.com/store/apps/details?id=com.rutaestelas.ubuestelas</string>
     <string name="stela_video">Vídeo estelas</string>
     <string name="did_you_know_info_text">Si pulsas sobre la estela en la barra de herramientas podrás ver un vídeo de la estela en 3D</string>
     <string name="not_video">No hay vídeo disponible de esta estela</string>
@@ -40,6 +40,7 @@
     <string name="game_explain">Acércate a los puntos en el mapa para activar las estelas. \n\nCuándo estés cerca podrás ver imágenes de la zona en la que se encuentran las estelas pulsando el botón de información.</string>
     <string name="push_to_go">Pulsa para avanzar</string>
     <string name="disabled_location">La ubicación es necesaria para jugar. Actívala de nuevo.</string>
+    <string name="invalid_move">Movimiento no válido</string>
 
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
