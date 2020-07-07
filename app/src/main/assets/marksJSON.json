@@ -92,8 +92,8 @@
     },
     {
       "description":"Estela 7",
-      "latitude": 42.122932,
-      "longitude": -3.444696,
+      "latitude": 42.122922,
+      "longitude": -3.444749,
       "type": "test",
       "fileName": "mark07.json",
       "picturesAround": [
@@ -107,8 +107,8 @@
     },
     {
       "description":"Estela 8",
-      "latitude": 42.123155,
-      "longitude": -3.445654,
+      "latitude": 42.123190,
+      "longitude": -3.445692,
       "type": "test",
       "fileName": "mark08.json",
       "picturesAround": [
@@ -140,8 +140,8 @@
     },
     {
       "description":"Estela 10",
-      "latitude": 42.120989,
-      "longitude": -3.444791,
+      "latitude": 42.121119,
+      "longitude": -3.444781,
       "type": "complete_words",
       "fileName": "mark10.json",
       "picturesAround": [
